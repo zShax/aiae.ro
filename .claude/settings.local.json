@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node extract-bundle.js)",
+      "Bash(shopify version:*)"
+    ]
+  }
+}

@@ -1,0 +1,148 @@
+<section id="custom" class="aiae-pod">
+
+  {%- comment -%} Header {%- endcomment -%}
+  <div class="aiae-pod__head aiae-reveal">
+    <div>
+      <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
+      {%- assign accent_html = '<span class="aiae-dot">' | append: section.settings.accent_word | append: '</span>' -%}
+      <h2 class="aiae-display aiae-pod__title">
+        {{ section.settings.title | replace: section.settings.accent_word, accent_html }}
+      </h2>
+    </div>
+    <div class="aiae-pod__meta">
+      <span>{{ section.settings.module_label }}</span>
+      <span class="aiae-live">● {{ section.settings.status_label }}</span>
+    </div>
+  </div>
+
+  {%- comment -%} Stage: frame (gif) + control panel {%- endcomment -%}
+  <div class="aiae-pod-stage aiae-reveal">
+
+    {%- comment -%} GIF frame — fast-switching prints on the active piece {%- endcomment -%}
+    <div class="aiae-pod-frame">
+      {%- for block in section.blocks -%}
+        <div class="aiae-pod-slide{% if forloop.first %} is-active{% endif %}"
+             data-name="{{ block.settings.name | escape }}"
+             data-code="{{ block.settings.code | escape }}"
+             data-desc="{{ block.settings.desc | escape }}"
+             data-url="{{ block.settings.printify_url }}"
+             {{ block.shopify_attributes }}>
+          {%- if block.settings.gif != blank -%}
+            <img src="{{ block.settings.gif | image_url: width: 1400 }}"
+                 alt="{{ block.settings.name | escape }}"
+                 width="{{ block.settings.gif.width }}" height="{{ block.settings.gif.height }}"
+                 loading="lazy">
+          {%- else -%}
+            <div class="aiae-pod-ph">
+              <div>
+                <div class="aiae-pod-ph__code">[ {{ block.settings.code | default: 'PIECE' }} ]</div>
+                <div class="aiae-pod-ph__name">{{ block.settings.name }}</div>
+                <p class="aiae-pod-ph__hint">{{ section.settings.gif_hint }}</p>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+
+      {%- comment -%} Overlay tags {%- endcomment -%}
+      <span class="aiae-pod-frame__badge">{{ section.settings.frame_badge }}</span>
+      <span class="aiae-pod-frame__caption"><i></i>{{ section.settings.frame_caption }}</span>
+    </div>
+
+    {%- comment -%} Control panel {%- endcomment -%}
+    <div class="aiae-pod-panel">
+
+      <div>
+        <div class="aiae-pod__focus">{{ section.settings.focus_label }}</div>
+        <div class="aiae-pod-info" data-pod-info>
+          <div class="aiae-pod-info__row">
+            <span data-pod-code></span>
+            <span data-pod-counter></span>
+          </div>
+          <div class="aiae-pod-info__name" data-pod-name></div>
+          <p class="aiae-pod-info__desc" data-pod-desc></p>
+        </div>
+      </div>
+
+      {%- comment -%} Print & color note {%- endcomment -%}
+      <div class="aiae-pod__notes">
+        <span>↻ {{ section.settings.print_note }}</span>
+        <span>◐ {{ section.settings.color_note }}</span>
+      </div>
+
+      {%- comment -%} Thumbnails + navigation {%- endcomment -%}
+      <div>
+        <div class="aiae-pod__thumbs">
+          {%- for block in section.blocks -%}
+            <button type="button" class="aiae-pod-thumb{% if forloop.first %} is-active{% endif %}" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ block.settings.name | escape }}">
+              {%- if block.settings.gif != blank -%}
+                <img src="{{ block.settings.gif | image_url: width: 240 }}" alt="{{ block.settings.name | escape }}" width="120" height="120" loading="lazy">
+              {%- else -%}
+                <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
+              {%- endif -%}
+            </button>
+          {%- endfor -%}
+        </div>
+        <div class="aiae-pod__navrow">
+          <button type="button" class="aiae-pod-arrow" data-pod-prev aria-label="Anterior">&larr;</button>
+          <button type="button" class="aiae-pod-arrow" data-pod-next aria-label="Următor">&rarr;</button>
+          <i></i>
+        </div>
+        <a href="{{ section.blocks.first.settings.printify_url | default: '#' }}" class="aiae-pod-btn" data-pod-btn>
+          <span>{{ section.settings.button_label }}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Print on Demand",
+  "max_blocks": 5,
+  "settings": [
+    { "type": "text", "id": "section_number", "label": "Section number", "default": "02" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "PRINT ON DEMAND — PERSONALIZER" },
+    { "type": "text", "id": "title", "label": "Section title", "default": "FĂ-ȚI-O SINGUR" },
+    { "type": "text", "id": "accent_word", "label": "Accent word in title", "default": "SINGUR" },
+    { "type": "text", "id": "module_label", "label": "Module label", "default": "MODUL PERSONALIZER" },
+    { "type": "text", "id": "status_label", "label": "Status label", "default": "LIVE — TOATE CULORILE" },
+    { "type": "header", "content": "Frame & focus copy" },
+    { "type": "text", "id": "frame_badge", "label": "Frame badge", "default": "PREVIEW" },
+    { "type": "text", "id": "frame_caption", "label": "Frame caption", "default": "PRINTURI ÎN TIMP REAL" },
+    { "type": "text", "id": "focus_label", "label": "Focus label", "default": "ALEGE PIESA → PERSONALIZEAZĂ" },
+    { "type": "text", "id": "print_note", "label": "Print note", "default": "PRINT SCHIMBABIL" },
+    { "type": "text", "id": "color_note", "label": "Color note", "default": "CULOARE PRODUS" },
+    { "type": "textarea", "id": "gif_hint", "label": "Placeholder hint (shown until a GIF is added)", "default": "Adaugă un GIF în setările piesei — printuri care se schimbă rapid pe produsul activ." },
+    { "type": "text", "id": "button_label", "label": "Personalizer button label", "default": "PERSONALIZEAZĂ — PRINT & CULOARE" }
+  ],
+  "blocks": [
+    {
+      "type": "piece",
+      "name": "Personalizable piece",
+      "settings": [
+        { "type": "text", "id": "code", "label": "Code", "default": "POD 01" },
+        { "type": "text", "id": "name", "label": "Name", "default": "TRICOU CLASIC" },
+        { "type": "textarea", "id": "desc", "label": "Short description", "default": "Bumbac greu, croială boxy. Pune-ți printul și alege culoarea." },
+        { "type": "image_picker", "id": "gif", "label": "Print-switching GIF (animated)", "info": "Upload an animated GIF showing prints switching fast on this product." },
+        { "type": "url", "id": "printify_url", "label": "Printify personalizer link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AIAE Print on Demand",
+      "blocks": [
+        { "type": "piece", "settings": { "code": "POD 01", "name": "TRICOU", "desc": "Bumbac greu, croială boxy. Pune-ți printul și alege culoarea." } },
+        { "type": "piece", "settings": { "code": "POD 02", "name": "HANORAC", "desc": "Fleece dens, glugă dublă. Print mare pe spate, orice culoare." } },
+        { "type": "piece", "settings": { "code": "POD 03", "name": "TRICOU OVERSIZE", "desc": "Drop-shoulder, tipar lat. Printul tău, fără compromis." } },
+        { "type": "piece", "settings": { "code": "POD 04", "name": "ȘAPCA", "desc": "Broderie sau print frontal. Alege forma și nuanța." } },
+        { "type": "piece", "settings": { "code": "POD 05", "name": "TOTEBAG", "desc": "Canvas gros. Print integral, culori la alegere." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,82 @@
+<nav id="aiae-nav" class="aiae-nav">
+  <a href="{{ routes.root_url }}" class="aiae-nav__brand">{{ section.settings.brand_name }}</a>
+  <div class="aiae-nav__links">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'nav_link' -%}
+        <a href="{{ block.settings.link }}" class="aiae-nav__link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+      {%- endif -%}
+    {%- endfor -%}
+    <a href="{{ routes.cart_url }}" class="aiae-nav__cart">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--aiae-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+      {{ section.settings.cart_label }} (<span id="aiae-cart-count">{{ cart.item_count }}</span>)
+    </a>
+    <button type="button" class="aiae-burger" data-aiae-menu-toggle aria-expanded="false" aria-controls="aiae-menu" aria-label="Meniu">
+      <span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+{%- comment -%} Fullscreen paper menu (mobile) {%- endcomment -%}
+<div id="aiae-menu" class="aiae-menu" aria-hidden="true">
+  <div>
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'nav_link' -%}
+        <a href="{{ block.settings.link }}" class="aiae-menu__link" data-aiae-menu-link>{{ block.settings.label }}<sup>{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</sup></a>
+      {%- endif -%}
+    {%- endfor -%}
+    <a href="{{ routes.cart_url }}" class="aiae-menu__link" data-aiae-menu-link>{{ section.settings.cart_label }}<sup>({{ cart.item_count }})</sup></a>
+  </div>
+  <div class="aiae-menu__foot">
+    <span>{{ section.settings.brand_name | upcase }}</span>
+    <span>EST. 2026 — RO</span>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "AIAE Nav",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "aiae.ro"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Cart label",
+      "default": "COȘ"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "nav_link",
+      "name": "Nav Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Colecție"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AIAE Nav",
+      "blocks": [
+        { "type": "nav_link", "settings": { "label": "Colecție", "link": "#collection" } },
+        { "type": "nav_link", "settings": { "label": "Custom", "link": "#custom" } },
+        { "type": "nav_link", "settings": { "label": "Concept", "link": "#concept" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

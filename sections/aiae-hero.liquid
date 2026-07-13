@@ -1,0 +1,88 @@
+<section id="top" class="aiae-hero aiae-reveal">
+
+  {%- comment -%} Marquee ticker {%- endcomment -%}
+  <div class="aiae-hero__ticker aiae-noscroll">
+    <div class="aiae-marquee-inner">
+      {%- assign ticker_items = section.settings.ticker_text | split: '|' -%}
+      {%- for item in ticker_items -%}
+        <span style="padding:0 28px;">{{ item | strip }}</span>
+        <span class="aiae-tick-dot" style="padding:0 28px;">●</span>
+      {%- endfor -%}
+      {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
+      {%- for item in ticker_items -%}
+        <span style="padding:0 28px;">{{ item | strip }}</span>
+        <span class="aiae-tick-dot" style="padding:0 28px;">●</span>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="aiae-hero__eyebrow">
+    <span class="aiae-idx">(00)</span>
+    <span>{{ section.settings.label }}</span>
+    <span>— {{ section.settings.sublabel }}</span>
+  </div>
+
+  <h1 class="aiae-hero__headline">
+    {{- section.settings.headline | replace: '.', '<span class="aiae-dot">.</span>' -}}
+  </h1>
+
+  <div class="aiae-hero__bottom">
+    <p class="aiae-hero__tagline">{{ section.settings.tagline }}</p>
+    <a href="{{ section.settings.cta_link }}" class="aiae-hero__cta">{{ section.settings.cta_label }} →</a>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "ticker_text",
+      "label": "Ticker items (pipe-separated)",
+      "default": "DEGEABA CLUB 2026 — LOT 200/200|PRINT ON DEMAND — TOATE CULORILE|BUCUREȘTI / TIMIȘOARA|AIA E. ASTA E."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Eyebrow label",
+      "default": "STREETWEAR POST-IRONIC"
+    },
+    {
+      "type": "text",
+      "id": "sublabel",
+      "label": "Eyebrow sublabel",
+      "default": "ESTE CEEA CE ESTE"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline (use . for accent dot)",
+      "default": "AIA.E"
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Haine pentru oameni care au încetat să se mai prefacă. Design brut, finisaj de lux. Nu schimbă nimic — dar arată bine."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA button label",
+      "default": "VEZI COLECȚIA"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AIAE Hero"
+    }
+  ]
+}
+{% endschema %}

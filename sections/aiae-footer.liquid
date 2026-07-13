@@ -1,0 +1,124 @@
+<footer class="aiae-footer">
+  <div class="aiae-footer__top">
+    <div class="aiae-footer__brand">
+      <div class="aiae-footer__tagline">{{ section.settings.brand_tagline }}</div>
+      <p class="aiae-footer__desc">{{ section.settings.brand_description }}</p>
+    </div>
+    <div class="aiae-footer__cols">
+      <div class="aiae-footer__col">
+        <span class="aiae-footer__colhead">Magazin</span>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'shop_link' -%}
+            <a href="{{ block.settings.link }}" class="aiae-flink" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="aiae-footer__col">
+        <span class="aiae-footer__colhead">Social</span>
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'social_link' -%}
+            <a href="{{ block.settings.link }}" class="aiae-flink" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="aiae-footer__wordwrap aiae-noscroll">
+    <div id="aiae-footer-word" class="aiae-footer__word">
+      <span>{{ section.settings.wordmark }}</span>
+    </div>
+  </div>
+
+  <div class="aiae-footer__bottom">
+    <span>{{ section.settings.copyright }}</span>
+    <span class="aiae-footer__madein">{{ section.settings.made_in }}<i></i></span>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "AIAE Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_tagline",
+      "label": "Brand tagline",
+      "default": "AIAE.RO — ASTA E."
+    },
+    {
+      "type": "textarea",
+      "id": "brand_description",
+      "label": "Brand description",
+      "default": "Brand de streetwear din România. Produs la comandă, în loturi. Fără reaprovizionare, fără scuze. Aia e."
+    },
+    {
+      "type": "text",
+      "id": "wordmark",
+      "label": "Wordmark text",
+      "default": "AIAE"
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright text",
+      "default": "© 2026 AIAE.RO — TOATE DREPTURILE, DEGEABA"
+    },
+    {
+      "type": "text",
+      "id": "made_in",
+      "label": "Made in label",
+      "default": "FABRICAT ÎN RO"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shop_link",
+      "name": "Shop Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Link label",
+          "default": "Degeaba Club"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        }
+      ]
+    },
+    {
+      "type": "social_link",
+      "name": "Social Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Link label",
+          "default": "Instagram"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AIAE Footer",
+      "blocks": [
+        { "type": "shop_link", "settings": { "label": "Degeaba Club", "link": "/collections/degeaba-club" } },
+        { "type": "shop_link", "settings": { "label": "Print on Demand", "link": "/pages/custom" } },
+        { "type": "shop_link", "settings": { "label": "Concepte", "link": "/pages/concept" } },
+        { "type": "social_link", "settings": { "label": "Instagram", "link": "https://instagram.com" } },
+        { "type": "social_link", "settings": { "label": "TikTok", "link": "https://tiktok.com" } },
+        { "type": "social_link", "settings": { "label": "Newsletter", "link": "/pages/newsletter" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

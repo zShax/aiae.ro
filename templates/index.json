@@ -1,75 +1,149 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "aiae_nav": {
+      "type": "aiae-nav",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "link_1": { "type": "nav_link", "settings": { "label": "Colecție", "link": "/collections/all" } },
+        "link_2": { "type": "nav_link", "settings": { "label": "Custom", "link": "/pages/custom" } },
+        "link_3": { "type": "nav_link", "settings": { "label": "Concept", "link": "/pages/concept" } }
+      },
+      "block_order": ["link_1", "link_2", "link_3"],
+      "settings": {
+        "brand_name": "aiae.ro",
+        "cart_label": "COȘ"
+      }
+    },
+    "aiae_loader": {
+      "type": "aiae-loader",
+      "settings": {
+        "show_loader": true
+      }
+    },
+    "aiae_hero": {
+      "type": "aiae-hero",
+      "settings": {
+        "ticker_text": "DEGEABA CLUB 2026 — LOT 200/200|PRINT ON DEMAND — TOATE CULORILE|BUCUREȘTI / TIMIȘOARA|AIA E. ASTA E.",
+        "label": "STREETWEAR POST-IRONIC",
+        "sublabel": "ESTE CEEA CE ESTE",
+        "headline": "AIA.E",
+        "tagline": "Haine pentru oameni care au încetat să se mai prefacă. Design brut, finisaj de lux. Nu schimbă nimic — dar arată bine.",
+        "cta_label": "VEZI COLECȚIA",
+        "cta_link": "/collections/all"
+      }
+    },
+    "aiae_collection_grid": {
+      "type": "aiae-collection-grid",
+      "settings": {
+        "section_number": "01",
+        "eyebrow": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA",
+        "title": "DEGEABA\nCLUB 2026",
+        "description": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică.",
+        "products_to_show": 6
+      }
+    },
+    "aiae_print_on_demand": {
+      "type": "aiae-print-on-demand",
+      "blocks": {
+        "piece_1": { "type": "piece", "settings": { "code": "POD 01", "name": "TRICOU", "desc": "Bumbac greu, croială boxy. Pune-ți printul și alege culoarea." } },
+        "piece_2": { "type": "piece", "settings": { "code": "POD 02", "name": "HANORAC", "desc": "Fleece dens, glugă dublă. Print mare pe spate, orice culoare." } },
+        "piece_3": { "type": "piece", "settings": { "code": "POD 03", "name": "TRICOU OVERSIZE", "desc": "Drop-shoulder, tipar lat. Printul tău, fără compromis." } },
+        "piece_4": { "type": "piece", "settings": { "code": "POD 04", "name": "ȘAPCA", "desc": "Broderie sau print frontal. Alege forma și nuanța." } },
+        "piece_5": { "type": "piece", "settings": { "code": "POD 05", "name": "TOTEBAG", "desc": "Canvas gros. Print integral, culori la alegere." } }
+      },
+      "block_order": ["piece_1", "piece_2", "piece_3", "piece_4", "piece_5"],
+      "settings": {
+        "section_number": "02",
+        "eyebrow": "PRINT ON DEMAND — PERSONALIZER",
+        "title": "FĂ-ȚI-O SINGUR",
+        "accent_word": "SINGUR",
+        "module_label": "MODUL PERSONALIZER",
+        "status_label": "LIVE — TOATE CULORILE",
+        "frame_badge": "PREVIEW",
+        "frame_caption": "PRINTURI ÎN TIMP REAL",
+        "focus_label": "ALEGE PIESA → PERSONALIZEAZĂ",
+        "print_note": "PRINT SCHIMBABIL",
+        "color_note": "CULOARE PRODUS",
+        "gif_hint": "Adaugă un GIF în setările piesei — printuri care se schimbă rapid pe produsul activ.",
+        "button_label": "PERSONALIZEAZĂ — PRINT & CULOARE"
+      }
+    },
+    "aiae_concept_carousels": {
+      "type": "aiae-concept-carousels",
+      "blocks": {
+        "unt_row": {
+          "type": "carousel_row",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "title": "UNT.",
+            "note": "// BUTTER STUDIES — CREAMY CONTRAST",
+            "card_count": 5,
+            "card_1_number": "UNT 01", "card_1_title": "BEURRE NOIR", "card_1_subtitle": "Butter-melt graphic, cream on void", "card_1_bg": "#F2EFE7", "card_1_fg": "#0D0D0D",
+            "card_2_number": "UNT 02", "card_2_title": "82% GRĂSIME", "card_2_subtitle": "Nutritional-label deadpan print", "card_2_bg": "#F6F0DE", "card_2_fg": "#0D0D0D",
+            "card_3_number": "UNT 03", "card_3_title": "UNSALTED", "card_3_subtitle": "Creamy gradient wash tee", "card_3_bg": "#FBF6E9", "card_3_fg": "#0D0D0D",
+            "card_4_number": "UNT 04", "card_4_title": "PACHET DE UNT", "card_4_subtitle": "Wrapped-stick parody graphic", "card_4_bg": "#F2EAD3", "card_4_fg": "#0D0D0D",
+            "card_5_number": "UNT 05", "card_5_title": "SLIDE", "card_5_subtitle": "Melting type, soft texture", "card_5_bg": "#FDF8EC", "card_5_fg": "#0D0D0D"
           }
         },
-        "button": {
-          "type": "buttons",
+        "buc_row": {
+          "type": "carousel_row",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "title": "BUCUREȘTI.",
+            "note": "// AI-RECONSTRUCTED BRUTALISM",
+            "card_count": 5,
+            "card_1_number": "BUC 01", "card_1_title": "CASA POPORULUI", "card_1_subtitle": "Reconstructed brutalist mass", "card_1_bg": "#1c1c1c", "card_1_fg": "#BEBAB2",
+            "card_2_number": "BUC 02", "card_2_title": "PIAȚA UNIRII", "card_2_subtitle": "Fountain grid, fractured", "card_2_bg": "#202020", "card_2_fg": "#BEBAB2",
+            "card_3_number": "BUC 03", "card_3_title": "BLOCURI / S3", "card_3_subtitle": "Communist housing repeat", "card_3_bg": "#1a1a1a", "card_3_fg": "#BEBAB2",
+            "card_4_number": "BUC 04", "card_4_title": "INTERCONTINENTAL", "card_4_subtitle": "Tower silhouette, gritty", "card_4_bg": "#1e1e1e", "card_4_fg": "#BEBAB2",
+            "card_5_number": "BUC 05", "card_5_title": "GARA DE NORD", "card_5_subtitle": "Departure-board collage", "card_5_bg": "#1b1b1b", "card_5_fg": "#BEBAB2"
+          }
+        },
+        "tm_row": {
+          "type": "carousel_row",
+          "settings": {
+            "title": "TIMIȘOARA.",
+            "note": "// GRITTY URBAN RECONSTRUCTION",
+            "card_count": 5,
+            "card_1_number": "TM 01", "card_1_title": "PIAȚA VICTORIEI", "card_1_subtitle": "Reconstructed facade run", "card_1_bg": "#23211e", "card_1_fg": "#BEBAB2",
+            "card_2_number": "TM 02", "card_2_title": "CATEDRALA", "card_2_subtitle": "Tiled roof glitch", "card_2_bg": "#211f1c", "card_2_fg": "#BEBAB2",
+            "card_3_number": "TM 03", "card_3_title": "CANALUL BEGA", "card_3_subtitle": "Waterline long-exposure", "card_3_bg": "#1f1f20", "card_3_fg": "#BEBAB2",
+            "card_4_number": "TM 04", "card_4_title": "PIAȚA UNIRII TM", "card_4_subtitle": "Baroque square, halftone", "card_4_bg": "#242220", "card_4_fg": "#BEBAB2",
+            "card_5_number": "TM 05", "card_5_title": "FABRIC", "card_5_subtitle": "Industrial district scan", "card_5_bg": "#1d1d1d", "card_5_fg": "#BEBAB2"
           }
         }
       },
-      "block_order": [
-        "heading",
-        "button"
-      ],
+      "block_order": ["unt_row", "buc_row", "tm_row"],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "section_number": "03",
+        "eyebrow": "CONCEPTE — POTENȚIAL DE CUSTOMIZARE",
+        "title": "CE S-AR PUTEA FACE"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "aiae_footer": {
+      "type": "aiae-footer",
+      "blocks": {
+        "shop_1": { "type": "shop_link", "settings": { "label": "Degeaba Club", "link": "/collections/degeaba-club" } },
+        "shop_2": { "type": "shop_link", "settings": { "label": "Print on Demand", "link": "/pages/custom" } },
+        "shop_3": { "type": "shop_link", "settings": { "label": "Concepte", "link": "/pages/concept" } },
+        "social_1": { "type": "social_link", "settings": { "label": "Instagram", "link": "https://instagram.com" } },
+        "social_2": { "type": "social_link", "settings": { "label": "TikTok", "link": "https://tiktok.com" } },
+        "social_3": { "type": "social_link", "settings": { "label": "Newsletter", "link": "/pages/newsletter" } }
+      },
+      "block_order": ["shop_1", "shop_2", "shop_3", "social_1", "social_2", "social_3"],
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "brand_tagline": "AIAE.RO — ASTA E.",
+        "brand_description": "Brand de streetwear din România. Produs la comandă, în loturi. Fără reaprovizionare, fără scuze. Aia e.",
+        "wordmark": "AIAE",
+        "copyright": "© 2026 AIAE.RO — TOATE DREPTURILE, DEGEABA",
+        "made_in": "FABRICAT ÎN RO"
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "aiae_nav",
+    "aiae_loader",
+    "aiae_hero",
+    "aiae_collection_grid",
+    "aiae_print_on_demand",
+    "aiae_concept_carousels",
+    "aiae_footer"
   ]
 }

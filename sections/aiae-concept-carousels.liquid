@@ -1,0 +1,226 @@
+<section id="concept" class="aiae-con">
+
+  <div class="aiae-con__head aiae-reveal">
+    <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
+    <h2 class="aiae-display aiae-con__title">{{ section.settings.title }}</h2>
+  </div>
+
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'carousel_row' -%}
+      <div class="aiae-con__row aiae-reveal" {{ block.shopify_attributes }}>
+        <div class="aiae-con__rowhead">
+          <h3 class="aiae-con__rowtitle">{{ block.settings.title }}</h3>
+          <span class="aiae-con__rownote">{{ block.settings.note }}</span>
+          <span class="aiae-con__rowline"></span>
+        </div>
+        <div class="aiae-con__track aiae-noscroll">
+          {%- assign card_count = block.settings.card_count | default: 5 -%}
+          {%- for i in (1..card_count) -%}
+            {%- assign n_key = 'card_' | append: i | append: '_number' -%}
+            {%- assign t_key = 'card_' | append: i | append: '_title' -%}
+            {%- assign s_key = 'card_' | append: i | append: '_subtitle' -%}
+            {%- assign bg_key = 'card_' | append: i | append: '_bg' -%}
+            {%- assign fg_key = 'card_' | append: i | append: '_fg' -%}
+            {%- assign n_val = block.settings[n_key] -%}
+            {%- assign t_val = block.settings[t_key] -%}
+            {%- assign s_val = block.settings[s_key] -%}
+            {%- assign bg_val = block.settings[bg_key] | default: '#E7E3D8' -%}
+            {%- assign fg_val = block.settings[fg_key] | default: '#0D0D0D' -%}
+            {%- if t_val != blank -%}
+              <div class="aiae-cc">
+                <div class="aiae-cc__media" style="background:{{ bg_val }}; color:{{ fg_val }};">
+                  <span class="aiae-cc__tag">[ {{ n_val }} ]</span>
+                  <span class="aiae-cc__num">{{ n_val }}</span>
+                </div>
+                <div class="aiae-cc__body">
+                  <h4 class="aiae-cc__title">{{ t_val }}</h4>
+                  <p class="aiae-cc__sub">{{ s_val }}</p>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+          <div class="aiae-con__spacer"></div>
+        </div>
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Concept Carousels",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_number",
+      "label": "Section number",
+      "default": "03"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "CONCEPTE — POTENȚIAL DE CUSTOMIZARE"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title",
+      "default": "CE S-AR PUTEA FACE"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "carousel_row",
+      "name": "Carousel Row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Row title",
+          "default": "UNT."
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Row note",
+          "default": "// BUTTER STUDIES — CREAMY CONTRAST"
+        },
+        {
+          "type": "range",
+          "id": "card_count",
+          "label": "Number of cards",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "header",
+          "content": "Card 1"
+        },
+        { "type": "text", "id": "card_1_number", "label": "Number", "default": "UNT 01" },
+        { "type": "text", "id": "card_1_title", "label": "Title", "default": "BEURRE NOIR" },
+        { "type": "text", "id": "card_1_subtitle", "label": "Subtitle", "default": "Butter-melt graphic, cream on void" },
+        { "type": "color", "id": "card_1_bg", "label": "Background color", "default": "#F2EFE7" },
+        { "type": "color", "id": "card_1_fg", "label": "Foreground color", "default": "#0D0D0D" },
+        {
+          "type": "header",
+          "content": "Card 2"
+        },
+        { "type": "text", "id": "card_2_number", "label": "Number", "default": "UNT 02" },
+        { "type": "text", "id": "card_2_title", "label": "Title", "default": "82% GRĂSIME" },
+        { "type": "text", "id": "card_2_subtitle", "label": "Subtitle", "default": "Nutritional-label deadpan print" },
+        { "type": "color", "id": "card_2_bg", "label": "Background color", "default": "#F6F0DE" },
+        { "type": "color", "id": "card_2_fg", "label": "Foreground color", "default": "#0D0D0D" },
+        {
+          "type": "header",
+          "content": "Card 3"
+        },
+        { "type": "text", "id": "card_3_number", "label": "Number", "default": "UNT 03" },
+        { "type": "text", "id": "card_3_title", "label": "Title", "default": "UNSALTED" },
+        { "type": "text", "id": "card_3_subtitle", "label": "Subtitle", "default": "Creamy gradient wash tee" },
+        { "type": "color", "id": "card_3_bg", "label": "Background color", "default": "#FBF6E9" },
+        { "type": "color", "id": "card_3_fg", "label": "Foreground color", "default": "#0D0D0D" },
+        {
+          "type": "header",
+          "content": "Card 4"
+        },
+        { "type": "text", "id": "card_4_number", "label": "Number", "default": "UNT 04" },
+        { "type": "text", "id": "card_4_title", "label": "Title", "default": "PACHET DE UNT" },
+        { "type": "text", "id": "card_4_subtitle", "label": "Subtitle", "default": "Wrapped-stick parody graphic" },
+        { "type": "color", "id": "card_4_bg", "label": "Background color", "default": "#F2EAD3" },
+        { "type": "color", "id": "card_4_fg", "label": "Foreground color", "default": "#0D0D0D" },
+        {
+          "type": "header",
+          "content": "Card 5"
+        },
+        { "type": "text", "id": "card_5_number", "label": "Number", "default": "UNT 05" },
+        { "type": "text", "id": "card_5_title", "label": "Title", "default": "SLIDE" },
+        { "type": "text", "id": "card_5_subtitle", "label": "Subtitle", "default": "Melting type, soft texture" },
+        { "type": "color", "id": "card_5_bg", "label": "Background color", "default": "#FDF8EC" },
+        { "type": "color", "id": "card_5_fg", "label": "Foreground color", "default": "#0D0D0D" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AIAE Concept Carousels",
+      "blocks": [
+        {
+          "type": "carousel_row",
+          "settings": {
+            "title": "UNT.",
+            "note": "// BUTTER STUDIES — CREAMY CONTRAST"
+          }
+        },
+        {
+          "type": "carousel_row",
+          "settings": {
+            "title": "BUCUREȘTI.",
+            "note": "// AI-RECONSTRUCTED BRUTALISM",
+            "card_1_number": "BUC 01",
+            "card_1_title": "CASA POPORULUI",
+            "card_1_subtitle": "Reconstructed brutalist mass",
+            "card_1_bg": "#1c1c1c",
+            "card_1_fg": "#BEBAB2",
+            "card_2_number": "BUC 02",
+            "card_2_title": "PIAȚA UNIRII",
+            "card_2_subtitle": "Fountain grid, fractured",
+            "card_2_bg": "#202020",
+            "card_2_fg": "#BEBAB2",
+            "card_3_number": "BUC 03",
+            "card_3_title": "BLOCURI / S3",
+            "card_3_subtitle": "Communist housing repeat",
+            "card_3_bg": "#1a1a1a",
+            "card_3_fg": "#BEBAB2",
+            "card_4_number": "BUC 04",
+            "card_4_title": "INTERCONTINENTAL",
+            "card_4_subtitle": "Tower silhouette, gritty",
+            "card_4_bg": "#1e1e1e",
+            "card_4_fg": "#BEBAB2",
+            "card_5_number": "BUC 05",
+            "card_5_title": "GARA DE NORD",
+            "card_5_subtitle": "Departure-board collage",
+            "card_5_bg": "#1b1b1b",
+            "card_5_fg": "#BEBAB2"
+          }
+        },
+        {
+          "type": "carousel_row",
+          "settings": {
+            "title": "TIMIȘOARA.",
+            "note": "// GRITTY URBAN RECONSTRUCTION",
+            "card_1_number": "TM 01",
+            "card_1_title": "PIAȚA VICTORIEI",
+            "card_1_subtitle": "Reconstructed facade run",
+            "card_1_bg": "#23211e",
+            "card_1_fg": "#BEBAB2",
+            "card_2_number": "TM 02",
+            "card_2_title": "CATEDRALA",
+            "card_2_subtitle": "Tiled roof glitch",
+            "card_2_bg": "#211f1c",
+            "card_2_fg": "#BEBAB2",
+            "card_3_number": "TM 03",
+            "card_3_title": "CANALUL BEGA",
+            "card_3_subtitle": "Waterline long-exposure",
+            "card_3_bg": "#1f1f20",
+            "card_3_fg": "#BEBAB2",
+            "card_4_number": "TM 04",
+            "card_4_title": "PIAȚA UNIRII TM",
+            "card_4_subtitle": "Baroque square, halftone",
+            "card_4_bg": "#242220",
+            "card_4_fg": "#BEBAB2",
+            "card_5_number": "TM 05",
+            "card_5_title": "FABRIC",
+            "card_5_subtitle": "Industrial district scan",
+            "card_5_bg": "#1d1d1d",
+            "card_5_fg": "#BEBAB2"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

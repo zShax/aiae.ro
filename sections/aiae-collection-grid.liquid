@@ -1,0 +1,118 @@
+<section id="collection" class="aiae-section">
+
+  <div class="aiae-section__head aiae-reveal">
+    <div>
+      <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
+      <h2 class="aiae-display aiae-section__title">{{ section.settings.title | newline_to_br }}</h2>
+    </div>
+    <p class="aiae-section__desc">{{ section.settings.description }}</p>
+  </div>
+
+  <div class="aiae-grid">
+
+    {%- assign collection = collections[section.settings.collection] -%}
+    {%- if collection != blank and collection.products_count > 0 -%}
+      {%- for product in collection.products limit: section.settings.products_to_show -%}
+        <div class="aiae-card aiae-reveal">
+          <a href="{{ product.url }}">
+            <div class="aiae-card__media">
+              {%- if product.featured_image -%}
+                <img src="{{ product.featured_image | image_url: width: 600 }}"
+                     alt="{{ product.featured_image.alt | escape }}"
+                     width="600"
+                     height="{{ 600 | divided_by: product.featured_image.aspect_ratio | round }}"
+                     loading="lazy">
+              {%- else -%}
+                <span class="aiae-card__code">[ {{ product.title | upcase }} ]</span>
+              {%- endif -%}
+              {%- if product.metafields.aiae.lot != blank -%}
+                <span class="aiae-card__lot">{{ product.metafields.aiae.lot }}</span>
+              {%- endif -%}
+            </div>
+            <div class="aiae-card__body">
+              <div class="aiae-card__row">
+                <h3 class="aiae-card__title">{{ product.title }}</h3>
+                <span class="aiae-card__price">{{ product.price | money }}</span>
+              </div>
+              {%- if product.metafields.aiae.code != blank or product.type != blank -%}
+                <p class="aiae-card__meta">
+                  {{ product.metafields.aiae.code | default: product.type }} — {{ product.metafields.aiae.detail | default: product.vendor }}
+                </p>
+              {%- endif -%}
+            </div>
+          </a>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- comment -%} Placeholder cards when no collection is assigned {%- endcomment -%}
+      {%- assign placeholder_items = "CR-01,DEGEABA CREWNECK,480 RON,LOT 01|CP-02,SERIAL CAP / 0001,260 RON,LOT 02|HD-03,STARBURST HOOD,620 RON,LOT 03|TS-04,RESUME TEE / NULL,220 RON,LOT 04|TS-05,TICKET TEE / EXPIRED,240 RON,LOT 05|LS-06,AIA E LONGSLEEVE,320 RON,LOT 06" | split: "|" -%}
+      {%- for item_str in placeholder_items -%}
+        {%- assign parts = item_str | split: "," -%}
+        <div class="aiae-card aiae-reveal">
+          <div class="aiae-card__media aiae-card__media--ph">
+            <span class="aiae-card__code">[ {{ parts[0] }} ]</span>
+            <span class="aiae-card__lot">{{ parts[3] }}</span>
+          </div>
+          <div class="aiae-card__body">
+            <div class="aiae-card__row">
+              <h3 class="aiae-card__title">{{ parts[1] }}</h3>
+              <span class="aiae-card__price">{{ parts[2] }}</span>
+            </div>
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Collection Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_number",
+      "label": "Section number",
+      "default": "01"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section title (use newline for line break)",
+      "default": "DEGEABA\nCLUB 2026"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 6,
+      "label": "Products to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AIAE Collection Grid"
+    }
+  ]
+}
+{% endschema %}
