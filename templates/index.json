@@ -1,13 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "aiae_nav": {
       "type": "aiae-nav",
       "blocks": {
-        "link_1": { "type": "nav_link", "settings": { "label": "Colecție", "link": "/collections/all" } },
-        "link_2": { "type": "nav_link", "settings": { "label": "Custom", "link": "/pages/custom" } },
-        "link_3": { "type": "nav_link", "settings": { "label": "Concept", "link": "/pages/concept" } }
+        "link_1": {
+          "type": "nav_link",
+          "settings": {
+            "label": "Colecție",
+            "link": "/collections/all"
+          }
+        },
+        "link_2": {
+          "type": "nav_link",
+          "settings": {
+            "label": "Custom",
+            "link": "/pages/custom"
+          }
+        },
+        "link_3": {
+          "type": "nav_link",
+          "settings": {
+            "label": "Concept",
+            "link": "/pages/concept"
+          }
+        }
       },
-      "block_order": ["link_1", "link_2", "link_3"],
+      "block_order": [
+        "link_1",
+        "link_2",
+        "link_3"
+      ],
       "settings": {
         "brand_name": "aiae.ro",
         "cart_label": "COȘ"
@@ -36,13 +67,35 @@
       "settings": {
         "section_number": "01",
         "eyebrow": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA",
-        "title": "DEGEABA\nCLUB 2026",
+        "title": "DEGEABACLUB 2026",
         "description": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică.",
+        "collection": "degeaba-club",
         "products_to_show": 6
       }
     },
     "aiae_print_on_demand": {
       "type": "aiae-print-on-demand",
+      "blocks": {
+        "printify_print_on_demand_personalize_button_nRiXpU": {
+          "type": "shopify://apps/printify-print-on-demand/blocks/personalize_button/019a5dbe-775d-7320-afec-36b77e3421a0",
+          "settings": {
+            "use_default_theme_style": true,
+            "button_text": "Add personalized design",
+            "button_text_with_personalization": "Remove saved design",
+            "button_extra_classes": "product-form__buttons button--full-width",
+            "button_extra_classes_with_personalization": "product-form__buttons button--full-width button--secondary",
+            "button_color": "#007bff",
+            "text_color": "#ffffff",
+            "button_padding": "12px 24px",
+            "font_size": "16px",
+            "border_radius": "4px",
+            "modal_title": "Personalize Your Product"
+          }
+        }
+      },
+      "block_order": [
+        "printify_print_on_demand_personalize_button_nRiXpU"
+      ],
       "settings": {
         "section_number": "02",
         "eyebrow": "PRINT ON DEMAND — PERSONALIZER",
@@ -50,6 +103,7 @@
         "accent_word": "SINGUR",
         "module_label": "MODUL PERSONALIZER",
         "status_label": "LIVE — TOATE CULORILE",
+        "collection": "filozofia-ta",
         "products_to_show": 5,
         "auto_rotate": true,
         "autoplay_speed": 4,
@@ -71,11 +125,31 @@
             "title": "UNT.",
             "note": "// BUTTER STUDIES — CREAMY CONTRAST",
             "card_count": 5,
-            "card_1_number": "UNT 01", "card_1_title": "BEURRE NOIR", "card_1_subtitle": "Butter-melt graphic, cream on void", "card_1_bg": "#F2EFE7", "card_1_fg": "#0D0D0D",
-            "card_2_number": "UNT 02", "card_2_title": "82% GRĂSIME", "card_2_subtitle": "Nutritional-label deadpan print", "card_2_bg": "#F6F0DE", "card_2_fg": "#0D0D0D",
-            "card_3_number": "UNT 03", "card_3_title": "UNSALTED", "card_3_subtitle": "Creamy gradient wash tee", "card_3_bg": "#FBF6E9", "card_3_fg": "#0D0D0D",
-            "card_4_number": "UNT 04", "card_4_title": "PACHET DE UNT", "card_4_subtitle": "Wrapped-stick parody graphic", "card_4_bg": "#F2EAD3", "card_4_fg": "#0D0D0D",
-            "card_5_number": "UNT 05", "card_5_title": "SLIDE", "card_5_subtitle": "Melting type, soft texture", "card_5_bg": "#FDF8EC", "card_5_fg": "#0D0D0D"
+            "card_1_number": "UNT 01",
+            "card_1_title": "BEURRE NOIR",
+            "card_1_subtitle": "Butter-melt graphic, cream on void",
+            "card_1_bg": "#f2efe7",
+            "card_1_fg": "#0d0d0d",
+            "card_2_number": "UNT 02",
+            "card_2_title": "82% GRĂSIME",
+            "card_2_subtitle": "Nutritional-label deadpan print",
+            "card_2_bg": "#f6f0de",
+            "card_2_fg": "#0d0d0d",
+            "card_3_number": "UNT 03",
+            "card_3_title": "UNSALTED",
+            "card_3_subtitle": "Creamy gradient wash tee",
+            "card_3_bg": "#fbf6e9",
+            "card_3_fg": "#0d0d0d",
+            "card_4_number": "UNT 04",
+            "card_4_title": "PACHET DE UNT",
+            "card_4_subtitle": "Wrapped-stick parody graphic",
+            "card_4_bg": "#f2ead3",
+            "card_4_fg": "#0d0d0d",
+            "card_5_number": "UNT 05",
+            "card_5_title": "SLIDE",
+            "card_5_subtitle": "Melting type, soft texture",
+            "card_5_bg": "#fdf8ec",
+            "card_5_fg": "#0d0d0d"
           }
         },
         "buc_row": {
@@ -84,11 +158,31 @@
             "title": "BUCUREȘTI.",
             "note": "// AI-RECONSTRUCTED BRUTALISM",
             "card_count": 5,
-            "card_1_number": "BUC 01", "card_1_title": "CASA POPORULUI", "card_1_subtitle": "Reconstructed brutalist mass", "card_1_bg": "#1c1c1c", "card_1_fg": "#BEBAB2",
-            "card_2_number": "BUC 02", "card_2_title": "PIAȚA UNIRII", "card_2_subtitle": "Fountain grid, fractured", "card_2_bg": "#202020", "card_2_fg": "#BEBAB2",
-            "card_3_number": "BUC 03", "card_3_title": "BLOCURI / S3", "card_3_subtitle": "Communist housing repeat", "card_3_bg": "#1a1a1a", "card_3_fg": "#BEBAB2",
-            "card_4_number": "BUC 04", "card_4_title": "INTERCONTINENTAL", "card_4_subtitle": "Tower silhouette, gritty", "card_4_bg": "#1e1e1e", "card_4_fg": "#BEBAB2",
-            "card_5_number": "BUC 05", "card_5_title": "GARA DE NORD", "card_5_subtitle": "Departure-board collage", "card_5_bg": "#1b1b1b", "card_5_fg": "#BEBAB2"
+            "card_1_number": "BUC 01",
+            "card_1_title": "CASA POPORULUI",
+            "card_1_subtitle": "Reconstructed brutalist mass",
+            "card_1_bg": "#1c1c1c",
+            "card_1_fg": "#bebab2",
+            "card_2_number": "BUC 02",
+            "card_2_title": "PIAȚA UNIRII",
+            "card_2_subtitle": "Fountain grid, fractured",
+            "card_2_bg": "#202020",
+            "card_2_fg": "#bebab2",
+            "card_3_number": "BUC 03",
+            "card_3_title": "BLOCURI / S3",
+            "card_3_subtitle": "Communist housing repeat",
+            "card_3_bg": "#1a1a1a",
+            "card_3_fg": "#bebab2",
+            "card_4_number": "BUC 04",
+            "card_4_title": "INTERCONTINENTAL",
+            "card_4_subtitle": "Tower silhouette, gritty",
+            "card_4_bg": "#1e1e1e",
+            "card_4_fg": "#bebab2",
+            "card_5_number": "BUC 05",
+            "card_5_title": "GARA DE NORD",
+            "card_5_subtitle": "Departure-board collage",
+            "card_5_bg": "#1b1b1b",
+            "card_5_fg": "#bebab2"
           }
         },
         "tm_row": {
@@ -97,15 +191,39 @@
             "title": "TIMIȘOARA.",
             "note": "// GRITTY URBAN RECONSTRUCTION",
             "card_count": 5,
-            "card_1_number": "TM 01", "card_1_title": "PIAȚA VICTORIEI", "card_1_subtitle": "Reconstructed facade run", "card_1_bg": "#23211e", "card_1_fg": "#BEBAB2",
-            "card_2_number": "TM 02", "card_2_title": "CATEDRALA", "card_2_subtitle": "Tiled roof glitch", "card_2_bg": "#211f1c", "card_2_fg": "#BEBAB2",
-            "card_3_number": "TM 03", "card_3_title": "CANALUL BEGA", "card_3_subtitle": "Waterline long-exposure", "card_3_bg": "#1f1f20", "card_3_fg": "#BEBAB2",
-            "card_4_number": "TM 04", "card_4_title": "PIAȚA UNIRII TM", "card_4_subtitle": "Baroque square, halftone", "card_4_bg": "#242220", "card_4_fg": "#BEBAB2",
-            "card_5_number": "TM 05", "card_5_title": "FABRIC", "card_5_subtitle": "Industrial district scan", "card_5_bg": "#1d1d1d", "card_5_fg": "#BEBAB2"
+            "card_1_number": "TM 01",
+            "card_1_title": "PIAȚA VICTORIEI",
+            "card_1_subtitle": "Reconstructed facade run",
+            "card_1_bg": "#23211e",
+            "card_1_fg": "#bebab2",
+            "card_2_number": "TM 02",
+            "card_2_title": "CATEDRALA",
+            "card_2_subtitle": "Tiled roof glitch",
+            "card_2_bg": "#211f1c",
+            "card_2_fg": "#bebab2",
+            "card_3_number": "TM 03",
+            "card_3_title": "CANALUL BEGA",
+            "card_3_subtitle": "Waterline long-exposure",
+            "card_3_bg": "#1f1f20",
+            "card_3_fg": "#bebab2",
+            "card_4_number": "TM 04",
+            "card_4_title": "PIAȚA UNIRII TM",
+            "card_4_subtitle": "Baroque square, halftone",
+            "card_4_bg": "#242220",
+            "card_4_fg": "#bebab2",
+            "card_5_number": "TM 05",
+            "card_5_title": "FABRIC",
+            "card_5_subtitle": "Industrial district scan",
+            "card_5_bg": "#1d1d1d",
+            "card_5_fg": "#bebab2"
           }
         }
       },
-      "block_order": ["unt_row", "buc_row", "tm_row"],
+      "block_order": [
+        "unt_row",
+        "buc_row",
+        "tm_row"
+      ],
       "settings": {
         "section_number": "03",
         "eyebrow": "CONCEPTE — POTENȚIAL DE CUSTOMIZARE",
@@ -115,14 +233,57 @@
     "aiae_footer": {
       "type": "aiae-footer",
       "blocks": {
-        "shop_1": { "type": "shop_link", "settings": { "label": "Degeaba Club", "link": "/collections/degeaba-club" } },
-        "shop_2": { "type": "shop_link", "settings": { "label": "Print on Demand", "link": "/pages/custom" } },
-        "shop_3": { "type": "shop_link", "settings": { "label": "Concepte", "link": "/pages/concept" } },
-        "social_1": { "type": "social_link", "settings": { "label": "Instagram", "link": "https://instagram.com" } },
-        "social_2": { "type": "social_link", "settings": { "label": "TikTok", "link": "https://tiktok.com" } },
-        "social_3": { "type": "social_link", "settings": { "label": "Newsletter", "link": "/pages/newsletter" } }
+        "shop_1": {
+          "type": "shop_link",
+          "settings": {
+            "label": "Degeaba Club",
+            "link": "/collections/degeaba-club"
+          }
+        },
+        "shop_2": {
+          "type": "shop_link",
+          "settings": {
+            "label": "Print on Demand",
+            "link": "/pages/custom"
+          }
+        },
+        "shop_3": {
+          "type": "shop_link",
+          "settings": {
+            "label": "Concepte",
+            "link": "/pages/concept"
+          }
+        },
+        "social_1": {
+          "type": "social_link",
+          "settings": {
+            "label": "Instagram",
+            "link": "https://instagram.com"
+          }
+        },
+        "social_2": {
+          "type": "social_link",
+          "settings": {
+            "label": "TikTok",
+            "link": "https://tiktok.com"
+          }
+        },
+        "social_3": {
+          "type": "social_link",
+          "settings": {
+            "label": "Newsletter",
+            "link": "/pages/newsletter"
+          }
+        }
       },
-      "block_order": ["shop_1", "shop_2", "shop_3", "social_1", "social_2", "social_3"],
+      "block_order": [
+        "shop_1",
+        "shop_2",
+        "shop_3",
+        "social_1",
+        "social_2",
+        "social_3"
+      ],
       "settings": {
         "brand_tagline": "AIAE.RO — ASTA E.",
         "brand_description": "Brand de streetwear din România. Produs la comandă, în loturi. Fără reaprovizionare, fără scuze. Aia e.",
