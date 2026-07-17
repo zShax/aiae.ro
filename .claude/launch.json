@@ -2,17 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "aiae-preview",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": [
-        "-y",
-        "http-server",
-        "C:\\Users\\mariu\\AppData\\Local\\Temp\\claude\\C--Users-mariu-Documents-GitHub-aiae-ro\\aaba061f-4c45-4ce9-841d-fe24b3f95ea1\\scratchpad\\preview",
-        "-p",
-        "4173",
-        "-c-1"
-      ],
-      "port": 4173
+      "name": "theme-dev",
+      "runtimeExecutable": "shopify",
+      "runtimeArgs": ["theme", "dev"],
+      "port": 9292
     }
   ]
 }

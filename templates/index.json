@@ -43,14 +43,6 @@
     },
     "aiae_print_on_demand": {
       "type": "aiae-print-on-demand",
-      "blocks": {
-        "piece_1": { "type": "piece", "settings": { "code": "POD 01", "name": "TRICOU", "desc": "Bumbac greu, croială boxy. Pune-ți printul și alege culoarea." } },
-        "piece_2": { "type": "piece", "settings": { "code": "POD 02", "name": "HANORAC", "desc": "Fleece dens, glugă dublă. Print mare pe spate, orice culoare." } },
-        "piece_3": { "type": "piece", "settings": { "code": "POD 03", "name": "TRICOU OVERSIZE", "desc": "Drop-shoulder, tipar lat. Printul tău, fără compromis." } },
-        "piece_4": { "type": "piece", "settings": { "code": "POD 04", "name": "ȘAPCA", "desc": "Broderie sau print frontal. Alege forma și nuanța." } },
-        "piece_5": { "type": "piece", "settings": { "code": "POD 05", "name": "TOTEBAG", "desc": "Canvas gros. Print integral, culori la alegere." } }
-      },
-      "block_order": ["piece_1", "piece_2", "piece_3", "piece_4", "piece_5"],
       "settings": {
         "section_number": "02",
         "eyebrow": "PRINT ON DEMAND — PERSONALIZER",
@@ -58,12 +50,15 @@
         "accent_word": "SINGUR",
         "module_label": "MODUL PERSONALIZER",
         "status_label": "LIVE — TOATE CULORILE",
+        "products_to_show": 5,
+        "auto_rotate": true,
+        "autoplay_speed": 4,
         "frame_badge": "PREVIEW",
         "frame_caption": "PRINTURI ÎN TIMP REAL",
         "focus_label": "ALEGE PIESA → PERSONALIZEAZĂ",
         "print_note": "PRINT SCHIMBABIL",
         "color_note": "CULOARE PRODUS",
-        "gif_hint": "Adaugă un GIF în setările piesei — printuri care se schimbă rapid pe produsul activ.",
+        "empty_hint": "Alege o colecție cu produse personalizabile în setările secțiunii.",
         "button_label": "PERSONALIZEAZĂ — PRINT & CULOARE"
       }
     },

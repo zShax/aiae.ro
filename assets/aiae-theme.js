@@ -41,7 +41,6 @@
 
     initMenu();
     initPod(reduceMotion);
-    initPodSnap(reduceMotion);
   }
 
   // ─── Mobile fullscreen menu ────────────────────────────
@@ -68,14 +67,14 @@
     });
   }
 
-  // ─── Personalizer carousel ─────────────────────────────
+  // ─── Personalizer carousel — infinite loop with ghost cards ─
   function initPod(reduceMotion) {
     const pod = document.querySelector('.aiae-pod');
     if (!pod) return;
 
-    const slides = Array.prototype.slice.call(pod.querySelectorAll('.aiae-pod-slide'));
+    const cards = Array.prototype.slice.call(pod.querySelectorAll('[data-pod-card]'));
     const thumbs = Array.prototype.slice.call(pod.querySelectorAll('[data-pod-thumb]'));
-    if (!slides.length) return;
+    if (!cards.length) return;
 
     const info = pod.querySelector('[data-pod-info]');
     const nameEl = pod.querySelector('[data-pod-name]');
@@ -85,14 +84,18 @@
     const btn = pod.querySelector('[data-pod-btn]');
     const prev = pod.querySelector('[data-pod-prev]');
     const next = pod.querySelector('[data-pod-next]');
-    const frame = pod.querySelector('.aiae-pod-frame');
-    const total = slides.length;
+    const frame = pod.querySelector('[data-pod-frame]');
+    const total = cards.length;
+    const half = Math.floor(total / 2);
+    const autoplay = pod.dataset.autoplay === 'true' && !reduceMotion && total > 1;
+    const delay = Math.max(2, parseInt(pod.dataset.autoplaySpeed, 10) || 4) * 1000;
     let idx = -1;
+    const lastOff = new Array(total);
 
     function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
     function paint(i) {
-      const d = slides[i].dataset;
+      const d = cards[i].dataset;
       if (nameEl) nameEl.textContent = d.name || '';
       if (codeEl) codeEl.textContent = d.code || '';
       if (descEl) descEl.textContent = d.desc || '';
@@ -100,11 +103,33 @@
       if (btn) btn.setAttribute('href', (d.url && d.url.length) ? d.url : '#');
     }
 
+    // Position every card on a circular strip around the active one.
+    // Ghosts sit at ±1; anything further is faded out, so the card that
+    // wraps around the loop teleports while invisible.
+    function layout(instant) {
+      cards.forEach(function(card, k) {
+        const off = ((k - idx) % total + total + half) % total - half;
+        const dist = Math.abs(off);
+        const snap = instant || (lastOff[k] !== undefined && Math.abs(off - lastOff[k]) > 1);
+        lastOff[k] = off;
+        if (snap) card.classList.add('is-snap');
+        const scale = dist === 0 ? 1 : (dist === 1 ? 0.86 : 0.76);
+        card.style.transform = 'translate(-50%, -50%) translateX(' + (off * 104) + '%) scale(' + scale + ')';
+        card.style.zIndex = String(3 - Math.min(dist, 2));
+        card.classList.toggle('is-active', dist === 0);
+        card.classList.toggle('is-ghost', dist === 1);
+        if (snap) {
+          void card.offsetWidth;
+          card.classList.remove('is-snap');
+        }
+      });
+    }
+
     function setActive(i, instant) {
       i = (i % total + total) % total;
       if (i === idx) return;
       idx = i;
-      slides.forEach(function(s, k) { s.classList.toggle('is-active', k === idx); });
+      layout(instant);
       thumbs.forEach(function(t, k) { t.classList.toggle('is-active', k === idx); });
 
       if (instant || reduceMotion || !info) {
@@ -118,11 +143,48 @@
       }
     }
 
+    // ── Infinite auto-rotation ──
+    let timer = null;
+    let inView = true;
+    function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
+    function startAuto() {
+      if (!autoplay || !inView || document.hidden) return;
+      stopAuto();
+      timer = setInterval(function() { setActive(idx + 1); }, delay);
+    }
+    function nudge() { stopAuto(); startAuto(); }
+
+    if (autoplay) {
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function(entries) {
+          inView = entries[0].isIntersecting;
+          if (inView) startAuto(); else stopAuto();
+        }, { threshold: 0.25 }).observe(pod);
+      }
+      document.addEventListener('visibilitychange', function() {
+        if (document.hidden) stopAuto(); else startAuto();
+      });
+      if (frame) {
+        frame.addEventListener('mouseenter', stopAuto);
+        frame.addEventListener('mouseleave', startAuto);
+      }
+    }
+
+    // ── Controls ──
     thumbs.forEach(function(t, k) {
-      t.addEventListener('click', function() { setActive(k); });
+      t.addEventListener('click', function() { setActive(k); nudge(); });
     });
-    if (prev) prev.addEventListener('click', function() { setActive(idx - 1); });
-    if (next) next.addEventListener('click', function() { setActive(idx + 1); });
+    if (prev) prev.addEventListener('click', function() { setActive(idx - 1); nudge(); });
+    if (next) next.addEventListener('click', function() { setActive(idx + 1); nudge(); });
+
+    // Clicking a ghost card brings it to the front
+    let dragMoved = false;
+    cards.forEach(function(card, k) {
+      card.addEventListener('click', function() {
+        if (dragMoved) return;
+        if (card.classList.contains('is-ghost')) { setActive(k); nudge(); }
+      });
+    });
 
     // Keyboard arrows when the pod is in view
     document.addEventListener('keydown', function(e) {
@@ -132,77 +194,53 @@
       if (r.top > window.innerHeight * 0.4 || r.bottom < window.innerHeight * 0.6) return;
       if (e.key === 'ArrowLeft') setActive(idx - 1);
       else setActive(idx + 1);
+      nudge();
     });
 
-    // Swipe on the frame (mobile)
+    // ── Scrollable frame: drag / swipe / horizontal wheel ──
     if (frame) {
-      let sx = 0, sy = 0, tracking = false;
-      frame.addEventListener('touchstart', function(e) {
-        const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY; tracking = true;
-      }, { passive: true });
-      frame.addEventListener('touchend', function(e) {
-        if (!tracking) return; tracking = false;
-        const t = e.changedTouches[0];
-        const dx = t.clientX - sx, dy = t.clientY - sy;
+      let sx = 0, sy = 0, dragging = false;
+      frame.addEventListener('pointerdown', function(e) {
+        dragging = true; dragMoved = false;
+        sx = e.clientX; sy = e.clientY;
+        frame.classList.add('is-grabbing');
+        stopAuto();
+      });
+      window.addEventListener('pointermove', function(e) {
+        if (!dragging) return;
+        if (Math.abs(e.clientX - sx) > 8) dragMoved = true;
+      });
+      window.addEventListener('pointerup', function(e) {
+        if (!dragging) return;
+        dragging = false;
+        frame.classList.remove('is-grabbing');
+        const dx = e.clientX - sx, dy = e.clientY - sy;
         if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
           setActive(dx < 0 ? idx + 1 : idx - 1);
         }
-      }, { passive: true });
+        startAuto();
+        setTimeout(function() { dragMoved = false; }, 0);
+      });
+      window.addEventListener('pointercancel', function() {
+        dragging = false;
+        frame.classList.remove('is-grabbing');
+        startAuto();
+      });
+
+      let wheelLock = false;
+      frame.addEventListener('wheel', function(e) {
+        if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+        e.preventDefault();
+        if (wheelLock) return;
+        wheelLock = true;
+        setActive(e.deltaX > 0 ? idx + 1 : idx - 1);
+        nudge();
+        setTimeout(function() { wheelLock = false; }, 450);
+      }, { passive: false });
     }
 
     setActive(0, true);
-  }
-
-  // ─── Magnetic fullscreen snap (luxurious easing) ───────
-  function initPodSnap(reduceMotion) {
-    if (reduceMotion) return;
-    const pod = document.querySelector('.aiae-pod');
-    if (!pod) return;
-
-    let cooldown = false;
-    let raf = null;
-
-    function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
-
-    function tweenTo(targetY, dur) {
-      const startY = window.scrollY || window.pageYOffset;
-      const dist = targetY - startY;
-      if (Math.abs(dist) < 3) return;
-      const start = performance.now();
-      cooldown = true;
-      if (raf) cancelAnimationFrame(raf);
-      (function step(now) {
-        const p = Math.min(1, (now - start) / dur);
-        window.scrollTo(0, startY + dist * easeInOutCubic(p));
-        if (p < 1) raf = requestAnimationFrame(step);
-        else setTimeout(function() { cooldown = false; }, 140);
-      })(start);
-    }
-
-    function trySnap() {
-      if (cooldown) return;
-      const rect = pod.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const top = rect.top;
-      // Only when the pod is taller-or-equal usable height and partly in the capture band.
-      const enteringDown = top > 0 && top < vh * 0.5;                       // pulling up into view
-      const enteringUp = top < 0 && top > -vh * 0.42 && rect.bottom > vh * 0.5; // scrolling back up into it
-      if (enteringDown || enteringUp) {
-        tweenTo((window.scrollY || window.pageYOffset) + top, 720);
-      }
-    }
-
-    // Act only on scroll-end so we never fight an active gesture.
-    let timer = null;
-    function schedule() {
-      if (cooldown) return;
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(trySnap, 120);
-    }
-    window.addEventListener('scroll', schedule, { passive: true });
-    if ('onscrollend' in window) {
-      window.addEventListener('scrollend', function() { if (!cooldown) trySnap(); });
-    }
+    startAuto();
   }
 
   if (document.readyState === 'loading') {

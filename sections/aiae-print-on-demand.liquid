@@ -1,4 +1,6 @@
-<section id="custom" class="aiae-pod">
+<section id="custom" class="aiae-pod"
+         data-autoplay="{% if section.settings.auto_rotate %}true{% else %}false{% endif %}"
+         data-autoplay-speed="{{ section.settings.autoplay_speed | default: 4 }}">
 
   {%- comment -%} Header {%- endcomment -%}
   <div class="aiae-pod__head aiae-reveal">
@@ -15,34 +17,75 @@
     </div>
   </div>
 
-  {%- comment -%} Stage: frame (gif) + control panel {%- endcomment -%}
+  {%- liquid
+    assign coll = section.settings.collection
+    assign limit = section.settings.products_to_show | default: 5
+    assign has_products = false
+    if coll != blank and coll.products.size > 0
+      assign has_products = true
+    endif
+    assign ph_names = 'TRICOU,HANORAC,TRICOU OVERSIZE,ȘAPCA,TOTEBAG' | split: ','
+  -%}
+
+  {%- comment -%} Stage: infinite carousel frame + control panel {%- endcomment -%}
   <div class="aiae-pod-stage aiae-reveal">
 
-    {%- comment -%} GIF frame — fast-switching prints on the active piece {%- endcomment -%}
-    <div class="aiae-pod-frame">
-      {%- for block in section.blocks -%}
-        <div class="aiae-pod-slide{% if forloop.first %} is-active{% endif %}"
-             data-name="{{ block.settings.name | escape }}"
-             data-code="{{ block.settings.code | escape }}"
-             data-desc="{{ block.settings.desc | escape }}"
-             data-url="{{ block.settings.printify_url }}"
-             {{ block.shopify_attributes }}>
-          {%- if block.settings.gif != blank -%}
-            <img src="{{ block.settings.gif | image_url: width: 1400 }}"
-                 alt="{{ block.settings.name | escape }}"
-                 width="{{ block.settings.gif.width }}" height="{{ block.settings.gif.height }}"
-                 loading="lazy">
-          {%- else -%}
-            <div class="aiae-pod-ph">
-              <div>
-                <div class="aiae-pod-ph__code">[ {{ block.settings.code | default: 'PIECE' }} ]</div>
-                <div class="aiae-pod-ph__name">{{ block.settings.name }}</div>
-                <p class="aiae-pod-ph__hint">{{ section.settings.gif_hint }}</p>
+    {%- comment -%} Frame — active product centered, neighbours as ghost cards {%- endcomment -%}
+    <div class="aiae-pod-frame" data-pod-frame>
+      <div class="aiae-pod-track">
+        {%- if has_products -%}
+          {%- for product in coll.products limit: limit -%}
+            {%- capture pod_code -%}POD {% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}{%- endcapture -%}
+            <div class="aiae-pod-card"
+                 data-pod-card
+                 data-name="{{ product.title | escape }}"
+                 data-code="{{ pod_code }}"
+                 data-desc="{{ product.description | strip_html | truncate: 120 | escape }}"
+                 data-url="{{ product.url }}">
+              {%- if product.featured_image != blank -%}
+                <img src="{{ product.featured_image | image_url: width: 1200 }}"
+                     alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                     width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}"
+                     loading="lazy">
+              {%- else -%}
+                <div class="aiae-pod-ph">
+                  <div>
+                    <div class="aiae-pod-ph__code">[ {{ pod_code }} ]</div>
+                    <div class="aiae-pod-ph__name">{{ product.title }}</div>
+                  </div>
+                </div>
+              {%- endif -%}
+              {%- if section.blocks.size > 0 -%}
+                <div class="aiae-pod-card__apps"
+                     data-product-id="{{ product.id }}"
+                     data-product-handle="{{ product.handle }}"
+                     data-product-url="{{ product.url }}">
+                  {%- for block in section.blocks -%}
+                    {%- render block -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for ph_name in ph_names -%}
+            <div class="aiae-pod-card"
+                 data-pod-card
+                 data-name="{{ ph_name | escape }}"
+                 data-code="POD 0{{ forloop.index }}"
+                 data-desc="{{ section.settings.empty_hint | escape }}"
+                 data-url="#">
+              <div class="aiae-pod-ph">
+                <div>
+                  <div class="aiae-pod-ph__code">[ POD 0{{ forloop.index }} ]</div>
+                  <div class="aiae-pod-ph__name">{{ ph_name }}</div>
+                  <p class="aiae-pod-ph__hint">{{ section.settings.empty_hint }}</p>
+                </div>
               </div>
             </div>
-          {%- endif -%}
-        </div>
-      {%- endfor -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
 
       {%- comment -%} Overlay tags {%- endcomment -%}
       <span class="aiae-pod-frame__badge">{{ section.settings.frame_badge }}</span>
@@ -73,22 +116,35 @@
       {%- comment -%} Thumbnails + navigation {%- endcomment -%}
       <div>
         <div class="aiae-pod__thumbs">
-          {%- for block in section.blocks -%}
-            <button type="button" class="aiae-pod-thumb{% if forloop.first %} is-active{% endif %}" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ block.settings.name | escape }}">
-              {%- if block.settings.gif != blank -%}
-                <img src="{{ block.settings.gif | image_url: width: 240 }}" alt="{{ block.settings.name | escape }}" width="120" height="120" loading="lazy">
-              {%- else -%}
+          {%- if has_products -%}
+            {%- for product in coll.products limit: limit -%}
+              <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ product.title | escape }}">
+                {%- if product.featured_image != blank -%}
+                  <img src="{{ product.featured_image | image_url: width: 240 }}" alt="{{ product.title | escape }}" width="120" height="120" loading="lazy">
+                {%- else -%}
+                  <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
+                {%- endif -%}
+              </button>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for ph_name in ph_names -%}
+              <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ ph_name | escape }}">
                 <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
-              {%- endif -%}
-            </button>
-          {%- endfor -%}
+              </button>
+            {%- endfor -%}
+          {%- endif -%}
         </div>
         <div class="aiae-pod__navrow">
           <button type="button" class="aiae-pod-arrow" data-pod-prev aria-label="Anterior">&larr;</button>
           <button type="button" class="aiae-pod-arrow" data-pod-next aria-label="Următor">&rarr;</button>
           <i></i>
         </div>
-        <a href="{{ section.blocks.first.settings.printify_url | default: '#' }}" class="aiae-pod-btn" data-pod-btn>
+        {%- if has_products -%}
+          {%- assign first_url = coll.products.first.url -%}
+        {%- else -%}
+          {%- assign first_url = '#' -%}
+        {%- endif -%}
+        <a href="{{ first_url }}" class="aiae-pod-btn" data-pod-btn>
           <span>{{ section.settings.button_label }}</span>
           <span aria-hidden="true">→</span>
         </a>
@@ -102,7 +158,6 @@
 {% schema %}
 {
   "name": "AIAE Print on Demand",
-  "max_blocks": 5,
   "settings": [
     { "type": "text", "id": "section_number", "label": "Section number", "default": "02" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "PRINT ON DEMAND — PERSONALIZER" },
@@ -110,39 +165,25 @@
     { "type": "text", "id": "accent_word", "label": "Accent word in title", "default": "SINGUR" },
     { "type": "text", "id": "module_label", "label": "Module label", "default": "MODUL PERSONALIZER" },
     { "type": "text", "id": "status_label", "label": "Status label", "default": "LIVE — TOATE CULORILE" },
+    { "type": "header", "content": "Products" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "The personalizable products shown in the carousel." },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 10, "step": 1, "label": "Products to show", "default": 5 },
+    { "type": "checkbox", "id": "auto_rotate", "label": "Auto-rotate carousel", "default": true },
+    { "type": "range", "id": "autoplay_speed", "min": 2, "max": 8, "step": 1, "unit": "s", "label": "Change product every", "default": 4 },
     { "type": "header", "content": "Frame & focus copy" },
     { "type": "text", "id": "frame_badge", "label": "Frame badge", "default": "PREVIEW" },
     { "type": "text", "id": "frame_caption", "label": "Frame caption", "default": "PRINTURI ÎN TIMP REAL" },
     { "type": "text", "id": "focus_label", "label": "Focus label", "default": "ALEGE PIESA → PERSONALIZEAZĂ" },
     { "type": "text", "id": "print_note", "label": "Print note", "default": "PRINT SCHIMBABIL" },
     { "type": "text", "id": "color_note", "label": "Color note", "default": "CULOARE PRODUS" },
-    { "type": "textarea", "id": "gif_hint", "label": "Placeholder hint (shown until a GIF is added)", "default": "Adaugă un GIF în setările piesei — printuri care se schimbă rapid pe produsul activ." },
+    { "type": "textarea", "id": "empty_hint", "label": "Placeholder hint (shown until a collection is selected)", "default": "Alege o colecție cu produse personalizabile în setările secțiunii." },
     { "type": "text", "id": "button_label", "label": "Personalizer button label", "default": "PERSONALIZEAZĂ — PRINT & CULOARE" }
   ],
   "blocks": [
-    {
-      "type": "piece",
-      "name": "Personalizable piece",
-      "settings": [
-        { "type": "text", "id": "code", "label": "Code", "default": "POD 01" },
-        { "type": "text", "id": "name", "label": "Name", "default": "TRICOU CLASIC" },
-        { "type": "textarea", "id": "desc", "label": "Short description", "default": "Bumbac greu, croială boxy. Pune-ți printul și alege culoarea." },
-        { "type": "image_picker", "id": "gif", "label": "Print-switching GIF (animated)", "info": "Upload an animated GIF showing prints switching fast on this product." },
-        { "type": "url", "id": "printify_url", "label": "Printify personalizer link" }
-      ]
-    }
+    { "type": "@app" }
   ],
   "presets": [
-    {
-      "name": "AIAE Print on Demand",
-      "blocks": [
-        { "type": "piece", "settings": { "code": "POD 01", "name": "TRICOU", "desc": "Bumbac greu, croială boxy. Pune-ți printul și alege culoarea." } },
-        { "type": "piece", "settings": { "code": "POD 02", "name": "HANORAC", "desc": "Fleece dens, glugă dublă. Print mare pe spate, orice culoare." } },
-        { "type": "piece", "settings": { "code": "POD 03", "name": "TRICOU OVERSIZE", "desc": "Drop-shoulder, tipar lat. Printul tău, fără compromis." } },
-        { "type": "piece", "settings": { "code": "POD 04", "name": "ȘAPCA", "desc": "Broderie sau print frontal. Alege forma și nuanța." } },
-        { "type": "piece", "settings": { "code": "POD 05", "name": "TOTEBAG", "desc": "Canvas gros. Print integral, culori la alegere." } }
-      ]
-    }
+    { "name": "AIAE Print on Demand" }
   ]
 }
 {% endschema %}
