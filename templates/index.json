@@ -9,41 +9,6 @@
  */
 {
   "sections": {
-    "aiae_nav": {
-      "type": "aiae-nav",
-      "blocks": {
-        "link_1": {
-          "type": "nav_link",
-          "settings": {
-            "label": "Colecție",
-            "link": "/collections/all"
-          }
-        },
-        "link_2": {
-          "type": "nav_link",
-          "settings": {
-            "label": "Custom",
-            "link": "/pages/custom"
-          }
-        },
-        "link_3": {
-          "type": "nav_link",
-          "settings": {
-            "label": "Concept",
-            "link": "/pages/concept"
-          }
-        }
-      },
-      "block_order": [
-        "link_1",
-        "link_2",
-        "link_3"
-      ],
-      "settings": {
-        "brand_name": "aiae.ro",
-        "cart_label": "COȘ"
-      }
-    },
     "aiae_loader": {
       "type": "aiae-loader",
       "settings": {
@@ -75,27 +40,6 @@
     },
     "aiae_print_on_demand": {
       "type": "aiae-print-on-demand",
-      "blocks": {
-        "printify_print_on_demand_personalize_button_nRiXpU": {
-          "type": "shopify://apps/printify-print-on-demand/blocks/personalize_button/019a5dbe-775d-7320-afec-36b77e3421a0",
-          "settings": {
-            "use_default_theme_style": true,
-            "button_text": "Add personalized design",
-            "button_text_with_personalization": "Remove saved design",
-            "button_extra_classes": "product-form__buttons button--full-width",
-            "button_extra_classes_with_personalization": "product-form__buttons button--full-width button--secondary",
-            "button_color": "#007bff",
-            "text_color": "#ffffff",
-            "button_padding": "12px 24px",
-            "font_size": "16px",
-            "border_radius": "4px",
-            "modal_title": "Personalize Your Product"
-          }
-        }
-      },
-      "block_order": [
-        "printify_print_on_demand_personalize_button_nRiXpU"
-      ],
       "settings": {
         "section_number": "02",
         "eyebrow": "PRINT ON DEMAND — PERSONALIZER",
@@ -295,7 +239,6 @@
     }
   },
   "order": [
-    "aiae_nav",
     "aiae_loader",
     "aiae_hero",
     "aiae_collection_grid",

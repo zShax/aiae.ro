@@ -1,0 +1,326 @@
+{%- comment -%}
+  AIAE Product — branded product page ("risograph paper" system).
+  Left: media stage + thumbnails. Right: info panel with variant
+  pills, quantity, app blocks (Printify Personalize etc.) and ATC.
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign form_id = 'aiae-product-form-' | append: section.id
+  assign media_count = product.media.size
+-%}
+
+<section class="aiae-prod" data-aiae-product>
+  <div class="aiae-prod__crumbs" data-aiae-reveal="fade">
+    <a href="{{ routes.root_url }}">AIAE.RO</a>
+    <span>/</span>
+    <a href="{{ routes.all_products_collection_url }}">{{ section.settings.crumb_collection_label }}</a>
+    <span>/</span>
+    <em>{{ product.title | truncate: 40 }}</em>
+  </div>
+
+  <div class="aiae-prod__grid">
+
+    {%- comment -%} ── Media ── {%- endcomment -%}
+    <div class="aiae-prod__media" data-aiae-reveal="scale">
+      <div class="aiae-prod__stage">
+        {%- if media_count > 0 -%}
+          {%- for media in product.media -%}
+            <div class="aiae-prod__frame{% if forloop.first %} is-active{% endif %}"
+                 data-prod-frame
+                 data-media-id="{{ media.id }}">
+              {%- if media.media_type == 'image' -%}
+                <img src="{{ media | image_url: width: 1400 }}"
+                     alt="{{ media.alt | default: product.title | escape }}"
+                     width="{{ media.width }}" height="{{ media.height }}"
+                     {% unless forloop.first %}loading="lazy"{% endunless %}>
+              {%- else -%}
+                {{ media | media_tag: image_size: '1400x' }}
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          <div class="aiae-prod__frame is-active aiae-prod__frame--ph">
+            <span>[ FĂRĂ IMAGINE ]</span>
+          </div>
+        {%- endif -%}
+        <span class="aiae-prod__badge">{{ section.settings.frame_badge }}</span>
+        {%- if section.settings.frame_caption != blank -%}
+          <span class="aiae-prod__caption"><i></i>{{ section.settings.frame_caption }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- if media_count > 1 -%}
+        <div class="aiae-prod__thumbs">
+          {%- for media in product.media -%}
+            <button type="button"
+                    class="aiae-prod__thumb{% if forloop.first %} is-active{% endif %}"
+                    data-prod-thumb="{{ media.id }}"
+                    aria-label="{{ 'products.product.media.image_available' | t: index: forloop.index }}">
+              <img src="{{ media | image_url: width: 240 }}" alt="" width="120" height="120" loading="lazy">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Info panel ── {%- endcomment -%}
+    <div class="aiae-prod__panel" data-aiae-reveal="right" style="--aiae-reveal-delay: 0.12s;">
+
+      <div class="aiae-eyebrow">{{ section.settings.eyebrow }}</div>
+
+      <h1 class="aiae-display aiae-prod__title">{{ product.title }}</h1>
+
+      <div class="aiae-prod__priceline">
+        <span class="aiae-prod__price" data-prod-price>
+          {{- current_variant.price | money -}}
+        </span>
+        <s class="aiae-prod__compare{% unless current_variant.compare_at_price > current_variant.price %} is-hidden{% endunless %}" data-prod-compare>
+          {%- if current_variant.compare_at_price -%}{{ current_variant.compare_at_price | money }}{%- endif -%}
+        </s>
+        <span class="aiae-prod__stock" data-prod-stock>
+          {%- if current_variant.available -%}● {{ section.settings.in_stock_label }}{%- else -%}○ {{ section.settings.sold_out_label }}{%- endif -%}
+        </span>
+      </div>
+
+      {%- if product.description != blank -%}
+        <div class="aiae-prod__desc">{{ product.description }}</div>
+      {%- endif -%}
+
+      {%- form 'product', product, id: form_id, class: 'aiae-prod__form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" data-prod-id>
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <fieldset class="aiae-prod__opt" data-prod-option="{{ forloop.index0 }}">
+              <legend>{{ option.name }} <span data-prod-optvalue>{{ option.selected_value }}</span></legend>
+              <div class="aiae-prod__pills">
+                {%- for value in option.values -%}
+                  <label class="aiae-prod__pill">
+                    <input type="radio"
+                           name="option-{{ forloop.parentloop.index0 }}"
+                           value="{{ value | escape }}"
+                           {% if option.selected_value == value %}checked{% endif %}>
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <div class="aiae-prod__row">
+          <div class="aiae-prod__qty">
+            <button type="button" data-prod-qty="-1" aria-label="Scade cantitatea">−</button>
+            <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Cantitate">
+            <button type="button" data-prod-qty="1" aria-label="Crește cantitatea">+</button>
+          </div>
+          <div class="aiae-prod__sku" data-prod-sku>
+            {%- if current_variant.sku != blank -%}SKU {{ current_variant.sku }}{%- endif -%}
+          </div>
+        </div>
+
+        {%- comment -%} App blocks — Printify Personalize button etc. {%- endcomment -%}
+        {%- if section.blocks.size > 0 -%}
+          <div class="aiae-prod__apps">
+            {%- for block in section.blocks -%}
+              {%- render block -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <button type="submit"
+                name="add"
+                class="aiae-prod__atc"
+                data-prod-atc
+                {% unless current_variant.available %}disabled{% endunless %}>
+          <span data-prod-atc-label>
+            {%- if current_variant.available -%}{{ section.settings.atc_label }}{%- else -%}{{ section.settings.sold_out_label | upcase }}{%- endif -%}
+          </span>
+          <span aria-hidden="true">→</span>
+        </button>
+        <div class="aiae-prod__feedback" data-prod-feedback aria-live="polite"></div>
+      {%- endform -%}
+
+      <div class="aiae-prod__notes">
+        {%- if section.settings.note_1 != blank -%}<span>↻ {{ section.settings.note_1 }}</span>{%- endif -%}
+        {%- if section.settings.note_2 != blank -%}<span>◐ {{ section.settings.note_2 }}</span>{%- endif -%}
+        {%- if section.settings.note_3 != blank -%}<span>▣ {{ section.settings.note_3 }}</span>{%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script type="application/json" data-prod-variants>
+  {{ product.variants | json }}
+</script>
+
+<script>
+(function() {
+  'use strict';
+  var root = document.querySelector('[data-aiae-product]');
+  if (!root || root.dataset.aiaeInit) return;
+  root.dataset.aiaeInit = '1';
+
+  var form = document.getElementById({{ form_id | json }});
+  var variants = JSON.parse(document.querySelector('[data-prod-variants]').textContent);
+  var moneyFormat = {{ shop.money_format | json }};
+  var idInput = root.querySelector('[data-prod-id]');
+  var priceEl = root.querySelector('[data-prod-price]');
+  var compareEl = root.querySelector('[data-prod-compare]');
+  var stockEl = root.querySelector('[data-prod-stock]');
+  var skuEl = root.querySelector('[data-prod-sku]');
+  var atc = root.querySelector('[data-prod-atc]');
+  var atcLabel = root.querySelector('[data-prod-atc-label]');
+  var feedback = root.querySelector('[data-prod-feedback]');
+  var labels = {
+    atc: {{ section.settings.atc_label | json }},
+    added: {{ section.settings.added_label | json }},
+    soldOut: {{ section.settings.sold_out_label | json }},
+    inStock: {{ section.settings.in_stock_label | json }},
+    error: {{ section.settings.error_label | json }}
+  };
+
+  function money(cents) {
+    var value = (cents / 100).toFixed(2);
+    return moneyFormat
+      .replace(/\{\{\s*amount_with_comma_separator\s*\}\}/, value.replace('.', ','))
+      .replace(/\{\{\s*amount_no_decimals\s*\}\}/, Math.round(cents / 100))
+      .replace(/\{\{\s*amount\s*\}\}/, value);
+  }
+
+  function selectedOptions() {
+    var opts = [];
+    root.querySelectorAll('[data-prod-option]').forEach(function(fs, i) {
+      var checked = fs.querySelector('input:checked');
+      opts[i] = checked ? checked.value : null;
+    });
+    return opts;
+  }
+
+  function findVariant() {
+    var opts = selectedOptions();
+    if (!opts.length) return variants[0];
+    return variants.find(function(v) {
+      return v.options.every(function(o, i) { return o === opts[i]; });
+    });
+  }
+
+  function showMedia(mediaId) {
+    if (!mediaId) return;
+    var frames = root.querySelectorAll('[data-prod-frame]');
+    var found = false;
+    frames.forEach(function(f) {
+      var match = f.dataset.mediaId === String(mediaId);
+      if (match) found = true;
+      f.classList.toggle('is-active', match);
+    });
+    if (found) {
+      root.querySelectorAll('[data-prod-thumb]').forEach(function(t) {
+        t.classList.toggle('is-active', t.dataset.prodThumb === String(mediaId));
+      });
+    }
+  }
+
+  function applyVariant(variant) {
+    if (!variant) {
+      if (atc) { atc.disabled = true; atcLabel.textContent = labels.soldOut.toUpperCase(); }
+      return;
+    }
+    idInput.value = variant.id;
+    if (priceEl) priceEl.textContent = money(variant.price);
+    if (compareEl) {
+      var hasCompare = variant.compare_at_price && variant.compare_at_price > variant.price;
+      compareEl.classList.toggle('is-hidden', !hasCompare);
+      compareEl.textContent = hasCompare ? money(variant.compare_at_price) : '';
+    }
+    if (stockEl) stockEl.textContent = variant.available ? '● ' + labels.inStock : '○ ' + labels.soldOut;
+    if (skuEl) skuEl.textContent = variant.sku ? 'SKU ' + variant.sku : '';
+    if (atc) {
+      atc.disabled = !variant.available;
+      atcLabel.textContent = variant.available ? labels.atc : labels.soldOut.toUpperCase();
+    }
+    if (variant.featured_media) showMedia(variant.featured_media.id);
+    var url = new URL(window.location.href);
+    url.searchParams.set('variant', variant.id);
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  root.querySelectorAll('[data-prod-option] input').forEach(function(input) {
+    input.addEventListener('change', function() {
+      var fs = input.closest('[data-prod-option]');
+      var valueEl = fs.querySelector('[data-prod-optvalue]');
+      if (valueEl) valueEl.textContent = input.value;
+      applyVariant(findVariant());
+    });
+  });
+
+  root.querySelectorAll('[data-prod-thumb]').forEach(function(thumb) {
+    thumb.addEventListener('click', function() { showMedia(thumb.dataset.prodThumb); });
+  });
+
+  root.querySelectorAll('[data-prod-qty]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var input = root.querySelector('input[name="quantity"]');
+      var next = (parseInt(input.value, 10) || 1) + parseInt(btn.dataset.prodQty, 10);
+      input.value = Math.max(1, next);
+    });
+  });
+
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (atc.disabled) return;
+      atc.classList.add('is-busy');
+      fetch({{ routes.cart_add_url | json }} + '.js', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      })
+        .then(function(r) {
+          if (!r.ok) return r.json().then(function(j) { throw new Error(j.description || labels.error); });
+          return r.json();
+        })
+        .then(function() { return fetch({{ routes.cart_url | json }} + '.js').then(function(r) { return r.json(); }); })
+        .then(function(cart) {
+          var count = document.getElementById('aiae-cart-count');
+          if (count) count.textContent = cart.item_count;
+          atcLabel.textContent = labels.added;
+          feedback.textContent = '';
+          setTimeout(function() { atcLabel.textContent = labels.atc; }, 2200);
+        })
+        .catch(function(err) {
+          feedback.textContent = err.message || labels.error;
+        })
+        .finally(function() { atc.classList.remove('is-busy'); });
+    });
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "AIAE Product",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "PIESĂ OFICIALĂ — PRINT ON DEMAND" },
+    { "type": "text", "id": "crumb_collection_label", "label": "Breadcrumb collection label", "default": "COLECȚIE" },
+    { "type": "header", "content": "Frame" },
+    { "type": "text", "id": "frame_badge", "label": "Frame badge", "default": "PREVIEW" },
+    { "type": "text", "id": "frame_caption", "label": "Frame caption", "default": "PRINTURI ÎN TIMP REAL" },
+    { "type": "header", "content": "Labels" },
+    { "type": "text", "id": "atc_label", "label": "Add to cart label", "default": "ADAUGĂ ÎN COȘ" },
+    { "type": "text", "id": "added_label", "label": "Added confirmation", "default": "ADĂUGAT ✓" },
+    { "type": "text", "id": "in_stock_label", "label": "In stock label", "default": "LIVE — DISPONIBIL" },
+    { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "Epuizat" },
+    { "type": "text", "id": "error_label", "label": "Error message", "default": "Ceva n-a mers. Mai încearcă o dată." },
+    { "type": "header", "content": "Notes" },
+    { "type": "text", "id": "note_1", "label": "Note 1", "default": "PRINT SCHIMBABIL" },
+    { "type": "text", "id": "note_2", "label": "Note 2", "default": "CULOARE PRODUS" },
+    { "type": "text", "id": "note_3", "label": "Note 3", "default": "PRODUS LA COMANDĂ ÎN RO" }
+  ],
+  "blocks": [
+    { "type": "@app" }
+  ]
+}
+{% endschema %}

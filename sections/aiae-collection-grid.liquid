@@ -1,11 +1,11 @@
 <section id="collection" class="aiae-section">
 
-  <div class="aiae-section__head aiae-reveal">
-    <div>
+  <div class="aiae-section__head">
+    <div data-aiae-reveal>
       <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
       <h2 class="aiae-display aiae-section__title">{{ section.settings.title | newline_to_br }}</h2>
     </div>
-    <p class="aiae-section__desc">{{ section.settings.description }}</p>
+    <p class="aiae-section__desc" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">{{ section.settings.description }}</p>
   </div>
 
   <div class="aiae-grid">
@@ -13,7 +13,7 @@
     {%- assign collection = collections[section.settings.collection] -%}
     {%- if collection != blank and collection.products_count > 0 -%}
       {%- for product in collection.products limit: section.settings.products_to_show -%}
-        <div class="aiae-card aiae-reveal">
+        <div class="aiae-card" data-aiae-reveal="scale" style="--aiae-reveal-delay: {{ forloop.index0 | modulo: 3 | times: 0.09 }}s;">
           <a href="{{ product.url }}">
             <div class="aiae-card__media">
               {%- if product.featured_image -%}
@@ -48,7 +48,7 @@
       {%- assign placeholder_items = "CR-01,DEGEABA CREWNECK,480 RON,LOT 01|CP-02,SERIAL CAP / 0001,260 RON,LOT 02|HD-03,STARBURST HOOD,620 RON,LOT 03|TS-04,RESUME TEE / NULL,220 RON,LOT 04|TS-05,TICKET TEE / EXPIRED,240 RON,LOT 05|LS-06,AIA E LONGSLEEVE,320 RON,LOT 06" | split: "|" -%}
       {%- for item_str in placeholder_items -%}
         {%- assign parts = item_str | split: "," -%}
-        <div class="aiae-card aiae-reveal">
+        <div class="aiae-card" data-aiae-reveal="scale" style="--aiae-reveal-delay: {{ forloop.index0 | modulo: 3 | times: 0.09 }}s;">
           <div class="aiae-card__media aiae-card__media--ph">
             <span class="aiae-card__code">[ {{ parts[0] }} ]</span>
             <span class="aiae-card__lot">{{ parts[3] }}</span>

@@ -1,14 +1,14 @@
 <section id="concept" class="aiae-con">
 
-  <div class="aiae-con__head aiae-reveal">
-    <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
-    <h2 class="aiae-display aiae-con__title">{{ section.settings.title }}</h2>
+  <div class="aiae-con__head">
+    <div class="aiae-eyebrow" data-aiae-reveal>({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
+    <h2 class="aiae-display aiae-con__title" data-aiae-reveal style="--aiae-reveal-delay: 0.12s;">{{ section.settings.title }}</h2>
   </div>
 
   {%- for block in section.blocks -%}
     {%- if block.type == 'carousel_row' -%}
-      <div class="aiae-con__row aiae-reveal" {{ block.shopify_attributes }}>
-        <div class="aiae-con__rowhead">
+      <div class="aiae-con__row" {{ block.shopify_attributes }}>
+        <div class="aiae-con__rowhead" data-aiae-reveal>
           <h3 class="aiae-con__rowtitle">{{ block.settings.title }}</h3>
           <span class="aiae-con__rownote">{{ block.settings.note }}</span>
           <span class="aiae-con__rowline"></span>
@@ -27,7 +27,7 @@
             {%- assign bg_val = block.settings[bg_key] | default: '#E7E3D8' -%}
             {%- assign fg_val = block.settings[fg_key] | default: '#0D0D0D' -%}
             {%- if t_val != blank -%}
-              <div class="aiae-cc">
+              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;">
                 <div class="aiae-cc__media" style="background:{{ bg_val }}; color:{{ fg_val }};">
                   <span class="aiae-cc__tag">[ {{ n_val }} ]</span>
                   <span class="aiae-cc__num">{{ n_val }}</span>

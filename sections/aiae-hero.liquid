@@ -1,7 +1,7 @@
-<section id="top" class="aiae-hero aiae-reveal">
+<section id="top" class="aiae-hero">
 
   {%- comment -%} Marquee ticker {%- endcomment -%}
-  <div class="aiae-hero__ticker aiae-noscroll">
+  <div class="aiae-hero__ticker aiae-noscroll" data-aiae-reveal="fade" style="--aiae-reveal-delay: 0.55s;">
     <div class="aiae-marquee-inner">
       {%- assign ticker_items = section.settings.ticker_text | split: '|' -%}
       {%- for item in ticker_items -%}
@@ -16,19 +16,19 @@
     </div>
   </div>
 
-  <div class="aiae-hero__eyebrow">
+  <div class="aiae-hero__eyebrow" data-aiae-reveal style="--aiae-reveal-delay: 0.1s;">
     <span class="aiae-idx">(00)</span>
     <span>{{ section.settings.label }}</span>
     <span>— {{ section.settings.sublabel }}</span>
   </div>
 
-  <h1 class="aiae-hero__headline">
+  <h1 class="aiae-hero__headline" data-aiae-reveal="rise" style="--aiae-reveal-delay: 0.2s;">
     {{- section.settings.headline | replace: '.', '<span class="aiae-dot">.</span>' -}}
   </h1>
 
   <div class="aiae-hero__bottom">
-    <p class="aiae-hero__tagline">{{ section.settings.tagline }}</p>
-    <a href="{{ section.settings.cta_link }}" class="aiae-hero__cta">{{ section.settings.cta_label }} →</a>
+    <p class="aiae-hero__tagline" data-aiae-reveal style="--aiae-reveal-delay: 0.36s;">{{ section.settings.tagline }}</p>
+    <a href="{{ section.settings.cta_link }}" class="aiae-hero__cta" data-aiae-reveal style="--aiae-reveal-delay: 0.46s;">{{ section.settings.cta_label }} →</a>
   </div>
 
 </section>

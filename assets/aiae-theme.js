@@ -41,6 +41,51 @@
 
     initMenu();
     initPod(reduceMotion);
+    initReveal(reduceMotion, loader);
+  }
+
+  // ─── Scroll-entrance reveals ───────────────────────────
+  function initReveal(reduceMotion, loader) {
+    const SELECTOR = '.aiae-reveal, [data-aiae-reveal]';
+    const targets = Array.prototype.slice.call(document.querySelectorAll(SELECTOR));
+    if (!targets.length) return;
+    // Without the .aiae-anim body class nothing is ever hidden,
+    // so reduced motion / old browsers simply show static content.
+    if (reduceMotion || !('IntersectionObserver' in window)) return;
+
+    document.body.classList.add('aiae-anim');
+
+    // Once the entrance settles, strip the reveal hooks so the
+    // element returns to stock styling (hover transitions etc.).
+    function settle(el) {
+      const delay = (parseFloat(getComputedStyle(el).transitionDelay) || 0) * 1000;
+      setTimeout(function() {
+        el.classList.remove('aiae-reveal', 'is-revealed');
+        el.removeAttribute('data-aiae-reveal');
+      }, 950 + delay);
+    }
+
+    const io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        io.unobserve(entry.target);
+        entry.target.classList.add('is-revealed');
+        settle(entry.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.06 });
+
+    function observeAll(els) {
+      els.forEach(function(el) { io.observe(el); });
+    }
+
+    // Hold the first reveals until the intro loader curtain lifts
+    const wait = (loader && loader.style.display !== 'none') ? 1900 : 0;
+    setTimeout(function() { observeAll(targets); }, wait);
+
+    // Theme editor re-renders sections with fresh (hidden) markup
+    document.addEventListener('shopify:section:load', function(e) {
+      observeAll(Array.prototype.slice.call(e.target.querySelectorAll(SELECTOR)));
+    });
   }
 
   // ─── Mobile fullscreen menu ────────────────────────────

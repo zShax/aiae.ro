@@ -3,15 +3,15 @@
          data-autoplay-speed="{{ section.settings.autoplay_speed | default: 4 }}">
 
   {%- comment -%} Header {%- endcomment -%}
-  <div class="aiae-pod__head aiae-reveal">
-    <div>
+  <div class="aiae-pod__head">
+    <div data-aiae-reveal>
       <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
       {%- assign accent_html = '<span class="aiae-dot">' | append: section.settings.accent_word | append: '</span>' -%}
       <h2 class="aiae-display aiae-pod__title">
         {{ section.settings.title | replace: section.settings.accent_word, accent_html }}
       </h2>
     </div>
-    <div class="aiae-pod__meta">
+    <div class="aiae-pod__meta" data-aiae-reveal style="--aiae-reveal-delay: 0.16s;">
       <span>{{ section.settings.module_label }}</span>
       <span class="aiae-live">● {{ section.settings.status_label }}</span>
     </div>
@@ -28,10 +28,10 @@
   -%}
 
   {%- comment -%} Stage: infinite carousel frame + control panel {%- endcomment -%}
-  <div class="aiae-pod-stage aiae-reveal">
+  <div class="aiae-pod-stage">
 
     {%- comment -%} Frame — active product centered, neighbours as ghost cards {%- endcomment -%}
-    <div class="aiae-pod-frame" data-pod-frame>
+    <div class="aiae-pod-frame" data-pod-frame data-aiae-reveal="scale">
       <div class="aiae-pod-track">
         {%- if has_products -%}
           {%- for product in coll.products limit: limit -%}
@@ -93,7 +93,7 @@
     </div>
 
     {%- comment -%} Control panel {%- endcomment -%}
-    <div class="aiae-pod-panel">
+    <div class="aiae-pod-panel" data-aiae-reveal="right" style="--aiae-reveal-delay: 0.18s;">
 
       <div>
         <div class="aiae-pod__focus">{{ section.settings.focus_label }}</div>

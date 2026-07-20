@@ -10,107 +10,45 @@
 {
   "sections": {
     "main": {
-      "type": "main-product",
+      "type": "aiae-product",
       "blocks": {
-        "vendor": {
-          "type": "text",
+        "printify_personalize": {
+          "type": "shopify://apps/printify-print-on-demand/blocks/personalize_button/019a5dbe-775d-7320-afec-36b77e3421a0",
           "settings": {
-            "text": "{{ product.vendor }}",
-            "text_style": "uppercase"
-          }
-        },
-        "title": {
-          "type": "title",
-          "settings": {}
-        },
-        "price": {
-          "type": "price",
-          "settings": {}
-        },
-        "variant_picker": {
-          "type": "variant_picker",
-          "settings": {
-            "picker_type": "button",
-            "swatch_shape": "circle"
-          }
-        },
-        "quantity_selector": {
-          "type": "quantity_selector",
-          "settings": {}
-        },
-        "buy_buttons": {
-          "type": "buy_buttons",
-          "settings": {
-            "show_dynamic_checkout": true,
-            "show_gift_card_recipient": true
-          }
-        },
-        "description": {
-          "type": "description",
-          "settings": {}
-        },
-        "share": {
-          "type": "share",
-          "settings": {
-            "share_label": "Share"
+            "use_default_theme_style": false,
+            "button_text": "ADAUGĂ DESIGN PERSONALIZAT",
+            "button_text_with_personalization": "ȘTERGE DESIGNUL SALVAT",
+            "button_extra_classes": "aiae-prod__personalize",
+            "button_extra_classes_with_personalization": "aiae-prod__personalize is-saved",
+            "button_color": "#0D0D0D",
+            "text_color": "#F2EFE7",
+            "button_padding": "16px 22px",
+            "font_size": "12px",
+            "border_radius": "0px",
+            "modal_title": "Personalizează produsul"
           }
         }
       },
       "block_order": [
-        "vendor",
-        "title",
-        "price",
-        "variant_picker",
-        "quantity_selector",
-        "buy_buttons",
-        "description",
-        "share"
+        "printify_personalize"
       ],
       "settings": {
-        "enable_sticky_info": true,
-        "color_scheme": "scheme-1",
-        "media_size": "large",
-        "constrain_to_viewport": true,
-        "media_fit": "contain",
-        "gallery_layout": "stacked",
-        "mobile_thumbnails": "hide",
-        "media_position": "left",
-        "image_zoom": "lightbox",
-        "hide_variants": true,
-        "enable_video_looping": false,
-        "padding_top": 36,
-        "padding_bottom": 12
-      }
-    },
-    "disclosures": {
-      "type": "disclosures",
-      "settings": {
-        "padding_top": 36,
-        "padding_bottom": 0
-      }
-    },
-    "related-products": {
-      "type": "related-products",
-      "settings": {
-        "heading": "You may also like",
-        "heading_size": "h2",
-        "products_to_show": 4,
-        "columns_desktop": 4,
-        "columns_mobile": "2",
-        "color_scheme": "scheme-1",
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "padding_top": 36,
-        "padding_bottom": 28
+        "eyebrow": "PIESĂ OFICIALĂ — PRINT ON DEMAND",
+        "crumb_collection_label": "COLECȚIE",
+        "frame_badge": "PREVIEW",
+        "frame_caption": "PRINTURI ÎN TIMP REAL",
+        "atc_label": "ADAUGĂ ÎN COȘ",
+        "added_label": "ADĂUGAT ✓",
+        "in_stock_label": "LIVE — DISPONIBIL",
+        "sold_out_label": "Epuizat",
+        "error_label": "Ceva n-a mers. Mai încearcă o dată.",
+        "note_1": "PRINT SCHIMBABIL",
+        "note_2": "CULOARE PRODUS",
+        "note_3": "PRODUS LA COMANDĂ ÎN RO"
       }
     }
   },
   "order": [
-    "main",
-    "disclosures",
-    "related-products"
+    "main"
   ]
 }

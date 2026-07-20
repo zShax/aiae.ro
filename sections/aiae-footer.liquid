@@ -1,11 +1,11 @@
 <footer class="aiae-footer">
   <div class="aiae-footer__top">
-    <div class="aiae-footer__brand">
+    <div class="aiae-footer__brand" data-aiae-reveal>
       <div class="aiae-footer__tagline">{{ section.settings.brand_tagline }}</div>
       <p class="aiae-footer__desc">{{ section.settings.brand_description }}</p>
     </div>
     <div class="aiae-footer__cols">
-      <div class="aiae-footer__col">
+      <div class="aiae-footer__col" data-aiae-reveal style="--aiae-reveal-delay: 0.12s;">
         <span class="aiae-footer__colhead">Magazin</span>
         {%- for block in section.blocks -%}
           {%- if block.type == 'shop_link' -%}
@@ -13,7 +13,7 @@
           {%- endif -%}
         {%- endfor -%}
       </div>
-      <div class="aiae-footer__col">
+      <div class="aiae-footer__col" data-aiae-reveal style="--aiae-reveal-delay: 0.2s;">
         <span class="aiae-footer__colhead">Social</span>
         {%- for block in section.blocks -%}
           {%- if block.type == 'social_link' -%}
@@ -24,13 +24,13 @@
     </div>
   </div>
 
-  <div class="aiae-footer__wordwrap aiae-noscroll">
+  <div class="aiae-footer__wordwrap aiae-noscroll" data-aiae-reveal="rise">
     <div id="aiae-footer-word" class="aiae-footer__word">
       <span>{{ section.settings.wordmark }}</span>
     </div>
   </div>
 
-  <div class="aiae-footer__bottom">
+  <div class="aiae-footer__bottom" data-aiae-reveal="fade" style="--aiae-reveal-delay: 0.15s;">
     <span>{{ section.settings.copyright }}</span>
     <span class="aiae-footer__madein">{{ section.settings.made_in }}<i></i></span>
   </div>

@@ -38,7 +38,6 @@
 /* ── Keyframes ─────────────────────────────────────────── */
 @keyframes aiae-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes aiae-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-@keyframes aiae-rise { from { opacity: 0; transform: translateY(46px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes aiae-loader-out { 0%, 58% { transform: translateY(0); } 100% { transform: translateY(-101%); } }
 @keyframes aiae-bar { from { width: 0%; } to { width: 100%; } }
 
@@ -70,15 +69,29 @@ body.aiae-body::after {
 .aiae-noscroll::-webkit-scrollbar { display: none; height: 0; }
 .aiae-noscroll { scrollbar-width: none; }
 
-/* Reveal animation (scroll-driven; runs once on load in older engines) */
-.aiae-reveal {
+/* ── Entrance reveals ──────────────────────────────────────
+   aiae-theme.js adds .aiae-anim to <body>, flips .is-revealed
+   on each target as it enters the viewport, then strips the
+   reveal hooks once the transition settles so hover states
+   behave as designed. Without JS (or with reduced motion)
+   nothing is hidden — content simply stays visible. */
+.aiae-anim .aiae-reveal,
+.aiae-anim [data-aiae-reveal] {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.9s var(--aiae-ease), transform 0.9s var(--aiae-ease);
+  transition-delay: var(--aiae-reveal-delay, 0s);
+}
+.aiae-anim [data-aiae-reveal="fade"]  { transform: none; }
+.aiae-anim [data-aiae-reveal="down"]  { transform: translateY(-16px); }
+.aiae-anim [data-aiae-reveal="left"]  { transform: translateX(-36px); }
+.aiae-anim [data-aiae-reveal="right"] { transform: translateX(36px); }
+.aiae-anim [data-aiae-reveal="scale"] { transform: translateY(20px) scale(0.96); }
+.aiae-anim [data-aiae-reveal="rise"]  { transform: translateY(80px); }
+.aiae-anim .aiae-reveal.is-revealed,
+.aiae-anim [data-aiae-reveal].is-revealed {
   opacity: 1;
-  animation-name: aiae-rise;
-  animation-duration: 0.9s;
-  animation-timing-function: var(--aiae-ease);
-  animation-fill-mode: both;
-  animation-timeline: view();
-  animation-range: entry 0% cover 32%;
+  transform: none;
 }
 
 /* ── Shared type helpers ───────────────────────────────── */
@@ -1022,8 +1035,412 @@ body.aiae-menu-lock { overflow: hidden; }
   .aiae-grid { grid-template-columns: 1fr; }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   GLOBAL NAV — non-home pages get a solid paper bar + offset
+   ═══════════════════════════════════════════════════════════ */
+.aiae-body:not(.aiae-template-index) .aiae-nav {
+  background: rgba(242, 239, 231, 0.92);
+  border-bottom-color: var(--aiae-line);
+}
+.aiae-body:not(.aiae-template-index) #MainContent {
+  padding-top: 74px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PRODUCT PAGE — paper editorial sheet
+   ═══════════════════════════════════════════════════════════ */
+.aiae-prod {
+  padding: 26px var(--aiae-gutter) clamp(60px, 9vh, 120px);
+  background: var(--aiae-paper);
+}
+.aiae-prod__crumbs {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-faint);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--aiae-line);
+  margin-bottom: clamp(24px, 4vh, 44px);
+}
+.aiae-prod__crumbs a { color: var(--aiae-muted); text-decoration: none; white-space: nowrap; }
+.aiae-prod__crumbs a:hover { color: var(--aiae-ink); }
+.aiae-prod__crumbs em {
+  font-style: normal;
+  color: var(--aiae-ink);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aiae-prod__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+}
+
+/* Media stage */
+.aiae-prod__media { min-width: 0; }
+.aiae-prod__stage {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--aiae-cream);
+  border: 1px solid var(--aiae-line);
+  overflow: hidden;
+}
+.aiae-prod__frame {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s var(--aiae-ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.aiae-prod__frame.is-active { opacity: 1; visibility: visible; }
+.aiae-prod__frame img,
+.aiae-prod__frame video,
+.aiae-prod__frame iframe,
+.aiae-prod__frame model-viewer {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.aiae-prod__frame--ph {
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--aiae-faint);
+  background: repeating-linear-gradient(45deg, var(--aiae-cream), var(--aiae-cream) 11px, #EDE9DD 11px, #EDE9DD 22px);
+}
+.aiae-prod__badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--aiae-paper);
+  background: var(--aiae-ink);
+  padding: 5px 9px;
+  text-transform: uppercase;
+}
+.aiae-prod__caption {
+  position: absolute;
+  right: 14px; bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-muted);
+}
+.aiae-prod__caption i {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--aiae-accent);
+  animation: aiae-blink 1.6s steps(1) infinite;
+}
+.aiae-prod__thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* fade hint that the strip keeps going */
+  -webkit-mask-image: linear-gradient(to right, #000 90%, transparent);
+  mask-image: linear-gradient(to right, #000 90%, transparent);
+}
+.aiae-prod__thumbs::-webkit-scrollbar { display: none; }
+.aiae-prod__thumb {
+  flex: 0 0 auto;
+  width: 68px;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  cursor: pointer;
+  border: 1px solid var(--aiae-line);
+  background: var(--aiae-cream);
+  opacity: 0.55;
+  overflow: hidden;
+  transition: opacity 0.3s ease, border-color 0.3s ease, transform 0.3s var(--aiae-ease);
+}
+.aiae-prod__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.aiae-prod__thumb:hover { opacity: 0.9; transform: translateY(-2px); }
+.aiae-prod__thumb.is-active { opacity: 1; border-color: var(--aiae-accent); }
+
+/* Info panel — flex column so mobile can reorder content */
+.aiae-prod__panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.aiae-prod__title {
+  font-size: clamp(34px, 4.6vw, 72px);
+  margin-bottom: 18px;
+}
+.aiae-prod__priceline {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-family: var(--aiae-font-mono);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--aiae-line);
+  margin-bottom: 18px;
+}
+.aiae-prod__price { font-size: 20px; font-weight: 700; color: var(--aiae-ink); }
+.aiae-prod__compare { font-size: 14px; color: var(--aiae-faint); }
+.aiae-prod__compare.is-hidden { display: none; }
+.aiae-prod__stock {
+  margin-left: auto;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+.aiae-prod__desc {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--aiae-muted);
+  max-width: 52ch;
+  margin-bottom: 26px;
+  overflow-wrap: break-word;
+}
+.aiae-prod__desc p { margin: 0 0 12px; }
+
+/* Options */
+.aiae-prod__opt {
+  border: 0;
+  padding: 0;
+  margin: 0 0 20px;
+}
+.aiae-prod__opt legend {
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aiae-muted);
+  padding: 0;
+  margin-bottom: 10px;
+}
+.aiae-prod__opt legend span { color: var(--aiae-ink); }
+.aiae-prod__pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.aiae-prod__pill { position: relative; cursor: pointer; }
+.aiae-prod__pill input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.aiae-prod__pill span {
+  display: inline-block;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--aiae-muted);
+  border: 1px solid var(--aiae-line-strong);
+  padding: 9px 14px;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.aiae-prod__pill:hover span { color: var(--aiae-ink); border-color: var(--aiae-ink); }
+.aiae-prod__pill input:checked + span {
+  background: var(--aiae-ink);
+  color: var(--aiae-paper);
+  border-color: var(--aiae-ink);
+}
+.aiae-prod__pill input:focus-visible + span { outline: 2px solid var(--aiae-accent); outline-offset: 2px; }
+
+/* Quantity + SKU */
+.aiae-prod__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.aiae-prod__qty {
+  display: inline-flex;
+  border: 1px solid var(--aiae-line-strong);
+}
+.aiae-prod__qty button {
+  width: 42px; height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--aiae-ink);
+  font-size: 17px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.aiae-prod__qty button:hover { background: var(--aiae-ink); color: var(--aiae-paper); }
+.aiae-prod__qty input {
+  width: 52px;
+  border: 0;
+  border-left: 1px solid var(--aiae-line);
+  border-right: 1px solid var(--aiae-line);
+  background: transparent;
+  text-align: center;
+  font-family: var(--aiae-font-mono);
+  font-size: 14px;
+  color: var(--aiae-ink);
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.aiae-prod__qty input::-webkit-outer-spin-button,
+.aiae-prod__qty input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.aiae-prod__sku {
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--aiae-faint);
+  text-transform: uppercase;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* App blocks (Printify personalize) */
+.aiae-prod__apps { margin-bottom: 12px; }
+.aiae-prod__apps:empty { display: none; }
+.aiae-prod__apps button,
+.aiae-prod__apps .aiae-prod__personalize {
+  width: 100%;
+  font-family: var(--aiae-font-mono) !important;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.aiae-prod__personalize {
+  display: block;
+  background: var(--aiae-ink);
+  color: var(--aiae-paper);
+  border: 1px solid var(--aiae-ink);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.aiae-prod__personalize:hover { background: transparent; color: var(--aiae-ink); }
+.aiae-prod__personalize.is-saved { background: transparent; color: var(--aiae-ink); }
+
+/* Add to cart */
+.aiae-prod__atc {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: var(--aiae-accent);
+  color: var(--aiae-paper);
+  border: 1px solid var(--aiae-accent);
+  padding: 18px 22px;
+  font-family: var(--aiae-font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+}
+.aiae-prod__atc:hover:not(:disabled) { background: var(--aiae-ink); border-color: var(--aiae-ink); }
+.aiae-prod__atc:disabled { opacity: 0.45; cursor: not-allowed; }
+.aiae-prod__atc.is-busy { opacity: 0.7; pointer-events: none; }
+.aiae-prod__feedback {
+  min-height: 18px;
+  margin-top: 10px;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  color: var(--aiae-accent);
+}
+
+/* Notes */
+.aiae-prod__notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--aiae-line);
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--aiae-muted);
+}
+
+/* Tablet — single column, roomy stage */
+@media (max-width: 1024px) {
+  .aiae-prod__grid { grid-template-columns: 1fr; gap: 24px; }
+  .aiae-prod__title { font-size: clamp(32px, 6.5vw, 56px); }
+}
+
+/* Mobile — buy controls first, description after */
+@media (max-width: 640px) {
+  .aiae-prod { padding-top: 16px; }
+  .aiae-prod__crumbs { margin-bottom: 20px; padding-bottom: 14px; }
+  .aiae-prod__grid { gap: 18px; }
+  .aiae-prod__title { font-size: clamp(30px, 10.5vw, 44px); margin-bottom: 14px; }
+  .aiae-prod__thumb { width: 56px; }
+  .aiae-prod__priceline { padding-bottom: 14px; margin-bottom: 16px; }
+  .aiae-prod__price { font-size: 18px; }
+
+  /* The long Printify description would bury the buy button —
+     push it (and the notes) below the form on small screens. */
+  .aiae-prod__desc { order: 10; margin: 26px 0 0; padding-top: 18px; border-top: 1px solid var(--aiae-line); font-size: 14px; }
+  .aiae-prod__notes { order: 11; }
+
+  .aiae-prod__opt { margin-bottom: 16px; }
+  .aiae-prod__pill span { padding: 8px 12px; font-size: 11px; }
+  .aiae-prod__row { justify-content: space-between; }
+  .aiae-prod__atc { padding: 16px 18px; font-size: 12px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ACCOUNT — register disabled notice
+   ═══════════════════════════════════════════════════════════ */
+.aiae-register-off {
+  min-height: 52vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+  padding: 40px var(--aiae-gutter) 80px;
+}
+.aiae-register-off .aiae-display { font-size: clamp(34px, 6vw, 84px); }
+.aiae-register-off p {
+  margin: 0;
+  max-width: 46ch;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--aiae-muted);
+}
+.aiae-register-off a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+  text-decoration: none;
+  border: 1px solid var(--aiae-line-strong);
+  padding: 12px 18px;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.aiae-register-off a:hover { background: var(--aiae-ink); color: var(--aiae-paper); }
+
 /* ── Reduced motion ────────────────────────────────────── */
-.aiae-reduce-motion .aiae-reveal { animation: none; }
+.aiae-reduce-motion .aiae-reveal,
+.aiae-reduce-motion [data-aiae-reveal] { opacity: 1; transform: none; transition: none; }
 .aiae-reduce-motion .aiae-pod-frame::after { animation: none; display: none; }
 .aiae-reduce-motion .aiae-pod-card { transition: opacity 0.3s ease; }
 .aiae-reduce-motion .aiae-card__media img { transition: none; }
@@ -1031,7 +1448,8 @@ body.aiae-menu-lock { overflow: hidden; }
 .aiae-reduce-motion .aiae-menu__link { transition: color 0.25s ease; opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .aiae-reveal { animation: none; }
+  .aiae-anim .aiae-reveal,
+  .aiae-anim [data-aiae-reveal] { opacity: 1; transform: none; transition: none; }
   .aiae-pod-frame::after { animation: none; display: none; }
   .aiae-marquee-inner { animation-play-state: paused; }
 }
