@@ -1,11 +1,19 @@
-<section id="collection" class="aiae-section">
+<section id="collection" class="aiae-section aiae-section--void">
 
   <div class="aiae-section__head">
     <div data-aiae-reveal>
       <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
       <h2 class="aiae-display aiae-section__title">{{ section.settings.title | newline_to_br }}</h2>
     </div>
-    <p class="aiae-section__desc" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">{{ section.settings.description }}</p>
+    <div class="aiae-section__aside" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">
+      <p class="aiae-section__desc">{{ section.settings.description }}</p>
+      {%- if section.settings.redirect_label != blank -%}
+        <a href="{{ section.settings.redirect_link | default: '#custom' }}" class="aiae-section__redirect">
+          <span>{{ section.settings.redirect_label }}</span>
+          <span aria-hidden="true">↑</span>
+        </a>
+      {%- endif -%}
+    </div>
   </div>
 
   <div class="aiae-grid">
@@ -74,25 +82,37 @@
       "type": "text",
       "id": "section_number",
       "label": "Section number",
-      "default": "01"
+      "default": "03"
     },
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow text",
-      "default": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA"
+      "default": "MAGAZINUL — PIESE GATA FĂCUTE"
     },
     {
       "type": "text",
       "id": "title",
       "label": "Section title (use newline for line break)",
-      "default": "DEGEABA\nCLUB 2026"
+      "default": "GATA\nFĂCUTE"
     },
     {
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică."
+      "default": "Piesele astea țin magazinul pe picioare — le facem cu aceleași materiale și aceleași standarde. Dar sunt ale noastre, nu ale tale. Dacă vrei ceva care chiar te reprezintă, ia-o pe cea personalizată."
+    },
+    {
+      "type": "text",
+      "id": "redirect_label",
+      "label": "Redirect link label",
+      "default": "MAI BINE ALEGE DIN COLECȚIILE PERSONALIZATE"
+    },
+    {
+      "type": "url",
+      "id": "redirect_link",
+      "label": "Redirect link",
+      "info": "Defaults to the personalized collections section on this page."
     },
     {
       "type": "collection",

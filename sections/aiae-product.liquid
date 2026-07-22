@@ -90,56 +90,90 @@
       {%- form 'product', product, id: form_id, class: 'aiae-prod__form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
         <input type="hidden" name="id" value="{{ current_variant.id }}" data-prod-id>
 
-        {%- unless product.has_only_default_variant -%}
-          {%- for option in product.options_with_values -%}
-            <fieldset class="aiae-prod__opt" data-prod-option="{{ forloop.index0 }}">
-              <legend>{{ option.name }} <span data-prod-optvalue>{{ option.selected_value }}</span></legend>
-              <div class="aiae-prod__pills">
-                {%- for value in option.values -%}
-                  <label class="aiae-prod__pill">
-                    <input type="radio"
-                           name="option-{{ forloop.parentloop.index0 }}"
-                           value="{{ value | escape }}"
-                           {% if option.selected_value == value %}checked{% endif %}>
-                    <span>{{ value }}</span>
-                  </label>
-                {%- endfor -%}
+        {%- comment -%}
+          CTA dock — variant options, quantity, app blocks (Printify
+          Personalize etc.) and ATC all live in one bar. The slot keeps
+          its place in the flow; the bar detaches to the bottom of the
+          viewport whenever the slot is scrolled out of view, so the
+          buyer keeps every buying control within reach.
+        {%- endcomment -%}
+        <div class="aiae-prod__ctaslot" data-prod-cta-slot>
+          <div class="aiae-prod__cta" data-prod-cta>
+            <div class="aiae-prod__cta-inner">
+              <div class="aiae-prod__cta-meta" aria-hidden="true">
+                <span class="aiae-prod__cta-name">{{ product.title }}</span>
+                <span class="aiae-prod__cta-price" data-prod-price>{{ current_variant.price | money }}</span>
               </div>
-            </fieldset>
-          {%- endfor -%}
-        {%- endunless -%}
 
-        <div class="aiae-prod__row">
-          <div class="aiae-prod__qty">
-            <button type="button" data-prod-qty="-1" aria-label="Scade cantitatea">−</button>
-            <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Cantitate">
-            <button type="button" data-prod-qty="1" aria-label="Crește cantitatea">+</button>
-          </div>
-          <div class="aiae-prod__sku" data-prod-sku>
-            {%- if current_variant.sku != blank -%}SKU {{ current_variant.sku }}{%- endif -%}
+              <div class="aiae-prod__cta-controls">
+                {%- unless product.has_only_default_variant -%}
+                  <div class="aiae-prod__opts">
+                    {%- for option in product.options_with_values -%}
+                      <fieldset class="aiae-prod__opt" data-prod-option="{{ forloop.index0 }}">
+                        <legend>{{ option.name }} <span data-prod-optvalue>{{ option.selected_value }}</span></legend>
+
+                        {%- comment -%} roomy pills in the flow, native dropdown when space is tight {%- endcomment -%}
+                        <div class="aiae-prod__pills">
+                          {%- for value in option.values -%}
+                            <label class="aiae-prod__pill">
+                              <input type="radio"
+                                     name="option-{{ forloop.parentloop.index0 }}"
+                                     value="{{ value | escape }}"
+                                     {% if option.selected_value == value %}checked{% endif %}>
+                              <span>{{ value }}</span>
+                            </label>
+                          {%- endfor -%}
+                        </div>
+
+                        <div class="aiae-prod__drop">
+                          <select data-prod-select aria-label="{{ option.name | escape }}">
+                            {%- for value in option.values -%}
+                              <option value="{{ value | escape }}"{% if option.selected_value == value %} selected{% endif %}>{{ value }}</option>
+                            {%- endfor -%}
+                          </select>
+                          <i aria-hidden="true">▾</i>
+                        </div>
+                      </fieldset>
+                    {%- endfor -%}
+                  </div>
+                {%- endunless -%}
+
+                <div class="aiae-prod__row">
+                  <div class="aiae-prod__qty">
+                    <button type="button" data-prod-qty="-1" aria-label="Scade cantitatea">−</button>
+                    <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-label="Cantitate">
+                    <button type="button" data-prod-qty="1" aria-label="Crește cantitatea">+</button>
+                  </div>
+                  <div class="aiae-prod__sku" data-prod-sku>
+                    {%- if current_variant.sku != blank -%}SKU {{ current_variant.sku }}{%- endif -%}
+                  </div>
+                </div>
+              </div>
+
+              <div class="aiae-prod__cta-actions">
+                {%- if section.blocks.size > 0 -%}
+                  <div class="aiae-prod__apps">
+                    {%- for block in section.blocks -%}
+                      {%- render block -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+
+                <button type="submit"
+                        name="add"
+                        class="aiae-prod__atc"
+                        data-prod-atc
+                        {% unless current_variant.available %}disabled{% endunless %}>
+                  <span data-prod-atc-label>
+                    {%- if current_variant.available -%}{{ section.settings.atc_label }}{%- else -%}{{ section.settings.sold_out_label | upcase }}{%- endif -%}
+                  </span>
+                  <span class="aiae-prod__atc-arrow" aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+            <div class="aiae-prod__feedback" data-prod-feedback aria-live="polite"></div>
           </div>
         </div>
-
-        {%- comment -%} App blocks — Printify Personalize button etc. {%- endcomment -%}
-        {%- if section.blocks.size > 0 -%}
-          <div class="aiae-prod__apps">
-            {%- for block in section.blocks -%}
-              {%- render block -%}
-            {%- endfor -%}
-          </div>
-        {%- endif -%}
-
-        <button type="submit"
-                name="add"
-                class="aiae-prod__atc"
-                data-prod-atc
-                {% unless current_variant.available %}disabled{% endunless %}>
-          <span data-prod-atc-label>
-            {%- if current_variant.available -%}{{ section.settings.atc_label }}{%- else -%}{{ section.settings.sold_out_label | upcase }}{%- endif -%}
-          </span>
-          <span aria-hidden="true">→</span>
-        </button>
-        <div class="aiae-prod__feedback" data-prod-feedback aria-live="polite"></div>
       {%- endform -%}
 
       <div class="aiae-prod__notes">
@@ -163,11 +197,21 @@
   if (!root || root.dataset.aiaeInit) return;
   root.dataset.aiaeInit = '1';
 
+  /* Personalized products buy through the Printify personalizer, which
+     collects the variant and quantity in its own modal — so the bar
+     drops the options, the stepper and add-to-cart and leaves the
+     personalize button as the single call to action. The app block
+     renders for every product but only flags the ones it can actually
+     personalize; this runs while the section is still parsing, so the
+     controls never paint before being removed. */
+  var personalizer = root.querySelector('.personalize-container[data-has-metafields="true"]');
+  if (personalizer) root.classList.add('is-personalized');
+
   var form = document.getElementById({{ form_id | json }});
   var variants = JSON.parse(document.querySelector('[data-prod-variants]').textContent);
   var moneyFormat = {{ shop.money_format | json }};
   var idInput = root.querySelector('[data-prod-id]');
-  var priceEl = root.querySelector('[data-prod-price]');
+  var priceEls = root.querySelectorAll('[data-prod-price]');
   var compareEl = root.querySelector('[data-prod-compare]');
   var stockEl = root.querySelector('[data-prod-stock]');
   var skuEl = root.querySelector('[data-prod-sku]');
@@ -229,7 +273,7 @@
       return;
     }
     idInput.value = variant.id;
-    if (priceEl) priceEl.textContent = money(variant.price);
+    priceEls.forEach(function(el) { el.textContent = money(variant.price); });
     if (compareEl) {
       var hasCompare = variant.compare_at_price && variant.compare_at_price > variant.price;
       compareEl.classList.toggle('is-hidden', !hasCompare);
@@ -247,13 +291,25 @@
     window.history.replaceState({}, '', url.toString());
   }
 
-  root.querySelectorAll('[data-prod-option] input').forEach(function(input) {
-    input.addEventListener('change', function() {
-      var fs = input.closest('[data-prod-option]');
-      var valueEl = fs.querySelector('[data-prod-optvalue]');
-      if (valueEl) valueEl.textContent = input.value;
-      applyVariant(findVariant());
+  /* Each option has two faces — pills and a dropdown — so the bar can
+     shrink to a phone without losing a control. Whichever the visitor
+     touches, both move together. */
+  function pickOption(fs, value) {
+    var radio = fs.querySelector('input[value="' + (window.CSS && CSS.escape ? CSS.escape(value) : value) + '"]');
+    if (radio) radio.checked = true;
+    var select = fs.querySelector('[data-prod-select]');
+    if (select) select.value = value;
+    var valueEl = fs.querySelector('[data-prod-optvalue]');
+    if (valueEl) valueEl.textContent = value;
+    applyVariant(findVariant());
+  }
+
+  root.querySelectorAll('[data-prod-option]').forEach(function(fs) {
+    fs.querySelectorAll('.aiae-prod__pill input').forEach(function(input) {
+      input.addEventListener('change', function() { pickOption(fs, input.value); });
     });
+    var select = fs.querySelector('[data-prod-select]');
+    if (select) select.addEventListener('change', function() { pickOption(fs, select.value); });
   });
 
   root.querySelectorAll('[data-prod-thumb]').forEach(function(thumb) {
@@ -267,6 +323,57 @@
       input.value = Math.max(1, next);
     });
   });
+
+  /* ── CTA dock ───────────────────────────────────────────
+     The slot holds the buttons' place in the flow; the bar goes
+     fixed to the bottom of the viewport whenever that place is
+     not fully on screen. Measuring only while undocked keeps the
+     reserved height in sync with the real button stack. */
+  var ctaSlot = root.querySelector('[data-prod-cta-slot]');
+  var cta = root.querySelector('[data-prod-cta]');
+  if (ctaSlot && cta) {
+    var docked = false;
+    var queued = false;
+
+    function measureSlot() {
+      if (docked) return;
+      ctaSlot.style.minHeight = cta.offsetHeight + 'px';
+    }
+
+    function syncDock() {
+      queued = false;
+      var rect = ctaSlot.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      /* a few px of hysteresis so a scroll resting on the edge can't flutter */
+      var inPlace = rect.top >= 0 && rect.bottom <= vh - (docked ? 12 : 4);
+      if (docked === !inPlace) return;
+      docked = !inPlace;
+      cta.classList.toggle('is-docked', docked);
+      if (!docked) measureSlot();
+    }
+
+    function requestSync() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(syncDock);
+    }
+
+    measureSlot();
+    syncDock();
+    /* animate the slide-in only for docks the visitor actually scrolls into */
+    requestAnimationFrame(function() { cta.classList.add('is-ready'); });
+
+    window.addEventListener('scroll', requestSync, { passive: true });
+    window.addEventListener('resize', function() { measureSlot(); requestSync(); });
+    window.addEventListener('load', function() { measureSlot(); requestSync(); });
+    /* the mono webfont swap can re-wrap the button labels */
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function() { measureSlot(); requestSync(); });
+    }
+    if (window.ResizeObserver) {
+      new ResizeObserver(measureSlot).observe(cta);
+    }
+  }
 
   if (form) {
     form.addEventListener('submit', function(e) {
@@ -287,8 +394,12 @@
           var count = document.getElementById('aiae-cart-count');
           if (count) count.textContent = cart.item_count;
           atcLabel.textContent = labels.added;
+          atc.classList.add('is-added');
           feedback.textContent = '';
-          setTimeout(function() { atcLabel.textContent = labels.atc; }, 2200);
+          setTimeout(function() {
+            atcLabel.textContent = labels.atc;
+            atc.classList.remove('is-added');
+          }, 2200);
         })
         .catch(function(err) {
           feedback.textContent = err.message || labels.error;

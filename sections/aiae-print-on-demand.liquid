@@ -1,3 +1,13 @@
+{%- liquid
+  assign tab_blocks = section.blocks | where: 'type', 'collection_tab'
+  assign group_count = tab_blocks.size
+  if group_count == 0
+    assign group_count = 1
+  endif
+  assign limit = section.settings.products_to_show | default: 5
+  assign ph_names = 'TRICOU,HANORAC,TRICOU OVERSIZE,ȘAPCA,TOTEBAG' | split: ','
+-%}
+
 <section id="custom" class="aiae-pod"
          data-autoplay="{% if section.settings.auto_rotate %}true{% else %}false{% endif %}"
          data-autoplay-speed="{{ section.settings.autoplay_speed | default: 4 }}">
@@ -17,75 +27,104 @@
     </div>
   </div>
 
-  {%- liquid
-    assign coll = section.settings.collection
-    assign limit = section.settings.products_to_show | default: 5
-    assign has_products = false
-    if coll != blank and coll.products.size > 0
-      assign has_products = true
-    endif
-    assign ph_names = 'TRICOU,HANORAC,TRICOU OVERSIZE,ȘAPCA,TOTEBAG' | split: ','
-  -%}
+  {%- comment -%} Collection switcher — only worth showing once there is more than one {%- endcomment -%}
+  {%- if tab_blocks.size > 1 -%}
+    <div class="aiae-pod__tabs" data-aiae-reveal style="--aiae-reveal-delay: 0.2s;">
+      <span class="aiae-pod__tabs-label">{{ section.settings.tabs_label }}</span>
+      <div class="aiae-pod__tabs-row aiae-noscroll">
+        {%- for tab in tab_blocks -%}
+          {%- assign tab_title = tab.settings.label | default: tab.settings.collection.title | default: 'COLECȚIE' -%}
+          <button type="button"
+                  class="aiae-pod-tab{% if forloop.first %} is-active{% endif %}"
+                  data-pod-tab="{{ forloop.index0 }}"
+                  aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}"
+                  {{ tab.shopify_attributes }}>
+            <span class="aiae-pod-tab__idx">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+            <span>{{ tab_title }}</span>
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
 
   {%- comment -%} Stage: infinite carousel frame + control panel {%- endcomment -%}
   <div class="aiae-pod-stage">
 
     {%- comment -%} Frame — active product centered, neighbours as ghost cards {%- endcomment -%}
     <div class="aiae-pod-frame" data-pod-frame data-aiae-reveal="scale">
-      <div class="aiae-pod-track">
-        {%- if has_products -%}
-          {%- for product in coll.products limit: limit -%}
-            {%- capture pod_code -%}POD {% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}{%- endcapture -%}
-            <div class="aiae-pod-card"
-                 data-pod-card
-                 data-name="{{ product.title | escape }}"
-                 data-code="{{ pod_code }}"
-                 data-desc="{{ product.description | strip_html | truncate: 120 | escape }}"
-                 data-url="{{ product.url }}">
-              {%- if product.featured_image != blank -%}
-                <img src="{{ product.featured_image | image_url: width: 1200 }}"
-                     alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                     width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}"
-                     loading="lazy">
-              {%- else -%}
+      {%- for _g in (1..group_count) -%}
+        {%- liquid
+          assign gi = forloop.index0
+          assign gb = tab_blocks[gi]
+          if gb
+            assign coll = gb.settings.collection
+            assign gcode = gb.settings.code | default: 'POD'
+          else
+            assign coll = section.settings.collection
+            assign gcode = 'POD'
+          endif
+          assign has_products = false
+          if coll != blank and coll.products.size > 0
+            assign has_products = true
+          endif
+        -%}
+        <div class="aiae-pod-track" data-pod-group="{{ gi }}"{% unless forloop.first %} hidden{% endunless %}>
+          {%- if has_products -%}
+            {%- for product in coll.products limit: limit -%}
+              {%- capture pod_code -%}{{ gcode }} {% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}{%- endcapture -%}
+              <div class="aiae-pod-card"
+                   data-pod-card
+                   data-name="{{ product.title | escape }}"
+                   data-code="{{ pod_code }}"
+                   data-desc="{{ product.description | strip_html | truncate: 120 | escape }}"
+                   data-url="{{ product.url }}">
+                {%- if product.featured_image != blank -%}
+                  <img src="{{ product.featured_image | image_url: width: 1200 }}"
+                       alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                       width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}"
+                       loading="lazy">
+                {%- else -%}
+                  <div class="aiae-pod-ph">
+                    <div>
+                      <div class="aiae-pod-ph__code">[ {{ pod_code }} ]</div>
+                      <div class="aiae-pod-ph__name">{{ product.title }}</div>
+                    </div>
+                  </div>
+                {%- endif -%}
+                {%- if section.blocks.size > tab_blocks.size -%}
+                  <div class="aiae-pod-card__apps"
+                       data-product-id="{{ product.id }}"
+                       data-product-handle="{{ product.handle }}"
+                       data-product-url="{{ product.url }}">
+                    {%- for block in section.blocks -%}
+                      {%- unless block.type == 'collection_tab' -%}
+                        {%- render block -%}
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for ph_name in ph_names -%}
+              <div class="aiae-pod-card"
+                   data-pod-card
+                   data-name="{{ ph_name | escape }}"
+                   data-code="{{ gcode }} 0{{ forloop.index }}"
+                   data-desc="{{ section.settings.empty_hint | escape }}"
+                   data-url="#">
                 <div class="aiae-pod-ph">
                   <div>
-                    <div class="aiae-pod-ph__code">[ {{ pod_code }} ]</div>
-                    <div class="aiae-pod-ph__name">{{ product.title }}</div>
+                    <div class="aiae-pod-ph__code">[ {{ gcode }} 0{{ forloop.index }} ]</div>
+                    <div class="aiae-pod-ph__name">{{ ph_name }}</div>
+                    <p class="aiae-pod-ph__hint">{{ section.settings.empty_hint }}</p>
                   </div>
                 </div>
-              {%- endif -%}
-              {%- if section.blocks.size > 0 -%}
-                <div class="aiae-pod-card__apps"
-                     data-product-id="{{ product.id }}"
-                     data-product-handle="{{ product.handle }}"
-                     data-product-url="{{ product.url }}">
-                  {%- for block in section.blocks -%}
-                    {%- render block -%}
-                  {%- endfor -%}
-                </div>
-              {%- endif -%}
-            </div>
-          {%- endfor -%}
-        {%- else -%}
-          {%- for ph_name in ph_names -%}
-            <div class="aiae-pod-card"
-                 data-pod-card
-                 data-name="{{ ph_name | escape }}"
-                 data-code="POD 0{{ forloop.index }}"
-                 data-desc="{{ section.settings.empty_hint | escape }}"
-                 data-url="#">
-              <div class="aiae-pod-ph">
-                <div>
-                  <div class="aiae-pod-ph__code">[ POD 0{{ forloop.index }} ]</div>
-                  <div class="aiae-pod-ph__name">{{ ph_name }}</div>
-                  <p class="aiae-pod-ph__hint">{{ section.settings.empty_hint }}</p>
-                </div>
               </div>
-            </div>
-          {%- endfor -%}
-        {%- endif -%}
-      </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
 
       {%- comment -%} Overlay tags {%- endcomment -%}
       <span class="aiae-pod-frame__badge">{{ section.settings.frame_badge }}</span>
@@ -115,36 +154,47 @@
 
       {%- comment -%} Thumbnails + navigation {%- endcomment -%}
       <div>
-        <div class="aiae-pod__thumbs">
-          {%- if has_products -%}
-            {%- for product in coll.products limit: limit -%}
-              <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ product.title | escape }}">
-                {%- if product.featured_image != blank -%}
-                  <img src="{{ product.featured_image | image_url: width: 240 }}" alt="{{ product.title | escape }}" width="120" height="120" loading="lazy">
-                {%- else -%}
+        {%- for _g in (1..group_count) -%}
+          {%- liquid
+            assign gi = forloop.index0
+            assign gb = tab_blocks[gi]
+            if gb
+              assign coll = gb.settings.collection
+            else
+              assign coll = section.settings.collection
+            endif
+            assign has_products = false
+            if coll != blank and coll.products.size > 0
+              assign has_products = true
+            endif
+          -%}
+          <div class="aiae-pod__thumbs" data-pod-group="{{ gi }}"{% unless forloop.first %} hidden{% endunless %}>
+            {%- if has_products -%}
+              {%- for product in coll.products limit: limit -%}
+                <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ product.title | escape }}">
+                  {%- if product.featured_image != blank -%}
+                    <img src="{{ product.featured_image | image_url: width: 240 }}" alt="{{ product.title | escape }}" width="120" height="120" loading="lazy">
+                  {%- else -%}
+                    <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
+                  {%- endif -%}
+                </button>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for ph_name in ph_names -%}
+                <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ ph_name | escape }}">
                   <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
-                {%- endif -%}
-              </button>
-            {%- endfor -%}
-          {%- else -%}
-            {%- for ph_name in ph_names -%}
-              <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ ph_name | escape }}">
-                <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
-              </button>
-            {%- endfor -%}
-          {%- endif -%}
-        </div>
+                </button>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+
         <div class="aiae-pod__navrow">
           <button type="button" class="aiae-pod-arrow" data-pod-prev aria-label="Anterior">&larr;</button>
           <button type="button" class="aiae-pod-arrow" data-pod-next aria-label="Următor">&rarr;</button>
           <i></i>
         </div>
-        {%- if has_products -%}
-          {%- assign first_url = coll.products.first.url -%}
-        {%- else -%}
-          {%- assign first_url = '#' -%}
-        {%- endif -%}
-        <a href="{{ first_url }}" class="aiae-pod-btn" data-pod-btn>
+        <a href="#" class="aiae-pod-btn" data-pod-btn>
           <span>{{ section.settings.button_label }}</span>
           <span aria-hidden="true">→</span>
         </a>
@@ -160,14 +210,15 @@
   "name": "AIAE Print on Demand",
   "settings": [
     { "type": "text", "id": "section_number", "label": "Section number", "default": "02" },
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "PRINT ON DEMAND — PERSONALIZER" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "COLECȚII PERSONALIZATE — ALEGE ȘI FĂ-O A TA" },
     { "type": "text", "id": "title", "label": "Section title", "default": "FĂ-ȚI-O SINGUR" },
     { "type": "text", "id": "accent_word", "label": "Accent word in title", "default": "SINGUR" },
     { "type": "text", "id": "module_label", "label": "Module label", "default": "MODUL PERSONALIZER" },
     { "type": "text", "id": "status_label", "label": "Status label", "default": "LIVE — TOATE CULORILE" },
-    { "type": "header", "content": "Products" },
-    { "type": "collection", "id": "collection", "label": "Collection", "info": "The personalizable products shown in the carousel." },
-    { "type": "range", "id": "products_to_show", "min": 2, "max": 10, "step": 1, "label": "Products to show", "default": 5 },
+    { "type": "header", "content": "Collections" },
+    { "type": "text", "id": "tabs_label", "label": "Switcher label", "default": "COLECȚII" },
+    { "type": "collection", "id": "collection", "label": "Fallback collection", "info": "Used only when no “Personalized collection” blocks are added below." },
+    { "type": "range", "id": "products_to_show", "min": 2, "max": 10, "step": 1, "label": "Products per collection", "default": 5 },
     { "type": "checkbox", "id": "auto_rotate", "label": "Auto-rotate carousel", "default": true },
     { "type": "range", "id": "autoplay_speed", "min": 2, "max": 8, "step": 1, "unit": "s", "label": "Change product every", "default": 4 },
     { "type": "header", "content": "Frame & focus copy" },
@@ -180,6 +231,15 @@
     { "type": "text", "id": "button_label", "label": "Personalizer button label", "default": "PERSONALIZEAZĂ — PRINT & CULOARE" }
   ],
   "blocks": [
+    {
+      "type": "collection_tab",
+      "name": "Personalized collection",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "label", "label": "Tab label", "info": "Falls back to the collection title." },
+        { "type": "text", "id": "code", "label": "Product code prefix", "default": "POD" }
+      ]
+    },
     { "type": "@app" }
   ],
   "presets": [

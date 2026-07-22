@@ -27,26 +27,53 @@
         "cta_link": "/collections/all"
       }
     },
-    "aiae_collection_grid": {
-      "type": "aiae-collection-grid",
+    "aiae_about": {
+      "type": "aiae-about",
       "settings": {
         "section_number": "01",
-        "eyebrow": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA",
-        "title": "DEGEABACLUB 2026",
-        "description": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică.",
-        "collection": "degeaba-club",
-        "products_to_show": 6
+        "eyebrow": "DESPRE NOI — DIRECT DE LA FONDATORI",
+        "title": "DE LA NOI\nPENTRU TINE",
+        "letterhead": "AIAE.RO — GARMENT LAB",
+        "letter_date": "BUCUREȘTI / TIMIȘOARA",
+        "salutation": "Salut,",
+        "lead": "Am făcut aiae.ro pentru că ne-am săturat de haine care arată la fel pe toată lumea.",
+        "body": "<p>Lucrăm în serii mici, cu materiale grele și finisaje pe care le purtăm noi înainte să ajungă la tine. Dacă o piesă nu trece testul ăsta, nu ajunge în magazin.</p><p>Restul e treaba ta: alege produsul, pune-ți cuvintele, culorile și ideile pe el. Noi ne ocupăm de calitate — tu de mesaj.</p>",
+        "signature_mark": "A.E",
+        "signature_name": "Fondatorii AIAE",
+        "signature_role": "EST. 2026 — FABRICAT ÎN RO",
+        "mission_label": "MISIUNEA",
+        "mission_title": "CALITATE, APOI LIBERTATE",
+        "mission_text": "Produse pe care merită să pui ceva personal: materiale bune, printuri care rezistă, făcute la comandă pentru o singură persoană — tine.",
+        "vision_label": "VIZIUNEA",
+        "vision_title": "NIMIC LA INDIGO",
+        "vision_text": "O garderobă în care fiecare piesă spune ceva al tău. Fără uniforme, fără copii, fără haine care ar putea fi ale altcuiva.",
+        "cta_label": "PERSONALIZEAZĂ O PIESĂ",
+        "cta_link": "#custom"
       }
     },
     "aiae_print_on_demand": {
       "type": "aiae-print-on-demand",
+      "blocks": {
+        "tab_1": {
+          "type": "collection_tab",
+          "settings": {
+            "collection": "filozofia-ta",
+            "label": "FILOZOFIA TA",
+            "code": "POD"
+          }
+        }
+      },
+      "block_order": [
+        "tab_1"
+      ],
       "settings": {
         "section_number": "02",
-        "eyebrow": "PRINT ON DEMAND — PERSONALIZER",
+        "eyebrow": "COLECȚII PERSONALIZATE — ALEGE ȘI FĂ-O A TA",
         "title": "FĂ-ȚI-O SINGUR",
         "accent_word": "SINGUR",
         "module_label": "MODUL PERSONALIZER",
         "status_label": "LIVE — TOATE CULORILE",
+        "tabs_label": "COLECȚII",
         "collection": "filozofia-ta",
         "products_to_show": 5,
         "auto_rotate": true,
@@ -58,6 +85,19 @@
         "color_note": "CULOARE PRODUS",
         "empty_hint": "Alege o colecție cu produse personalizabile în setările secțiunii.",
         "button_label": "PERSONALIZEAZĂ — PRINT & CULOARE"
+      }
+    },
+    "aiae_collection_grid": {
+      "type": "aiae-collection-grid",
+      "settings": {
+        "section_number": "03",
+        "eyebrow": "MAGAZINUL — PIESE GATA FĂCUTE",
+        "title": "GATA\nFĂCUTE",
+        "description": "Piesele astea țin magazinul pe picioare — aceleași materiale, aceleași standarde. Dar sunt ale noastre, nu ale tale. Dacă vrei ceva care chiar te reprezintă, ia-o pe cea personalizată.",
+        "redirect_label": "MAI BINE ALEGE DIN COLECȚIILE PERSONALIZATE",
+        "redirect_link": "#custom",
+        "collection": "degeaba-club",
+        "products_to_show": 6
       }
     },
     "aiae_concept_carousels": {
@@ -175,6 +215,77 @@
         "title": "CE S-AR PUTEA FACE"
       }
     },
+    "aiae_faq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "faq_1": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Ce înseamnă, mai exact, „produs personalizat”?",
+            "icon": "none",
+            "row_content": "<p>Alegi piesa, apoi îi pui textul, culoarea și grafica ta. Fiecare comandă e produsă separat, pentru o singură persoană. Nu ținem stoc din ea și nu o mai face nimeni altcineva.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Din ce sunt făcute produsele?",
+            "icon": "none",
+            "row_content": "<p>Bumbac greu, tricotaje dense și printuri care nu crapă după trei spălări. Testăm fiecare piesă pe noi înainte s-o punem la vânzare — dacă nu am purta-o, nu ajunge în magazin.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Cât durează până ajunge la mine?",
+            "icon": "none",
+            "row_content": "<p>Producem la comandă, deci durează puțin mai mult decât la un magazin cu stoc: în general 2–5 zile lucrătoare pentru producție, plus timpul curierului.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Pot returna o piesă personalizată?",
+            "icon": "none",
+            "row_content": "<p>Piesele personalizate sunt făcute doar pentru tine, așa că nu pot fi revândute. Dacă am greșit noi ceva sau produsul are un defect, îl refacem sau îți dăm banii înapoi. Scrie-ne și rezolvăm.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Cum am grijă de print?",
+            "icon": "none",
+            "row_content": "<p>Spălare la 30°C, pe dos, fără înălbitor, călcat tot pe dos. Atât. Restul rezistă.</p>"
+          }
+        },
+        "faq_6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Atunci de ce mai aveți colecții gata făcute?",
+            "icon": "none",
+            "row_content": "<p>Pentru că țin magazinul pe picioare și sunt un punct de start bun. Dar dacă vrei o piesă care chiar spune ceva despre tine, mergi pe colecțiile personalizate.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6"
+      ],
+      "settings": {
+        "caption": "FAQ — CE NE ÎNTREABĂ LUMEA",
+        "heading": "ÎNTREBĂRI",
+        "heading_size": "hxl",
+        "heading_alignment": "left",
+        "layout": "none",
+        "open_first_collapsible_row": true,
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
     "aiae_footer": {
       "type": "aiae-footer",
       "blocks": {
@@ -241,9 +352,11 @@
   "order": [
     "aiae_loader",
     "aiae_hero",
-    "aiae_collection_grid",
+    "aiae_about",
     "aiae_print_on_demand",
+    "aiae_collection_grid",
     "aiae_concept_carousels",
+    "aiae_faq",
     "aiae_footer"
   ]
 }

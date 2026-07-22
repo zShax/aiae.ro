@@ -1,0 +1,98 @@
+<section id="about" class="aiae-about">
+
+  <div class="aiae-about__head" data-aiae-reveal>
+    <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
+    <h2 class="aiae-display aiae-about__title">{{ section.settings.title | newline_to_br }}</h2>
+  </div>
+
+  <div class="aiae-about__grid">
+
+    {%- comment -%} The letter — a sheet of paper resting on the dark table {%- endcomment -%}
+    <article class="aiae-about__letter" data-aiae-reveal="scale" style="--aiae-reveal-delay: 0.1s;">
+      <div class="aiae-about__letterhead">
+        <span>{{ section.settings.letterhead }}</span>
+        <span>{{ section.settings.letter_date }}</span>
+      </div>
+
+      {%- if section.settings.salutation != blank -%}
+        <p class="aiae-about__salutation">{{ section.settings.salutation }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.lead != blank -%}
+        <p class="aiae-about__lead">{{ section.settings.lead }}</p>
+      {%- endif -%}
+
+      <div class="aiae-about__body">{{ section.settings.body }}</div>
+
+      <div class="aiae-about__sign">
+        <span class="aiae-about__sign-mark" aria-hidden="true">{{ section.settings.signature_mark }}</span>
+        <span class="aiae-about__sign-text">
+          <span class="aiae-about__sign-name">{{ section.settings.signature_name }}</span>
+          <span class="aiae-about__sign-role">{{ section.settings.signature_role }}</span>
+        </span>
+      </div>
+    </article>
+
+    {%- comment -%} Mission & vision — mono plates on the dark side {%- endcomment -%}
+    <div class="aiae-about__pillars">
+      <article class="aiae-about__pillar" data-aiae-reveal="right" style="--aiae-reveal-delay: 0.18s;">
+        <span class="aiae-about__pillar-label">{{ section.settings.mission_label }}</span>
+        <h3 class="aiae-about__pillar-title">{{ section.settings.mission_title }}</h3>
+        <p class="aiae-about__pillar-text">{{ section.settings.mission_text }}</p>
+      </article>
+
+      <article class="aiae-about__pillar" data-aiae-reveal="right" style="--aiae-reveal-delay: 0.26s;">
+        <span class="aiae-about__pillar-label">{{ section.settings.vision_label }}</span>
+        <h3 class="aiae-about__pillar-title">{{ section.settings.vision_title }}</h3>
+        <p class="aiae-about__pillar-text">{{ section.settings.vision_text }}</p>
+      </article>
+
+      {%- if section.settings.cta_label != blank -%}
+        <a href="{{ section.settings.cta_link | default: '#custom' }}" class="aiae-about__cta" data-aiae-reveal="right" style="--aiae-reveal-delay: 0.32s;">
+          <span>{{ section.settings.cta_label }}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "AIAE About / Founders",
+  "settings": [
+    { "type": "text", "id": "section_number", "label": "Section number", "default": "01" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "DESPRE NOI — DIRECT DE LA FONDATORI" },
+    { "type": "text", "id": "title", "label": "Section title (use newline for line break)", "default": "DE LA NOI\nPENTRU TINE" },
+    { "type": "header", "content": "The letter" },
+    { "type": "text", "id": "letterhead", "label": "Letterhead (left)", "default": "AIAE.RO — GARMENT LAB" },
+    { "type": "text", "id": "letter_date", "label": "Letterhead (right)", "default": "BUCUREȘTI / TIMIȘOARA" },
+    { "type": "text", "id": "salutation", "label": "Salutation", "default": "Salut," },
+    { "type": "textarea", "id": "lead", "label": "Opening line", "default": "Am făcut aiae.ro pentru că ne-am săturat de haine care arată la fel pe toată lumea." },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Letter body",
+      "default": "<p>Lucrăm în serii mici, cu materiale grele și finisaje pe care le purtăm noi înainte să ajungă la tine. Dacă o piesă nu trece testul ăsta, nu ajunge în magazin.</p><p>Restul e treaba ta: alege produsul, pune-ți cuvintele, culorile și ideile pe el. Noi ne ocupăm de calitate — tu de mesaj.</p>"
+    },
+    { "type": "text", "id": "signature_mark", "label": "Signature mark", "default": "A.E" },
+    { "type": "text", "id": "signature_name", "label": "Signature name", "info": "Put the founders' actual names here.", "default": "Fondatorii AIAE" },
+    { "type": "text", "id": "signature_role", "label": "Signature role", "default": "EST. 2026 — FABRICAT ÎN RO" },
+    { "type": "header", "content": "Mission" },
+    { "type": "text", "id": "mission_label", "label": "Mission label", "default": "MISIUNEA" },
+    { "type": "text", "id": "mission_title", "label": "Mission title", "default": "CALITATE, APOI LIBERTATE" },
+    { "type": "textarea", "id": "mission_text", "label": "Mission text", "default": "Produse pe care merită să pui ceva personal: materiale bune, printuri care rezistă, făcute la comandă pentru o singură persoană — tine." },
+    { "type": "header", "content": "Vision" },
+    { "type": "text", "id": "vision_label", "label": "Vision label", "default": "VIZIUNEA" },
+    { "type": "text", "id": "vision_title", "label": "Vision title", "default": "NIMIC LA INDIGO" },
+    { "type": "textarea", "id": "vision_text", "label": "Vision text", "default": "O garderobă în care fiecare piesă spune ceva al tău. Fără uniforme, fără copii, fără haine care ar putea fi ale altcuiva." },
+    { "type": "header", "content": "Call to action" },
+    { "type": "text", "id": "cta_label", "label": "CTA label", "default": "PERSONALIZEAZĂ O PIESĂ" },
+    { "type": "url", "id": "cta_link", "label": "CTA link" }
+  ],
+  "presets": [
+    { "name": "AIAE About / Founders" }
+  ]
+}
+{% endschema %}

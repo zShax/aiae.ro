@@ -40,6 +40,22 @@
 @keyframes aiae-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 @keyframes aiae-loader-out { 0%, 58% { transform: translateY(0); } 100% { transform: translateY(-101%); } }
 @keyframes aiae-bar { from { width: 0%; } to { width: 100%; } }
+@keyframes aiae-cta-dock { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes aiae-atc-halo {
+  0%   { box-shadow: 0 0 0 0 rgba(217, 79, 30, 0.5); }
+  55%  { box-shadow: 0 0 0 14px rgba(217, 79, 30, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(217, 79, 30, 0); }
+}
+@keyframes aiae-atc-sheen {
+  0%        { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+  8%, 34%   { opacity: 1; }
+  45%, 100% { transform: translateX(110vw) skewX(-18deg); opacity: 0; }
+}
+@keyframes aiae-atc-arrow {
+  0%, 58%, 100% { transform: translateX(0); }
+  70%           { transform: translateX(7px); }
+  82%           { transform: translateX(0); }
+}
 
 /* ── Reset & base ──────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -363,13 +379,229 @@ body.aiae-menu-lock { overflow: hidden; }
 .aiae-hero__cta:hover { background: var(--aiae-accent); transform: translateY(-2px); }
 
 /* ═══════════════════════════════════════════════════════════
-   SECTION SHELL (light)
+   ABOUT / FOUNDERS — a paper letter left on a dark table
+   ═══════════════════════════════════════════════════════════ */
+.aiae-about {
+  position: relative;
+  padding: clamp(72px, 10vh, 132px) var(--aiae-gutter);
+  background: var(--aiae-d-bg);
+  color: var(--aiae-d-text);
+  border-bottom: 1px solid var(--aiae-d-line);
+  overflow: hidden;
+}
+/* faint blueprint grid, the hero's paper rule inverted */
+.aiae-about::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(to right, var(--aiae-d-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--aiae-d-line) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: radial-gradient(120% 90% at 50% 0%, #000 20%, transparent 78%);
+}
+.aiae-about__head {
+  position: relative;
+  z-index: 1;
+  margin-bottom: clamp(32px, 5vh, 64px);
+}
+.aiae-about__title {
+  padding-top: 0.14em;
+  font-size: clamp(44px, 7.4vw, 128px);
+  color: var(--aiae-d-text);
+}
+.aiae-about__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(18px, 2.6vw, 44px);
+  align-items: start;
+}
+
+/* ── The letter ── */
+.aiae-about__letter {
+  position: relative;
+  padding: clamp(26px, 3.6vw, 58px);
+  background: var(--aiae-paper);
+  color: var(--aiae-ink);
+  border: 1px solid var(--aiae-line);
+  box-shadow: 0 34px 80px rgba(0, 0, 0, 0.55);
+}
+.aiae-about__letter::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--aiae-accent);
+}
+.aiae-about__letterhead {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: clamp(22px, 3vw, 34px);
+  border-bottom: 1px solid var(--aiae-line);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--aiae-faint);
+}
+.aiae-about__salutation {
+  margin: 0 0 14px;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+.aiae-about__lead {
+  margin: 0 0 20px;
+  max-width: 26ch;
+  font-family: var(--aiae-font-body);
+  font-weight: 800;
+  font-size: clamp(21px, 2.2vw, 32px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--aiae-ink);
+}
+.aiae-about__body p {
+  margin: 0 0 15px;
+  max-width: 58ch;
+  font-size: 15px;
+  line-height: 1.74;
+  color: var(--aiae-muted);
+}
+.aiae-about__body p:last-child { margin-bottom: 0; }
+.aiae-about__sign {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: clamp(26px, 3.4vw, 44px);
+  padding-top: 22px;
+  border-top: 1px solid var(--aiae-line);
+}
+.aiae-about__sign-mark {
+  flex: none;
+  font-family: var(--aiae-font-display);
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 0.78;
+  letter-spacing: -0.02em;
+  color: var(--aiae-accent);
+  transform: skewX(-9deg);
+}
+.aiae-about__sign-text { display: flex; flex-direction: column; gap: 5px; }
+.aiae-about__sign-name {
+  font-family: var(--aiae-font-body);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  color: var(--aiae-ink);
+}
+.aiae-about__sign-role {
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--aiae-faint);
+}
+
+/* ── Mission & vision ── */
+.aiae-about__pillars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-self: stretch;
+}
+.aiae-about__pillar {
+  padding: clamp(20px, 2.3vw, 32px);
+  background: var(--aiae-d-surface);
+  border: 1px solid var(--aiae-d-line);
+}
+.aiae-about__pillar-label {
+  display: block;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+.aiae-about__pillar-title {
+  margin: 12px 0 12px;
+  font-family: var(--aiae-font-display);
+  font-size: clamp(22px, 2.3vw, 34px);
+  line-height: 0.94;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--aiae-d-text);
+}
+.aiae-about__pillar-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.66;
+  color: var(--aiae-d-muted);
+}
+.aiae-about__cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 17px 22px;
+  border: 1px solid var(--aiae-accent);
+  color: var(--aiae-accent);
+  text-decoration: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background 0.35s ease, color 0.35s ease, transform 0.35s var(--aiae-ease);
+}
+.aiae-about__cta:hover {
+  background: var(--aiae-accent);
+  color: var(--aiae-ink);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SECTION SHELL — light by default, .aiae-section--void flips
+   the whole shell (and the grid inside it) to the void palette
    ═══════════════════════════════════════════════════════════ */
 .aiae-section {
+  --sec-bg: var(--aiae-paper);
+  --sec-surface: var(--aiae-paper);
+  --sec-surface-hover: #FBF9F3;
+  --sec-text: var(--aiae-ink);
+  --sec-muted: var(--aiae-muted);
+  --sec-faint: var(--aiae-faint);
+  --sec-line: var(--aiae-line);
+  --sec-line-strong: var(--aiae-line-strong);
+  --sec-media: var(--aiae-cream);
+  --sec-media-alt: #EDE9DD;
+
   padding: clamp(64px, 9vh, 120px) var(--aiae-gutter);
   border-bottom: 1px solid var(--aiae-line);
-  background: var(--aiae-paper);
+  background: var(--sec-bg);
+  color: var(--sec-text);
 }
+.aiae-section--void {
+  --sec-bg: var(--aiae-d-bg);
+  --sec-surface: var(--aiae-d-surface);
+  --sec-surface-hover: #1E1E1E;
+  --sec-text: var(--aiae-d-text);
+  --sec-muted: var(--aiae-d-muted);
+  --sec-faint: var(--aiae-d-faint);
+  --sec-line: var(--aiae-d-line);
+  --sec-line-strong: rgba(242, 239, 231, 0.3);
+  --sec-media: #101010;
+  --sec-media-alt: #1A1A1A;
+  border-bottom-color: var(--aiae-d-line);
+}
+.aiae-section--void .aiae-display { color: var(--sec-text); }
 .aiae-section__head {
   display: flex;
   justify-content: space-between;
@@ -379,44 +611,72 @@ body.aiae-menu-lock { overflow: hidden; }
   margin-bottom: clamp(36px, 6vh, 72px);
 }
 .aiae-section__title { font-size: clamp(48px, 9vw, 150px); }
+.aiae-section__aside {
+  max-width: 38ch;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
 .aiae-section__desc {
   margin: 0;
   max-width: 34ch;
   font-size: 14px;
   line-height: 1.55;
-  color: var(--aiae-muted);
+  color: var(--sec-muted);
   font-family: var(--aiae-font-mono);
   letter-spacing: 0.02em;
 }
+/* Nudge back up to the personalized collections */
+.aiae-section__redirect {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--aiae-accent);
+  color: var(--aiae-accent);
+  text-decoration: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  transition: background 0.35s ease, color 0.35s ease, transform 0.35s var(--aiae-ease);
+}
+.aiae-section__redirect:hover {
+  background: var(--aiae-accent);
+  color: var(--aiae-ink);
+  transform: translateY(-2px);
+}
 
 /* ═══════════════════════════════════════════════════════════
-   COLLECTION GRID — hairline paper grid
+   COLLECTION GRID — hairline grid
    ═══════════════════════════════════════════════════════════ */
 .aiae-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1px;
-  background: var(--aiae-line);
-  border: 1px solid var(--aiae-line);
+  background: var(--sec-line);
+  border: 1px solid var(--sec-line);
 }
 .aiae-card {
   position: relative;
-  background: var(--aiae-paper);
+  background: var(--sec-surface);
   transition: background 0.4s ease;
 }
-.aiae-card:hover { background: #FBF9F3; }
+.aiae-card:hover { background: var(--sec-surface-hover); }
 .aiae-card a { text-decoration: none; display: block; }
 .aiae-card__media {
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: var(--aiae-cream);
+  background: var(--sec-media);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .aiae-card__media--ph {
-  background: repeating-linear-gradient(45deg, var(--aiae-cream), var(--aiae-cream) 11px, #EDE9DD 11px, #EDE9DD 22px);
+  background: repeating-linear-gradient(45deg, var(--sec-media), var(--sec-media) 11px, var(--sec-media-alt) 11px, var(--sec-media-alt) 22px);
 }
 .aiae-card__media img {
   width: 100%; height: 100%;
@@ -429,9 +689,9 @@ body.aiae-menu-lock { overflow: hidden; }
   font-family: var(--aiae-font-mono);
   font-size: 11px;
   letter-spacing: 0.16em;
-  color: var(--aiae-faint);
+  color: var(--sec-faint);
   text-transform: uppercase;
-  border: 1px solid var(--aiae-line-strong);
+  border: 1px solid var(--sec-line-strong);
   padding: 7px 12px;
 }
 .aiae-card__lot {
@@ -440,8 +700,8 @@ body.aiae-menu-lock { overflow: hidden; }
   font-family: var(--aiae-font-mono);
   font-size: 10px;
   letter-spacing: 0.14em;
-  color: var(--aiae-paper);
-  background: var(--aiae-ink);
+  color: var(--sec-bg);
+  background: var(--sec-text);
   padding: 4px 8px;
   text-transform: uppercase;
 }
@@ -459,12 +719,12 @@ body.aiae-menu-lock { overflow: hidden; }
   font-size: 16px;
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: var(--aiae-ink);
+  color: var(--sec-text);
 }
 .aiae-card__price {
   font-family: var(--aiae-font-mono);
   font-size: 13px;
-  color: var(--aiae-ink);
+  color: var(--sec-text);
   white-space: nowrap;
 }
 .aiae-card__meta {
@@ -472,16 +732,30 @@ body.aiae-menu-lock { overflow: hidden; }
   font-family: var(--aiae-font-mono);
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: var(--aiae-muted);
+  color: var(--sec-muted);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PRINT-ON-DEMAND — dark statement module (fullscreen)
+   PRINT-ON-DEMAND — light paper module (fullscreen)
+   Tokenised so the whole module can be flipped to the void
+   palette with .aiae-pod--void without touching every rule.
    ═══════════════════════════════════════════════════════════ */
 @keyframes aiae-pod-scan { 0% { transform: translateY(-120%); } 100% { transform: translateY(120%); } }
 @keyframes aiae-pod-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
 
 .aiae-pod {
+  /* Paper side */
+  --pod-bg: var(--aiae-paper);
+  --pod-text: var(--aiae-ink);
+  --pod-muted: var(--aiae-muted);
+  --pod-line: var(--aiae-line);
+  --pod-line-strong: var(--aiae-line-strong);
+  /* The display frame stays inverted so garments pop off the paper */
+  --pod-frame-bg: var(--aiae-d-bg);
+  --pod-frame-text: var(--aiae-d-text);
+  --pod-badge-bg: var(--aiae-paper);
+  --pod-badge-text: var(--aiae-ink);
+
   position: relative;
   min-height: 100vh;
   min-height: 100svh;
@@ -489,10 +763,21 @@ body.aiae-menu-lock { overflow: hidden; }
   flex-direction: column;
   scroll-margin-top: 0;
   padding: clamp(84px, 11vh, 128px) var(--aiae-gutter) clamp(40px, 6vh, 72px);
-  background: var(--aiae-d-bg);
-  color: var(--aiae-d-text);
+  background: var(--pod-bg);
+  color: var(--pod-text);
   border-top: 1px solid var(--aiae-line);
   border-bottom: 1px solid var(--aiae-line);
+}
+.aiae-pod--void {
+  --pod-bg: var(--aiae-d-bg);
+  --pod-text: var(--aiae-d-text);
+  --pod-muted: var(--aiae-d-muted);
+  --pod-line: var(--aiae-d-line);
+  --pod-line-strong: rgba(242, 239, 231, 0.3);
+  --pod-frame-bg: var(--aiae-cream);
+  --pod-frame-text: var(--aiae-ink);
+  --pod-badge-bg: var(--aiae-ink);
+  --pod-badge-text: var(--aiae-paper);
 }
 .aiae-pod__head {
   display: flex;
@@ -505,7 +790,7 @@ body.aiae-menu-lock { overflow: hidden; }
 .aiae-pod__title {
   padding-top: 0.14em;
   font-size: clamp(40px, 6.4vw, 104px);
-  color: var(--aiae-d-text);
+  color: var(--pod-text);
 }
 .aiae-pod__title .aiae-dot { color: var(--aiae-accent); }
 .aiae-pod__meta {
@@ -517,10 +802,61 @@ body.aiae-menu-lock { overflow: hidden; }
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--aiae-d-muted);
+  color: var(--pod-muted);
   text-align: right;
 }
 .aiae-pod__meta .aiae-live { color: var(--aiae-accent); }
+
+/* Collection switcher — one tab per personalized collection */
+.aiae-pod__tabs {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: clamp(18px, 2.6vh, 30px);
+  border-top: 1px solid var(--pod-line);
+  border-bottom: 1px solid var(--pod-line);
+  padding: 10px 0;
+}
+.aiae-pod__tabs-label {
+  flex: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+.aiae-pod__tabs-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  min-width: 0;
+}
+.aiae-pod-tab {
+  cursor: pointer;
+  flex: none;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 9px 16px;
+  background: transparent;
+  border: 1px solid var(--pod-line);
+  color: var(--pod-muted);
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.aiae-pod-tab__idx { font-size: 9px; opacity: 0.6; }
+.aiae-pod-tab:hover { color: var(--pod-text); border-color: var(--pod-line-strong); }
+.aiae-pod-tab.is-active {
+  color: var(--pod-bg);
+  background: var(--pod-text);
+  border-color: var(--pod-text);
+}
+.aiae-pod-tab.is-active .aiae-pod-tab__idx { color: var(--aiae-accent); opacity: 1; }
 
 .aiae-pod-stage {
   display: flex;
@@ -530,14 +866,14 @@ body.aiae-menu-lock { overflow: hidden; }
   align-items: stretch;
 }
 
-/* The frame stays paper-toned — a lightbox in the dark room */
+/* The frame is always the inverse of the section — a lit stage */
 .aiae-pod-frame {
   position: relative;
   flex: 1.55;
   min-height: 0;
   overflow: hidden;
-  border: 1px solid var(--aiae-d-line);
-  background: var(--aiae-cream);
+  border: 1px solid var(--pod-line-strong);
+  background: var(--pod-frame-bg);
 }
 .aiae-pod-frame { cursor: grab; touch-action: pan-y; }
 .aiae-pod-frame.is-grabbing { cursor: grabbing; }
@@ -644,8 +980,8 @@ body.aiae-menu-lock { overflow: hidden; }
   font-family: var(--aiae-font-mono);
   font-size: 10px;
   letter-spacing: 0.14em;
-  color: var(--aiae-paper);
-  background: var(--aiae-ink);
+  color: var(--pod-badge-text);
+  background: var(--pod-badge-bg);
   padding: 5px 10px;
   text-transform: uppercase;
 }
@@ -656,7 +992,7 @@ body.aiae-menu-lock { overflow: hidden; }
   font-family: var(--aiae-font-mono);
   font-size: 10px;
   letter-spacing: 0.16em;
-  color: var(--aiae-ink);
+  color: var(--pod-frame-text);
   text-transform: uppercase;
   display: flex;
   align-items: center;
@@ -695,7 +1031,7 @@ body.aiae-menu-lock { overflow: hidden; }
   margin-bottom: 8px;
   font-family: var(--aiae-font-mono);
   letter-spacing: 0.14em;
-  color: var(--aiae-d-muted);
+  color: var(--pod-muted);
 }
 .aiae-pod-info__row [data-pod-code] { font-size: 12px; }
 .aiae-pod-info__row [data-pod-counter] { font-size: 11px; margin-left: auto; }
@@ -705,7 +1041,7 @@ body.aiae-menu-lock { overflow: hidden; }
   line-height: 0.86;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  color: var(--aiae-d-text);
+  color: var(--pod-text);
 }
 .aiae-pod-info__desc {
   margin: 12px 0 0;
@@ -713,7 +1049,7 @@ body.aiae-menu-lock { overflow: hidden; }
   font-family: var(--aiae-font-body);
   font-size: 15px;
   line-height: 1.5;
-  color: var(--aiae-d-muted);
+  color: var(--pod-muted);
 }
 .aiae-pod__notes {
   display: flex;
@@ -723,9 +1059,9 @@ body.aiae-menu-lock { overflow: hidden; }
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--aiae-d-text);
+  color: var(--pod-text);
 }
-.aiae-pod__notes span { border: 1px solid rgba(242,239,231,0.28); padding: 7px 12px; }
+.aiae-pod__notes span { border: 1px solid var(--pod-line-strong); padding: 7px 12px; }
 
 /* Thumbnails */
 .aiae-pod__thumbs { display: flex; gap: 10px; margin-bottom: 16px; }
@@ -736,7 +1072,7 @@ body.aiae-menu-lock { overflow: hidden; }
   aspect-ratio: 1 / 1;
   overflow: hidden;
   padding: 0;
-  border: 1px solid rgba(242,239,231,0.22);
+  border: 1px solid var(--pod-line);
   opacity: 0.45;
   transition: opacity 0.4s ease, transform 0.4s var(--aiae-ease), border-color 0.4s ease;
   background: var(--aiae-cream);
@@ -765,19 +1101,19 @@ body.aiae-menu-lock { overflow: hidden; }
 
 /* Arrows */
 .aiae-pod__navrow { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-.aiae-pod__navrow i { flex: 1; height: 1px; background: var(--aiae-d-line); }
+.aiae-pod__navrow i { flex: 1; height: 1px; background: var(--pod-line); }
 .aiae-pod-arrow {
   cursor: pointer;
   width: 46px; height: 46px;
   display: flex; align-items: center; justify-content: center;
-  border: 1px solid rgba(242,239,231,0.3);
+  border: 1px solid var(--pod-line-strong);
   background: transparent;
-  color: var(--aiae-d-text);
+  color: var(--pod-text);
   font-size: 18px;
   transition: background 0.3s ease, color 0.3s ease, transform 0.3s var(--aiae-ease);
   -webkit-tap-highlight-color: transparent;
 }
-.aiae-pod-arrow:hover { background: var(--aiae-d-text); color: var(--aiae-ink); transform: translateY(-2px); }
+.aiae-pod-arrow:hover { background: var(--pod-text); color: var(--pod-bg); transform: translateY(-2px); }
 .aiae-pod-arrow:active { transform: translateY(0); }
 
 /* Personalizer CTA */
@@ -799,9 +1135,9 @@ body.aiae-menu-lock { overflow: hidden; }
   transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, transform 0.35s var(--aiae-ease);
 }
 .aiae-pod-btn:hover {
-  background: var(--aiae-d-text);
-  color: var(--aiae-ink);
-  border-color: var(--aiae-d-text);
+  background: var(--pod-text);
+  color: var(--pod-bg);
+  border-color: var(--pod-text);
   transform: translateY(-2px);
 }
 
@@ -994,6 +1330,12 @@ body.aiae-menu-lock { overflow: hidden; }
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .aiae-about__grid { grid-template-columns: 1fr; }
+  .aiae-about__pillars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .aiae-about__cta { grid-column: 1 / -1; }
+}
+
 @media (max-width: 899px) {
   .aiae-nav__links .aiae-nav__link { display: none; }
   .aiae-burger { display: block; }
@@ -1022,6 +1364,12 @@ body.aiae-menu-lock { overflow: hidden; }
   .aiae-pod-card { height: 92%; }
   .aiae-pod-panel { max-width: none; flex: none; }
   .aiae-pod__meta { align-items: flex-start; text-align: left; }
+  .aiae-pod__tabs { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .aiae-pod__tabs-row { width: 100%; }
+
+  /* About: pillars stack under the letter */
+  .aiae-about__pillars { grid-template-columns: 1fr; }
+  .aiae-about__letter { box-shadow: 0 18px 44px rgba(0, 0, 0, 0.5); }
 
   /* Concept cards: peek-scroll sizing */
   .aiae-cc { flex-basis: clamp(210px, 64vw, 300px); }
@@ -1033,6 +1381,129 @@ body.aiae-menu-lock { overflow: hidden; }
 
 @media (max-width: 330px) {
   .aiae-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FAQ — Dawn's collapsible-content section, re-skinned into the
+   paper system. Selectors are deliberately one class deeper than
+   Dawn's because base.css loads after this file.
+   ═══════════════════════════════════════════════════════════ */
+.aiae-body .aiae-faq.gradient {
+  background: var(--aiae-paper);
+  background-image: none;
+  color: var(--aiae-ink);
+  border-top: 1px solid var(--aiae-line);
+  border-bottom: 1px solid var(--aiae-line);
+}
+.aiae-faq .collapsible-content__wrapper {
+  padding-top: clamp(64px, 9vh, 116px) !important;
+  padding-bottom: clamp(64px, 9vh, 116px) !important;
+}
+.aiae-faq .collapsible-content-wrapper-narrow,
+.aiae-faq .page-width {
+  max-width: 1180px;
+  padding-left: var(--aiae-gutter);
+  padding-right: var(--aiae-gutter);
+}
+/* the section renders text-align inline, so this has to shout */
+.aiae-faq .collapsible-content__header { text-align: left !important; }
+.aiae-faq .caption-with-letter-spacing {
+  margin: 0 0 14px;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+.aiae-faq .collapsible-content__heading {
+  margin: 0 0 clamp(28px, 4vh, 56px);
+  /* Anton's tight line-box clips Romanian diacritics without this */
+  padding-top: 0.16em;
+  font-family: var(--aiae-font-display);
+  font-size: clamp(44px, 8vw, 128px);
+  line-height: 0.84;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+}
+
+.aiae-faq .grid__item { counter-reset: aiae-faq; }
+.aiae-body .aiae-faq .accordion,
+.aiae-body .aiae-faq .accordion + .accordion {
+  margin: 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--aiae-line);
+  counter-increment: aiae-faq;
+}
+.aiae-body .aiae-faq .accordion:last-child { border-bottom: 1px solid var(--aiae-line); }
+
+.aiae-faq .accordion summary {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: clamp(20px, 2.4vw, 28px) 2px;
+  transition: color 0.3s ease;
+}
+.aiae-faq .accordion summary:hover { background: transparent; }
+.aiae-faq .accordion summary::before {
+  content: counter(aiae-faq, decimal-leading-zero);
+  flex: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--aiae-accent);
+}
+.aiae-faq .accordion .svg-wrapper { display: none; }
+.aiae-faq .accordion__title {
+  flex: 1;
+  max-width: none;
+  margin: 0;
+  padding-right: 24px;
+  font-family: var(--aiae-font-body);
+  font-weight: 800;
+  font-size: clamp(15px, 1.5vw, 19px);
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+  transition: color 0.3s ease;
+}
+.aiae-faq .accordion summary:hover .accordion__title {
+  color: var(--aiae-accent);
+  text-decoration: none;
+}
+.aiae-faq .accordion summary .icon-caret {
+  position: static;
+  align-self: center;
+  margin-left: auto;
+  right: auto;
+  top: auto;
+  width: 13px;
+  height: 13px;
+  fill: var(--aiae-ink);
+  transition: transform 0.35s var(--aiae-ease);
+}
+.aiae-faq .accordion details[open] > summary .icon-caret { fill: var(--aiae-accent); }
+
+.aiae-faq .accordion__content {
+  margin: 0;
+  padding: 0 0 clamp(22px, 2.6vw, 32px) 30px;
+  max-width: 74ch;
+}
+.aiae-faq .accordion__content p {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--aiae-muted);
+}
+.aiae-faq .accordion__content p:last-child { margin-bottom: 0; }
+.aiae-faq .accordion__content a { color: var(--aiae-accent); }
+.aiae-faq .accordion__content strong { color: var(--aiae-ink); }
+
+@media (max-width: 749px) {
+  .aiae-faq .accordion summary { gap: 12px; }
+  .aiae-faq .accordion__content { padding-left: 24px; }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1260,6 +1731,38 @@ body.aiae-menu-lock { overflow: hidden; }
 }
 .aiae-prod__pill input:focus-visible + span { outline: 2px solid var(--aiae-accent); outline-offset: 2px; }
 
+/* Dropdown face of an option — shown instead of the pills whenever the
+   bar has to be compact (phones, and the docked bar at any width). */
+.aiae-prod__drop { position: relative; display: none; }
+.aiae-prod__drop select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  height: 38px;
+  padding: 0 26px 0 10px;
+  border: 1px solid var(--aiae-line-strong);
+  border-radius: 0;
+  background: var(--aiae-paper);
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.aiae-prod__drop select:focus-visible { outline: 2px solid var(--aiae-accent); outline-offset: 2px; }
+.aiae-prod__drop i {
+  position: absolute;
+  top: 50%;
+  right: 9px;
+  transform: translateY(-50%);
+  font-style: normal;
+  font-size: 10px;
+  color: var(--aiae-muted);
+  pointer-events: none;
+}
+
 /* Quantity + SKU */
 .aiae-prod__row {
   display: flex;
@@ -1308,8 +1811,51 @@ body.aiae-menu-lock { overflow: hidden; }
   white-space: nowrap;
 }
 
+/* ── CTA dock ──────────────────────────────────────────────
+   .aiae-prod__ctaslot keeps the buttons' place in the flow (JS
+   pins its min-height); .aiae-prod__cta.is-docked detaches to the
+   bottom of the viewport while that place is off screen. */
+.aiae-prod__ctaslot { margin-bottom: 4px; }
+.aiae-prod__cta-inner,
+.aiae-prod__cta-actions { display: flex; flex-direction: column; gap: 10px; }
+.aiae-prod__cta-meta { display: none; }
+.aiae-prod__cta-controls { min-width: 0; }
+
+/* Docked at any width the options collapse to dropdowns — the pills
+   would never fit next to the button in a one-row bar. */
+.aiae-prod__cta.is-docked .aiae-prod__pills { display: none; }
+.aiae-prod__cta.is-docked .aiae-prod__drop { display: block; }
+.aiae-prod__cta.is-docked .aiae-prod__opt { margin: 0; }
+.aiae-prod__cta.is-docked .aiae-prod__opt legend {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  margin-bottom: 4px;
+}
+.aiae-prod__cta.is-docked .aiae-prod__opt legend span { display: none; }
+.aiae-prod__cta.is-docked .aiae-prod__row { margin: 0; }
+.aiae-prod__cta.is-docked .aiae-prod__sku { display: none; }
+
+.aiae-prod__cta.is-docked {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8300;
+  padding: 12px var(--aiae-gutter);
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  background: rgba(242, 239, 231, 0.96);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--aiae-line-strong);
+  box-shadow: 0 -16px 38px rgba(13, 13, 13, 0.12);
+}
+.aiae-prod__cta.is-ready.is-docked { animation: aiae-cta-dock 0.36s var(--aiae-ease) both; }
+.aiae-prod__cta.is-docked .aiae-prod__feedback:empty { display: none; }
+/* the panel's entrance transform would otherwise become the
+   containing block for the fixed bar */
+.aiae-anim .aiae-prod__panel:has(.aiae-prod__cta.is-docked) { opacity: 1; transform: none; }
+
 /* App blocks (Printify personalize) */
-.aiae-prod__apps { margin-bottom: 12px; }
+.aiae-prod__apps { min-width: 0; }
 .aiae-prod__apps:empty { display: none; }
 .aiae-prod__apps button,
 .aiae-prod__apps .aiae-prod__personalize {
@@ -1317,6 +1863,10 @@ body.aiae-menu-lock { overflow: hidden; }
   font-family: var(--aiae-font-mono) !important;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  line-height: 1.3;
+  /* the app's label is theme-editor text — never let it force the
+     actions column wider than the space it was given */
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 .aiae-prod__personalize {
@@ -1331,6 +1881,8 @@ body.aiae-menu-lock { overflow: hidden; }
 
 /* Add to cart */
 .aiae-prod__atc {
+  position: relative;
+  overflow: hidden;
   display: flex;
   width: 100%;
   align-items: center;
@@ -1348,9 +1900,35 @@ body.aiae-menu-lock { overflow: hidden; }
   cursor: pointer;
   transition: background 0.25s ease, color 0.25s ease, opacity 0.25s ease;
 }
+.aiae-prod__atc > span { position: relative; z-index: 1; }
 .aiae-prod__atc:hover:not(:disabled) { background: var(--aiae-ink); border-color: var(--aiae-ink); }
 .aiae-prod__atc:disabled { opacity: 0.45; cursor: not-allowed; }
 .aiae-prod__atc.is-busy { opacity: 0.7; pointer-events: none; }
+.aiae-prod__atc.is-added { background: var(--aiae-ink); border-color: var(--aiae-ink); }
+
+/* Looping attention loop — halo pulse, sheen sweep, arrow nudge.
+   Runs only while the button is actually addable. */
+.aiae-prod__atc::after {
+  content: "";
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: 0;
+  width: 44px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(242, 239, 231, 0.5), transparent);
+}
+.aiae-prod__atc:not(:disabled):not(.is-busy):not(.is-added) {
+  animation: aiae-atc-halo 2.8s ease-out infinite;
+}
+.aiae-prod__atc:not(:disabled):not(.is-busy):not(.is-added)::after {
+  animation: aiae-atc-sheen 3.6s var(--aiae-ease) infinite;
+}
+.aiae-prod__atc:not(:disabled):not(.is-busy):not(.is-added) .aiae-prod__atc-arrow {
+  animation: aiae-atc-arrow 2.8s var(--aiae-ease) infinite;
+}
+
 .aiae-prod__feedback {
   min-height: 18px;
   margin-top: 10px;
@@ -1374,6 +1952,133 @@ body.aiae-menu-lock { overflow: hidden; }
   color: var(--aiae-muted);
 }
 
+/* Phones — one compact buy block: dropdowns + quantity on a single row
+   above a full-width button, laid out the same in the flow and docked
+   so nothing jumps around when the bar detaches. */
+@media (max-width: 699px) {
+  .aiae-prod__pills { display: none; }
+  .aiae-prod__drop { display: block; }
+  .aiae-prod__drop select { height: 34px; }
+  .aiae-prod__opt { margin: 0; }
+  .aiae-prod__opt legend {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    margin-bottom: 4px;
+  }
+  .aiae-prod__opt legend span { display: none; }
+  .aiae-prod__sku { display: none; }
+
+  /* Options share one row with the stepper; the stepper takes its own
+     intrinsic width so the two dropdowns split what is left. */
+  .aiae-prod__cta-controls {
+    display: grid;
+    /* minmax(0,…) — the option labels would otherwise floor the tracks
+       above the space actually available */
+    /* the first option carries the long labels (colour names), the
+       rest are short enough to live in a narrower track */
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 8px;
+    min-width: 0;
+  }
+  .aiae-prod__opts { display: contents; }
+  .aiae-prod__opt { min-width: 0; }
+  .aiae-prod__row { margin: 0; gap: 0; min-width: 0; }
+  .aiae-prod__qty button { flex: 0 0 32px; width: 32px; height: 32px; font-size: 15px; }
+  .aiae-prod__qty input { flex: 0 0 34px; width: 34px; min-width: 0; font-size: 12px; }
+
+  .aiae-prod__cta-actions { min-width: 0; gap: 8px; }
+  .aiae-prod__atc {
+    gap: 8px;
+    padding: 14px 18px;
+    font-size: 12px;
+  }
+  .aiae-prod__apps button,
+  .aiae-prod__personalize {
+    padding: 10px 12px !important;
+    font-size: 9px !important;
+  }
+  .aiae-prod__cta.is-docked { padding-top: 10px; }
+  .aiae-prod__cta.is-docked .aiae-prod__feedback { margin-top: 6px; min-height: 0; }
+}
+
+/* Docked bar — tablet and up: one row, controls then actions right */
+@media (min-width: 700px) {
+  /* flex-end so the dropdowns, the stepper and the button share one
+     baseline — the option legends sit above it */
+  .aiae-prod__cta.is-docked .aiae-prod__cta-inner {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: clamp(14px, 2.4vw, 32px);
+  }
+  .aiae-prod__cta.is-docked .aiae-prod__cta-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 10px;
+    margin-left: auto;
+  }
+  .aiae-prod__cta.is-docked .aiae-prod__opts { display: contents; }
+  .aiae-prod__cta.is-docked .aiae-prod__opt { flex: 0 1 150px; min-width: 0; }
+  .aiae-prod__cta.is-docked .aiae-prod__cta-actions {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .aiae-prod__cta.is-docked .aiae-prod__apps { display: flex; flex: 0 1 200px; }
+  /* sole CTA — pushed right, with the room add-to-cart would have had.
+     Only in this row layout: an auto margin in the phone bar's column
+     would stop the button stretching to full width. */
+  .aiae-prod.is-personalized .aiae-prod__cta.is-docked .aiae-prod__cta-actions {
+    margin-left: auto;
+  }
+  .aiae-prod.is-personalized .aiae-prod__cta.is-docked .aiae-prod__apps {
+    flex: 0 0 auto;
+    min-width: 280px;
+  }
+  .aiae-prod__cta.is-docked .aiae-prod__apps button,
+  .aiae-prod__cta.is-docked .aiae-prod__personalize {
+    padding: 12px 18px !important;
+    font-size: 10px !important;
+    line-height: 1.3;
+  }
+  .aiae-prod__cta.is-docked .aiae-prod__atc {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 230px;
+    padding: 15px 22px;
+  }
+}
+
+/* Docked bar — desktop: title + live price alongside the buttons */
+@media (min-width: 900px) {
+  .aiae-prod__cta.is-docked .aiae-prod__cta-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .aiae-prod__cta-name {
+    font-family: var(--aiae-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--aiae-muted);
+    max-width: 40ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .aiae-prod__cta-price { font-size: 18px; font-weight: 700; color: var(--aiae-ink); }
+}
+
+/* Personalized products — the personalizer modal collects the variant,
+   the quantity and the design, so the bar drops those controls and
+   leaves its button as the single call to action. After the docked
+   media queries: those set display on the same elements. */
+.aiae-prod.is-personalized .aiae-prod__cta .aiae-prod__cta-controls,
+.aiae-prod.is-personalized .aiae-prod__cta .aiae-prod__atc { display: none; }
+
 /* Tablet — single column, roomy stage */
 @media (max-width: 1024px) {
   .aiae-prod__grid { grid-template-columns: 1fr; gap: 24px; }
@@ -1395,10 +2100,7 @@ body.aiae-menu-lock { overflow: hidden; }
   .aiae-prod__desc { order: 10; margin: 26px 0 0; padding-top: 18px; border-top: 1px solid var(--aiae-line); font-size: 14px; }
   .aiae-prod__notes { order: 11; }
 
-  .aiae-prod__opt { margin-bottom: 16px; }
   .aiae-prod__pill span { padding: 8px 12px; font-size: 11px; }
-  .aiae-prod__row { justify-content: space-between; }
-  .aiae-prod__atc { padding: 16px 18px; font-size: 12px; }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1446,10 +2148,20 @@ body.aiae-menu-lock { overflow: hidden; }
 .aiae-reduce-motion .aiae-card__media img { transition: none; }
 .aiae-reduce-motion .aiae-menu { transition: none; }
 .aiae-reduce-motion .aiae-menu__link { transition: color 0.25s ease; opacity: 1; transform: none; }
+/* !important — the CTA animation selectors carry a :not() chain that
+   would otherwise outrank these kill-switches */
+.aiae-reduce-motion .aiae-prod__atc,
+.aiae-reduce-motion .aiae-prod__atc::after,
+.aiae-reduce-motion .aiae-prod__atc-arrow,
+.aiae-reduce-motion .aiae-prod__cta.is-docked { animation: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   .aiae-anim .aiae-reveal,
   .aiae-anim [data-aiae-reveal] { opacity: 1; transform: none; transition: none; }
   .aiae-pod-frame::after { animation: none; display: none; }
   .aiae-marquee-inner { animation-play-state: paused; }
+  .aiae-prod__atc,
+  .aiae-prod__atc::after,
+  .aiae-prod__atc-arrow,
+  .aiae-prod__cta.is-docked { animation: none !important; }
 }

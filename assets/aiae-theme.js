@@ -117,9 +117,24 @@
     const pod = document.querySelector('.aiae-pod');
     if (!pod) return;
 
-    const cards = Array.prototype.slice.call(pod.querySelectorAll('[data-pod-card]'));
-    const thumbs = Array.prototype.slice.call(pod.querySelectorAll('[data-pod-thumb]'));
-    if (!cards.length) return;
+    function slice(nodes) { return Array.prototype.slice.call(nodes); }
+
+    // One group per personalized collection. Only the active group's track
+    // and thumbnail row are in the DOM flow; the rest sit hidden.
+    const groups = slice(pod.querySelectorAll('.aiae-pod-track[data-pod-group]')).map(function(track, gi) {
+      const thumbsWrap = pod.querySelector('.aiae-pod__thumbs[data-pod-group="' + gi + '"]');
+      return {
+        track: track,
+        thumbsWrap: thumbsWrap,
+        cards: slice(track.querySelectorAll('[data-pod-card]')),
+        thumbs: thumbsWrap ? slice(thumbsWrap.querySelectorAll('[data-pod-thumb]')) : [],
+        lastOff: []
+      };
+    });
+    const tabs = slice(pod.querySelectorAll('[data-pod-tab]'));
+    if (!groups.length || !groups[0].cards.length) return;
+
+    let g = groups[0];
 
     const info = pod.querySelector('[data-pod-info]');
     const nameEl = pod.querySelector('[data-pod-name]');
@@ -130,21 +145,18 @@
     const prev = pod.querySelector('[data-pod-prev]');
     const next = pod.querySelector('[data-pod-next]');
     const frame = pod.querySelector('[data-pod-frame]');
-    const total = cards.length;
-    const half = Math.floor(total / 2);
-    const autoplay = pod.dataset.autoplay === 'true' && !reduceMotion && total > 1;
+    const autoplayOn = pod.dataset.autoplay === 'true' && !reduceMotion;
     const delay = Math.max(2, parseInt(pod.dataset.autoplaySpeed, 10) || 4) * 1000;
     let idx = -1;
-    const lastOff = new Array(total);
 
     function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
     function paint(i) {
-      const d = cards[i].dataset;
+      const d = g.cards[i].dataset;
       if (nameEl) nameEl.textContent = d.name || '';
       if (codeEl) codeEl.textContent = d.code || '';
       if (descEl) descEl.textContent = d.desc || '';
-      if (counterEl) counterEl.textContent = pad(i + 1) + ' / ' + pad(total);
+      if (counterEl) counterEl.textContent = pad(i + 1) + ' / ' + pad(g.cards.length);
       if (btn) btn.setAttribute('href', (d.url && d.url.length) ? d.url : '#');
     }
 
@@ -152,11 +164,13 @@
     // Ghosts sit at ±1; anything further is faded out, so the card that
     // wraps around the loop teleports while invisible.
     function layout(instant) {
-      cards.forEach(function(card, k) {
+      const total = g.cards.length;
+      const half = Math.floor(total / 2);
+      g.cards.forEach(function(card, k) {
         const off = ((k - idx) % total + total + half) % total - half;
         const dist = Math.abs(off);
-        const snap = instant || (lastOff[k] !== undefined && Math.abs(off - lastOff[k]) > 1);
-        lastOff[k] = off;
+        const snap = instant || (g.lastOff[k] !== undefined && Math.abs(off - g.lastOff[k]) > 1);
+        g.lastOff[k] = off;
         if (snap) card.classList.add('is-snap');
         const scale = dist === 0 ? 1 : (dist === 1 ? 0.86 : 0.76);
         card.style.transform = 'translate(-50%, -50%) translateX(' + (off * 104) + '%) scale(' + scale + ')';
@@ -171,11 +185,12 @@
     }
 
     function setActive(i, instant) {
+      const total = g.cards.length;
       i = (i % total + total) % total;
       if (i === idx) return;
       idx = i;
       layout(instant);
-      thumbs.forEach(function(t, k) { t.classList.toggle('is-active', k === idx); });
+      g.thumbs.forEach(function(t, k) { t.classList.toggle('is-active', k === idx); });
 
       if (instant || reduceMotion || !info) {
         paint(idx);
@@ -193,13 +208,37 @@
     let inView = true;
     function stopAuto() { if (timer) { clearInterval(timer); timer = null; } }
     function startAuto() {
-      if (!autoplay || !inView || document.hidden) return;
+      if (!autoplayOn || !inView || document.hidden || g.cards.length < 2) return;
       stopAuto();
       timer = setInterval(function() { setActive(idx + 1); }, delay);
     }
     function nudge() { stopAuto(); startAuto(); }
 
-    if (autoplay) {
+    // ── Collection switcher ──
+    function selectGroup(gi) {
+      const target = groups[gi];
+      if (!target || target === g || !target.cards.length) return;
+      stopAuto();
+      g.track.hidden = true;
+      if (g.thumbsWrap) g.thumbsWrap.hidden = true;
+      g = target;
+      g.track.hidden = false;
+      if (g.thumbsWrap) g.thumbsWrap.hidden = false;
+      g.lastOff = [];
+      tabs.forEach(function(t) {
+        const on = parseInt(t.dataset.podTab, 10) === gi;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      idx = -1;
+      setActive(0, true);
+      startAuto();
+    }
+    tabs.forEach(function(t) {
+      t.addEventListener('click', function() { selectGroup(parseInt(t.dataset.podTab, 10)); });
+    });
+
+    if (autoplayOn) {
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(function(entries) {
           inView = entries[0].isIntersecting;
@@ -216,20 +255,21 @@
     }
 
     // ── Controls ──
-    thumbs.forEach(function(t, k) {
-      t.addEventListener('click', function() { setActive(k); nudge(); });
+    let dragMoved = false;
+    groups.forEach(function(group) {
+      group.thumbs.forEach(function(t, k) {
+        t.addEventListener('click', function() { setActive(k); nudge(); });
+      });
+      // Clicking a ghost card brings it to the front
+      group.cards.forEach(function(card, k) {
+        card.addEventListener('click', function() {
+          if (dragMoved || group !== g) return;
+          if (card.classList.contains('is-ghost')) { setActive(k); nudge(); }
+        });
+      });
     });
     if (prev) prev.addEventListener('click', function() { setActive(idx - 1); nudge(); });
     if (next) next.addEventListener('click', function() { setActive(idx + 1); nudge(); });
-
-    // Clicking a ghost card brings it to the front
-    let dragMoved = false;
-    cards.forEach(function(card, k) {
-      card.addEventListener('click', function() {
-        if (dragMoved) return;
-        if (card.classList.contains('is-ghost')) { setActive(k); nudge(); }
-      });
-    });
 
     // Keyboard arrows when the pod is in view
     document.addEventListener('keydown', function(e) {
