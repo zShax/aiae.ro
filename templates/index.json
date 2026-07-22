@@ -27,6 +27,7 @@
         "cta_link": "/collections/all"
       }
     },
+<<<<<<< HEAD
     "aiae_about": {
       "type": "aiae-about",
       "settings": {
@@ -51,6 +52,8 @@
         "cta_link": "#custom"
       }
     },
+=======
+>>>>>>> 5d410fc2cd248ebf4809b84d4936ab7c56434d10
     "aiae_print_on_demand": {
       "type": "aiae-print-on-demand",
       "blocks": {
@@ -90,12 +93,19 @@
     "aiae_collection_grid": {
       "type": "aiae-collection-grid",
       "settings": {
+<<<<<<< HEAD
         "section_number": "03",
         "eyebrow": "MAGAZINUL — PIESE GATA FĂCUTE",
         "title": "GATA\nFĂCUTE",
         "description": "Piesele astea țin magazinul pe picioare — aceleași materiale, aceleași standarde. Dar sunt ale noastre, nu ale tale. Dacă vrei ceva care chiar te reprezintă, ia-o pe cea personalizată.",
         "redirect_label": "MAI BINE ALEGE DIN COLECȚIILE PERSONALIZATE",
         "redirect_link": "#custom",
+=======
+        "section_number": "01",
+        "eyebrow": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA",
+        "title": "DEGEABACLUB 2026",
+        "description": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică.",
+>>>>>>> 5d410fc2cd248ebf4809b84d4936ab7c56434d10
         "collection": "degeaba-club",
         "products_to_show": 6
       }
@@ -352,7 +362,10 @@
   "order": [
     "aiae_loader",
     "aiae_hero",
+<<<<<<< HEAD
     "aiae_about",
+=======
+>>>>>>> 5d410fc2cd248ebf4809b84d4936ab7c56434d10
     "aiae_print_on_demand",
     "aiae_collection_grid",
     "aiae_concept_carousels",
