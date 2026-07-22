@@ -27,17 +27,6 @@
         "cta_link": "/collections/all"
       }
     },
-    "aiae_collection_grid": {
-      "type": "aiae-collection-grid",
-      "settings": {
-        "section_number": "01",
-        "eyebrow": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA",
-        "title": "DEGEABACLUB 2026",
-        "description": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică.",
-        "collection": "degeaba-club",
-        "products_to_show": 6
-      }
-    },
     "aiae_print_on_demand": {
       "type": "aiae-print-on-demand",
       "settings": {
@@ -58,6 +47,17 @@
         "color_note": "CULOARE PRODUS",
         "empty_hint": "Alege o colecție cu produse personalizabile în setările secțiunii.",
         "button_label": "PERSONALIZEAZĂ — PRINT & CULOARE"
+      }
+    },
+    "aiae_collection_grid": {
+      "type": "aiae-collection-grid",
+      "settings": {
+        "section_number": "01",
+        "eyebrow": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA",
+        "title": "DEGEABACLUB 2026",
+        "description": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică.",
+        "collection": "degeaba-club",
+        "products_to_show": 6
       }
     },
     "aiae_concept_carousels": {
@@ -241,8 +241,8 @@
   "order": [
     "aiae_loader",
     "aiae_hero",
-    "aiae_collection_grid",
     "aiae_print_on_demand",
+    "aiae_collection_grid",
     "aiae_concept_carousels",
     "aiae_footer"
   ]
