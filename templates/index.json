@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "aiae_loader": {
@@ -9,6 +18,7 @@
     "aiae_hero": {
       "type": "aiae-hero",
       "settings": {
+        "image_desktop": "shopify://shop_images/Gemini_Generated_Image_q2mn5tq2mn5tq2mn.png",
         "ticker_text": "DEGEABA CLUB 2026 — LOT 200/200|PRINT ON DEMAND — TOATE CULORILE|BUCUREȘTI / TIMIȘOARA|AIA E. ASTA E.",
         "label": "STREETWEAR POST-IRONIC",
         "sublabel": "ESTE CEEA CE ESTE",
@@ -54,7 +64,9 @@
           }
         }
       },
-      "block_order": ["tab_1"],
+      "block_order": [
+        "tab_1"
+      ],
       "settings": {
         "section_number": "02",
         "eyebrow": "COLECȚII PERSONALIZATE — ALEGE ȘI FĂ-O A TA",
@@ -192,7 +204,11 @@
           }
         }
       },
-      "block_order": ["unt_row", "buc_row", "tm_row"],
+      "block_order": [
+        "unt_row",
+        "buc_row",
+        "tm_row"
+      ],
       "disabled": true,
       "settings": {
         "section_number": "03",
@@ -208,7 +224,8 @@
           "settings": {
             "heading": "Ce înseamnă, mai exact, „produs personalizat”?",
             "icon": "none",
-            "row_content": "<p>Alegi piesa, apoi îi pui textul, culoarea și grafica ta. Fiecare comandă e produsă separat, pentru o singură persoană. Nu ținem stoc din ea și nu o mai face nimeni altcineva.</p>"
+            "row_content": "<p>Alegi piesa, apoi îi pui textul, culoarea și grafica ta. Fiecare comandă e produsă separat, pentru o singură persoană. Nu ținem stoc din ea și nu o mai face nimeni altcineva.</p>",
+            "page": ""
           }
         },
         "faq_2": {
@@ -216,7 +233,8 @@
           "settings": {
             "heading": "Din ce sunt făcute produsele?",
             "icon": "none",
-            "row_content": "<p>Bumbac greu, tricotaje dense și printuri care nu crapă după trei spălări. Testăm fiecare piesă pe noi înainte s-o punem la vânzare — dacă nu am purta-o, nu ajunge în magazin.</p>"
+            "row_content": "<p>Bumbac greu, tricotaje dense și printuri care nu crapă după trei spălări. Testăm fiecare piesă pe noi înainte s-o punem la vânzare — dacă nu am purta-o, nu ajunge în magazin.</p>",
+            "page": ""
           }
         },
         "faq_3": {
@@ -224,7 +242,8 @@
           "settings": {
             "heading": "Cât durează până ajunge la mine?",
             "icon": "none",
-            "row_content": "<p>Producem la comandă, deci durează puțin mai mult decât la un magazin cu stoc: în general 2–5 zile lucrătoare pentru producție, plus timpul curierului.</p>"
+            "row_content": "<p>Producem la comandă, deci durează puțin mai mult decât la un magazin cu stoc: în general 2–5 zile lucrătoare pentru producție, plus timpul curierului.</p>",
+            "page": ""
           }
         },
         "faq_4": {
@@ -232,7 +251,8 @@
           "settings": {
             "heading": "Pot returna o piesă personalizată?",
             "icon": "none",
-            "row_content": "<p>Piesele personalizate sunt făcute doar pentru tine, așa că nu pot fi revândute. Dacă am greșit noi ceva sau produsul are un defect, îl refacem sau îți dăm banii înapoi. Scrie-ne și rezolvăm.</p>"
+            "row_content": "<p>Piesele personalizate sunt făcute doar pentru tine, așa că nu pot fi revândute. Dacă am greșit noi ceva sau produsul are un defect, îl refacem sau îți dăm banii înapoi. Scrie-ne și rezolvăm.</p>",
+            "page": ""
           }
         },
         "faq_5": {
@@ -240,7 +260,8 @@
           "settings": {
             "heading": "Cum am grijă de print?",
             "icon": "none",
-            "row_content": "<p>Spălare la 30°C, pe dos, fără înălbitor, călcat tot pe dos. Atât. Restul rezistă.</p>"
+            "row_content": "<p>Spălare la 30°C, pe dos, fără înălbitor, călcat tot pe dos. Atât. Restul rezistă.</p>",
+            "page": ""
           }
         },
         "faq_6": {
@@ -248,18 +269,30 @@
           "settings": {
             "heading": "Atunci de ce mai aveți colecții gata făcute?",
             "icon": "none",
-            "row_content": "<p>Pentru că țin magazinul pe picioare și sunt un punct de start bun. Dar dacă vrei o piesă care chiar spune ceva despre tine, mergi pe colecțiile personalizate.</p>"
+            "row_content": "<p>Pentru că țin magazinul pe picioare și sunt un punct de start bun. Dar dacă vrei o piesă care chiar spune ceva despre tine, mergi pe colecțiile personalizate.</p>",
+            "page": ""
           }
         }
       },
-      "block_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5", "faq_6"],
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6"
+      ],
       "settings": {
         "caption": "FAQ — CE NE ÎNTREABĂ LUMEA",
         "heading": "ÎNTREBĂRI",
         "heading_size": "hxl",
         "heading_alignment": "left",
         "layout": "none",
+        "container_color_scheme": "",
+        "color_scheme": "",
         "open_first_collapsible_row": true,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
         "padding_top": 0,
         "padding_bottom": 0
       }
@@ -310,7 +343,14 @@
           }
         }
       },
-      "block_order": ["shop_1", "shop_2", "shop_3", "social_1", "social_2", "social_3"],
+      "block_order": [
+        "shop_1",
+        "shop_2",
+        "shop_3",
+        "social_1",
+        "social_2",
+        "social_3"
+      ],
       "settings": {
         "brand_tagline": "AIAE.RO — ASTA E.",
         "brand_description": "Brand de streetwear din România. Produs la comandă, în loturi. Fără reaprovizionare, fără scuze. Aia e.",
