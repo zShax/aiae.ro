@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "aiae_loader": {
@@ -27,7 +18,6 @@
         "cta_link": "/collections/all"
       }
     },
-<<<<<<< HEAD
     "aiae_about": {
       "type": "aiae-about",
       "settings": {
@@ -49,11 +39,9 @@
         "vision_title": "NIMIC LA INDIGO",
         "vision_text": "O garderobă în care fiecare piesă spune ceva al tău. Fără uniforme, fără copii, fără haine care ar putea fi ale altcuiva.",
         "cta_label": "PERSONALIZEAZĂ O PIESĂ",
-        "cta_link": "#custom"
+        "cta_link": "/pages/custom"
       }
     },
-=======
->>>>>>> 5d410fc2cd248ebf4809b84d4936ab7c56434d10
     "aiae_print_on_demand": {
       "type": "aiae-print-on-demand",
       "blocks": {
@@ -66,9 +54,7 @@
           }
         }
       },
-      "block_order": [
-        "tab_1"
-      ],
+      "block_order": ["tab_1"],
       "settings": {
         "section_number": "02",
         "eyebrow": "COLECȚII PERSONALIZATE — ALEGE ȘI FĂ-O A TA",
@@ -93,19 +79,12 @@
     "aiae_collection_grid": {
       "type": "aiae-collection-grid",
       "settings": {
-<<<<<<< HEAD
         "section_number": "03",
         "eyebrow": "MAGAZINUL — PIESE GATA FĂCUTE",
         "title": "GATA\nFĂCUTE",
         "description": "Piesele astea țin magazinul pe picioare — aceleași materiale, aceleași standarde. Dar sunt ale noastre, nu ale tale. Dacă vrei ceva care chiar te reprezintă, ia-o pe cea personalizată.",
         "redirect_label": "MAI BINE ALEGE DIN COLECȚIILE PERSONALIZATE",
         "redirect_link": "#custom",
-=======
-        "section_number": "01",
-        "eyebrow": "COLECȚIA OFICIALĂ — PRIMA ȘI SINGURA",
-        "title": "DEGEABACLUB 2026",
-        "description": "Editorial. Subteran. Produs în loturi numerotate. Când se termină, se termină. Degeaba înseamnă \"pe gratis\" și \"în zadar\". Ambele se aplică.",
->>>>>>> 5d410fc2cd248ebf4809b84d4936ab7c56434d10
         "collection": "degeaba-club",
         "products_to_show": 6
       }
@@ -213,11 +192,7 @@
           }
         }
       },
-      "block_order": [
-        "unt_row",
-        "buc_row",
-        "tm_row"
-      ],
+      "block_order": ["unt_row", "buc_row", "tm_row"],
       "disabled": true,
       "settings": {
         "section_number": "03",
@@ -277,14 +252,7 @@
           }
         }
       },
-      "block_order": [
-        "faq_1",
-        "faq_2",
-        "faq_3",
-        "faq_4",
-        "faq_5",
-        "faq_6"
-      ],
+      "block_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5", "faq_6"],
       "settings": {
         "caption": "FAQ — CE NE ÎNTREABĂ LUMEA",
         "heading": "ÎNTREBĂRI",
@@ -342,14 +310,7 @@
           }
         }
       },
-      "block_order": [
-        "shop_1",
-        "shop_2",
-        "shop_3",
-        "social_1",
-        "social_2",
-        "social_3"
-      ],
+      "block_order": ["shop_1", "shop_2", "shop_3", "social_1", "social_2", "social_3"],
       "settings": {
         "brand_tagline": "AIAE.RO — ASTA E.",
         "brand_description": "Brand de streetwear din România. Produs la comandă, în loturi. Fără reaprovizionare, fără scuze. Aia e.",
@@ -362,10 +323,7 @@
   "order": [
     "aiae_loader",
     "aiae_hero",
-<<<<<<< HEAD
     "aiae_about",
-=======
->>>>>>> 5d410fc2cd248ebf4809b84d4936ab7c56434d10
     "aiae_print_on_demand",
     "aiae_collection_grid",
     "aiae_concept_carousels",
