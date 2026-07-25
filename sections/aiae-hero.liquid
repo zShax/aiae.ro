@@ -1,5 +1,29 @@
 <section id="top" class="aiae-hero">
 
+  {%- if section.settings.image_desktop != blank or section.settings.image_mobile != blank -%}
+    <div class="aiae-hero__media" data-aiae-reveal="fade" style="--aiae-reveal-delay: 0.05s;">
+      <picture>
+        {%- if section.settings.image_mobile != blank -%}
+          <source
+            media="(max-width: 749px)"
+            srcset="{{ section.settings.image_mobile | image_url: width: 1100 }}">
+        {%- endif -%}
+        {%- assign fallback_image = section.settings.image_desktop | default: section.settings.image_mobile -%}
+        <img
+          src="{{ fallback_image | image_url: width: 2200 }}"
+          srcset="{{ fallback_image | image_url: width: 1100 }} 1100w,
+                  {{ fallback_image | image_url: width: 2200 }} 2200w,
+                  {{ fallback_image | image_url: width: 3000 }} 3000w"
+          sizes="100vw"
+          alt="{{ fallback_image.alt | escape | default: shop.name }}"
+          width="{{ fallback_image.width }}"
+          height="{{ fallback_image.height }}"
+          loading="eager"
+          fetchpriority="high">
+      </picture>
+    </div>
+  {%- endif -%}
+
   {%- comment -%} Marquee ticker {%- endcomment -%}
   <div class="aiae-hero__ticker aiae-noscroll" data-aiae-reveal="fade" style="--aiae-reveal-delay: 0.55s;">
     <div class="aiae-marquee-inner">
@@ -37,6 +61,26 @@
 {
   "name": "AIAE Hero",
   "settings": [
+    {
+      "type": "header",
+      "content": "Hero image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop image",
+      "info": "Shown on screens wider than 750px. Recommended 2200px+ wide."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image",
+      "info": "Shown on screens up to 749px wide. Falls back to the desktop image if empty."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
     {
       "type": "text",
       "id": "ticker_text",
