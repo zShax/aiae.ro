@@ -152,29 +152,12 @@
             "card_bg": "#e7e3d8",
             "card_fg": "#0d0d0d"
           }
-        },
-        "tm_row": {
-          "type": "carousel_row",
-          "settings": {
-            "collection": "",
-            "products_to_show": 5,
-            "title": "",
-            "note": "",
-            "show_collection_link": true,
-            "collection_link_label": "VEZI COLECTIA",
-            "code_prefix": "TM",
-            "show_price": true,
-            "show_sold_out": true,
-            "card_bg": "#23211e",
-            "card_fg": "#bebab2"
-          }
         }
       },
       "block_order": [
         "unt_row",
         "buc_row",
-        "carousel_row_J4N8zQ",
-        "tm_row"
+        "carousel_row_J4N8zQ"
       ],
       "settings": {
         "section_number": "03",
