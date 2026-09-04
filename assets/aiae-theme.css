@@ -1201,6 +1201,26 @@ body.aiae-menu-lock { overflow: hidden; }
   color: var(--aiae-muted);
 }
 .aiae-con__rowline { flex: 1; height: 1px; background: var(--aiae-line); }
+.aiae-con__rowlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 7px 12px;
+  border: 1px solid var(--aiae-line);
+  color: var(--aiae-muted);
+  text-decoration: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+}
+.aiae-con__rowlink:hover {
+  background: var(--aiae-ink);
+  border-color: var(--aiae-ink);
+  color: var(--aiae-paper);
+}
 .aiae-con__track {
   display: flex;
   gap: 1px;
@@ -1222,6 +1242,7 @@ body.aiae-menu-lock { overflow: hidden; }
   transform: translateY(-6px);
   box-shadow: 0 18px 40px -22px rgba(13, 13, 13, 0.35);
 }
+.aiae-cc a { display: block; text-decoration: none; color: inherit; }
 .aiae-cc__media {
   aspect-ratio: 1 / 1.18;
   position: relative;
@@ -1229,6 +1250,16 @@ body.aiae-menu-lock { overflow: hidden; }
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.aiae-cc__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s var(--aiae-ease);
+}
+.aiae-cc:hover .aiae-cc__media img { transform: scale(1.045); }
+.aiae-cc__media--ph {
+  background-image: repeating-linear-gradient(45deg, rgba(13, 13, 13, 0.05) 0 11px, transparent 11px 22px);
 }
 .aiae-cc__tag {
   font-family: var(--aiae-font-mono);
@@ -1247,7 +1278,32 @@ body.aiae-menu-lock { overflow: hidden; }
   letter-spacing: 0.12em;
   opacity: 0.75;
 }
+/* Over a photo the raw code loses contrast, so it gets a chip */
+.aiae-cc__num--over {
+  padding: 4px 8px;
+  background: var(--aiae-ink);
+  color: var(--aiae-paper);
+  opacity: 1;
+  text-transform: uppercase;
+}
+.aiae-cc__flag {
+  position: absolute;
+  bottom: 12px; right: 12px;
+  font-family: var(--aiae-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  padding: 4px 8px;
+  background: var(--aiae-paper);
+  color: var(--aiae-ink);
+  border: 1px solid var(--aiae-ink);
+}
 .aiae-cc__body { padding: 16px 16px 20px; }
+.aiae-cc__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
 .aiae-cc__title {
   margin: 0;
   font-family: var(--aiae-font-body);
@@ -1256,6 +1312,12 @@ body.aiae-menu-lock { overflow: hidden; }
   text-transform: uppercase;
   letter-spacing: -0.01em;
   color: var(--aiae-ink);
+}
+.aiae-cc__price {
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  color: var(--aiae-ink);
+  white-space: nowrap;
 }
 .aiae-cc__sub {
   margin: 7px 0 0;
@@ -1401,6 +1463,8 @@ body.aiae-menu-lock { overflow: hidden; }
   /* Concept cards: peek-scroll sizing */
   .aiae-cc { flex-basis: clamp(210px, 64vw, 300px); }
   .aiae-con__rowhead { flex-wrap: wrap; gap: 8px 16px; }
+  .aiae-con__rowline { display: none; }
+  .aiae-cc__row { flex-wrap: wrap; gap: 4px 10px; }
 
   /* Footer wordmark breathing room */
   .aiae-footer__top { flex-direction: column; }

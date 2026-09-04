@@ -7,38 +7,106 @@
 
   {%- for block in section.blocks -%}
     {%- if block.type == 'carousel_row' -%}
+      {%- assign row_collection = collections[block.settings.collection] -%}
+
+      {%- comment -%} Row heading falls back to the collection's own details {%- endcomment -%}
+      {%- assign row_title = block.settings.title -%}
+      {%- if row_title == blank -%}
+        {%- assign row_title = row_collection.title -%}
+      {%- endif -%}
+
+      {%- assign row_note = block.settings.note -%}
+      {%- if row_note == blank and row_collection.description != blank -%}
+        {%- assign row_note = row_collection.description | strip_html | strip | truncate: 90 -%}
+        {%- assign row_note = '// ' | append: row_note -%}
+      {%- endif -%}
+
+      {%- assign code_prefix = block.settings.code_prefix -%}
+      {%- if code_prefix == blank -%}
+        {%- assign code_prefix = row_collection.title | strip_html | upcase | slice: 0, 3 | strip -%}
+      {%- endif -%}
+      {%- assign code_prefix = code_prefix | default: 'CONCEPT' -%}
+
       <div class="aiae-con__row" {{ block.shopify_attributes }}>
         <div class="aiae-con__rowhead" data-aiae-reveal>
-          <h3 class="aiae-con__rowtitle">{{ block.settings.title }}</h3>
-          <span class="aiae-con__rownote">{{ block.settings.note }}</span>
+          <h3 class="aiae-con__rowtitle">{{ row_title | default: 'CONCEPT' }}</h3>
+          <span class="aiae-con__rownote">{{ row_note }}</span>
           <span class="aiae-con__rowline"></span>
+          {%- if block.settings.show_collection_link and row_collection.url != blank -%}
+            <a href="{{ row_collection.url }}" class="aiae-con__rowlink">
+              <span>{{ block.settings.collection_link_label | default: 'VEZI COLECTIA' }}</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          {%- endif -%}
         </div>
+
         <div class="aiae-con__track aiae-noscroll">
-          {%- assign card_count = block.settings.card_count | default: 5 -%}
-          {%- for i in (1..card_count) -%}
-            {%- assign n_key = 'card_' | append: i | append: '_number' -%}
-            {%- assign t_key = 'card_' | append: i | append: '_title' -%}
-            {%- assign s_key = 'card_' | append: i | append: '_subtitle' -%}
-            {%- assign bg_key = 'card_' | append: i | append: '_bg' -%}
-            {%- assign fg_key = 'card_' | append: i | append: '_fg' -%}
-            {%- assign n_val = block.settings[n_key] -%}
-            {%- assign t_val = block.settings[t_key] -%}
-            {%- assign s_val = block.settings[s_key] -%}
-            {%- assign bg_val = block.settings[bg_key] | default: '#E7E3D8' -%}
-            {%- assign fg_val = block.settings[fg_key] | default: '#0D0D0D' -%}
-            {%- if t_val != blank -%}
+          {%- if row_collection != blank and row_collection.products_count > 0 -%}
+            {%- for product in row_collection.products limit: block.settings.products_to_show -%}
+              {%- assign card_number = product.metafields.aiae.code -%}
+              {%- if card_number == blank -%}
+                {%- if forloop.index < 10 -%}
+                  {%- assign card_number = code_prefix | append: ' 0' | append: forloop.index -%}
+                {%- else -%}
+                  {%- assign card_number = code_prefix | append: ' ' | append: forloop.index -%}
+                {%- endif -%}
+              {%- endif -%}
+
+              {%- assign card_sub = product.metafields.aiae.detail -%}
+              {%- if card_sub == blank -%}{%- assign card_sub = product.type -%}{%- endif -%}
+              {%- if card_sub == blank -%}
+                {%- assign card_sub = product.description | strip_html | strip | truncate: 60 -%}
+              {%- endif -%}
+
               <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;">
-                <div class="aiae-cc__media" style="background:{{ bg_val }}; color:{{ fg_val }};">
-                  <span class="aiae-cc__tag">[ {{ n_val }} ]</span>
-                  <span class="aiae-cc__num">{{ n_val }}</span>
+                <a href="{{ product.url }}">
+                  <div class="aiae-cc__media" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+                    {%- if product.featured_image -%}
+                      <img src="{{ product.featured_image | image_url: width: 660 }}"
+                           alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                           width="660"
+                           height="{{ 660 | divided_by: product.featured_image.aspect_ratio | round }}"
+                           loading="lazy">
+                    {%- else -%}
+                      <span class="aiae-cc__tag">[ {{ card_number }} ]</span>
+                    {%- endif -%}
+                    <span class="aiae-cc__num{% if product.featured_image %} aiae-cc__num--over{% endif %}">{{ card_number }}</span>
+                    {%- if block.settings.show_sold_out and product.available == false -%}
+                      <span class="aiae-cc__flag">SOLD OUT</span>
+                    {%- endif -%}
+                  </div>
+                  <div class="aiae-cc__body">
+                    <div class="aiae-cc__row">
+                      <h4 class="aiae-cc__title">{{ product.title }}</h4>
+                      {%- if block.settings.show_price -%}
+                        <span class="aiae-cc__price">{{ product.price | money }}</span>
+                      {%- endif -%}
+                    </div>
+                    {%- if card_sub != blank -%}
+                      <p class="aiae-cc__sub">{{ card_sub }}</p>
+                    {%- endif -%}
+                  </div>
+                </a>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- comment -%} Placeholder cards while no concept collection is assigned {%- endcomment -%}
+            {%- assign placeholder_count = block.settings.products_to_show | default: 5 | at_most: 5 -%}
+            {%- for i in (1..placeholder_count) -%}
+              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;">
+                <div class="aiae-cc__media aiae-cc__media--ph" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+                  <span class="aiae-cc__tag">[ {{ code_prefix }} 0{{ forloop.index }} ]</span>
+                  <span class="aiae-cc__num">{{ code_prefix }} 0{{ forloop.index }}</span>
                 </div>
                 <div class="aiae-cc__body">
-                  <h4 class="aiae-cc__title">{{ t_val }}</h4>
-                  <p class="aiae-cc__sub">{{ s_val }}</p>
+                  <div class="aiae-cc__row">
+                    <h4 class="aiae-cc__title">CONCEPT {{ forloop.index }}</h4>
+                  </div>
+                  <p class="aiae-cc__sub">Alege o colec&#539;ie din set&#259;rile blocului.</p>
                 </div>
               </div>
-            {%- endif -%}
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- endif -%}
           <div class="aiae-con__spacer"></div>
         </div>
       </div>
@@ -73,74 +141,85 @@
   "blocks": [
     {
       "type": "carousel_row",
-      "name": "Carousel Row",
+      "name": "Concept Row",
       "settings": [
         {
-          "type": "text",
-          "id": "title",
-          "label": "Row title",
-          "default": "UNT."
-        },
-        {
-          "type": "text",
-          "id": "note",
-          "label": "Row note",
-          "default": "// BUTTER STUDIES — CREAMY CONTRAST"
+          "type": "collection",
+          "id": "collection",
+          "label": "Concept collection",
+          "info": "The products in this collection become the cards. Around 5 products per collection works best."
         },
         {
           "type": "range",
-          "id": "card_count",
-          "label": "Number of cards",
+          "id": "products_to_show",
+          "label": "Products to show",
           "min": 1,
-          "max": 5,
+          "max": 12,
           "step": 1,
           "default": 5
         },
         {
           "type": "header",
-          "content": "Card 1"
+          "content": "Row heading"
         },
-        { "type": "text", "id": "card_1_number", "label": "Number", "default": "UNT 01" },
-        { "type": "text", "id": "card_1_title", "label": "Title", "default": "BEURRE NOIR" },
-        { "type": "text", "id": "card_1_subtitle", "label": "Subtitle", "default": "Butter-melt graphic, cream on void" },
-        { "type": "color", "id": "card_1_bg", "label": "Background color", "default": "#F2EFE7" },
-        { "type": "color", "id": "card_1_fg", "label": "Foreground color", "default": "#0D0D0D" },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Row title",
+          "info": "Leave blank to use the collection title."
+        },
+        {
+          "type": "text",
+          "id": "note",
+          "label": "Row note",
+          "info": "Leave blank to use the collection description."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_collection_link",
+          "label": "Show link to collection",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "collection_link_label",
+          "label": "Collection link label",
+          "default": "VEZI COLECȚIA"
+        },
         {
           "type": "header",
-          "content": "Card 2"
+          "content": "Cards"
         },
-        { "type": "text", "id": "card_2_number", "label": "Number", "default": "UNT 02" },
-        { "type": "text", "id": "card_2_title", "label": "Title", "default": "82% GRĂSIME" },
-        { "type": "text", "id": "card_2_subtitle", "label": "Subtitle", "default": "Nutritional-label deadpan print" },
-        { "type": "color", "id": "card_2_bg", "label": "Background color", "default": "#F6F0DE" },
-        { "type": "color", "id": "card_2_fg", "label": "Foreground color", "default": "#0D0D0D" },
         {
-          "type": "header",
-          "content": "Card 3"
+          "type": "text",
+          "id": "code_prefix",
+          "label": "Card code prefix",
+          "info": "Used for the [ PREFIX 01 ] tag. Leave blank to derive it from the collection title. A product's aiae.code metafield always wins."
         },
-        { "type": "text", "id": "card_3_number", "label": "Number", "default": "UNT 03" },
-        { "type": "text", "id": "card_3_title", "label": "Title", "default": "UNSALTED" },
-        { "type": "text", "id": "card_3_subtitle", "label": "Subtitle", "default": "Creamy gradient wash tee" },
-        { "type": "color", "id": "card_3_bg", "label": "Background color", "default": "#FBF6E9" },
-        { "type": "color", "id": "card_3_fg", "label": "Foreground color", "default": "#0D0D0D" },
         {
-          "type": "header",
-          "content": "Card 4"
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "Show price",
+          "default": true
         },
-        { "type": "text", "id": "card_4_number", "label": "Number", "default": "UNT 04" },
-        { "type": "text", "id": "card_4_title", "label": "Title", "default": "PACHET DE UNT" },
-        { "type": "text", "id": "card_4_subtitle", "label": "Subtitle", "default": "Wrapped-stick parody graphic" },
-        { "type": "color", "id": "card_4_bg", "label": "Background color", "default": "#F2EAD3" },
-        { "type": "color", "id": "card_4_fg", "label": "Foreground color", "default": "#0D0D0D" },
         {
-          "type": "header",
-          "content": "Card 5"
+          "type": "checkbox",
+          "id": "show_sold_out",
+          "label": "Show sold out badge",
+          "default": true
         },
-        { "type": "text", "id": "card_5_number", "label": "Number", "default": "UNT 05" },
-        { "type": "text", "id": "card_5_title", "label": "Title", "default": "SLIDE" },
-        { "type": "text", "id": "card_5_subtitle", "label": "Subtitle", "default": "Melting type, soft texture" },
-        { "type": "color", "id": "card_5_bg", "label": "Background color", "default": "#FDF8EC" },
-        { "type": "color", "id": "card_5_fg", "label": "Foreground color", "default": "#0D0D0D" }
+        {
+          "type": "color",
+          "id": "card_bg",
+          "label": "Card media background",
+          "default": "#E7E3D8"
+        },
+        {
+          "type": "color",
+          "id": "card_fg",
+          "label": "Card media foreground",
+          "default": "#0D0D0D"
+        }
       ]
     }
   ],
@@ -148,77 +227,9 @@
     {
       "name": "AIAE Concept Carousels",
       "blocks": [
-        {
-          "type": "carousel_row",
-          "settings": {
-            "title": "UNT.",
-            "note": "// BUTTER STUDIES — CREAMY CONTRAST"
-          }
-        },
-        {
-          "type": "carousel_row",
-          "settings": {
-            "title": "BUCUREȘTI.",
-            "note": "// AI-RECONSTRUCTED BRUTALISM",
-            "card_1_number": "BUC 01",
-            "card_1_title": "CASA POPORULUI",
-            "card_1_subtitle": "Reconstructed brutalist mass",
-            "card_1_bg": "#1c1c1c",
-            "card_1_fg": "#BEBAB2",
-            "card_2_number": "BUC 02",
-            "card_2_title": "PIAȚA UNIRII",
-            "card_2_subtitle": "Fountain grid, fractured",
-            "card_2_bg": "#202020",
-            "card_2_fg": "#BEBAB2",
-            "card_3_number": "BUC 03",
-            "card_3_title": "BLOCURI / S3",
-            "card_3_subtitle": "Communist housing repeat",
-            "card_3_bg": "#1a1a1a",
-            "card_3_fg": "#BEBAB2",
-            "card_4_number": "BUC 04",
-            "card_4_title": "INTERCONTINENTAL",
-            "card_4_subtitle": "Tower silhouette, gritty",
-            "card_4_bg": "#1e1e1e",
-            "card_4_fg": "#BEBAB2",
-            "card_5_number": "BUC 05",
-            "card_5_title": "GARA DE NORD",
-            "card_5_subtitle": "Departure-board collage",
-            "card_5_bg": "#1b1b1b",
-            "card_5_fg": "#BEBAB2"
-          }
-        },
-        {
-          "type": "carousel_row",
-          "settings": {
-            "title": "TIMIȘOARA.",
-            "note": "// GRITTY URBAN RECONSTRUCTION",
-            "card_1_number": "TM 01",
-            "card_1_title": "PIAȚA VICTORIEI",
-            "card_1_subtitle": "Reconstructed facade run",
-            "card_1_bg": "#23211e",
-            "card_1_fg": "#BEBAB2",
-            "card_2_number": "TM 02",
-            "card_2_title": "CATEDRALA",
-            "card_2_subtitle": "Tiled roof glitch",
-            "card_2_bg": "#211f1c",
-            "card_2_fg": "#BEBAB2",
-            "card_3_number": "TM 03",
-            "card_3_title": "CANALUL BEGA",
-            "card_3_subtitle": "Waterline long-exposure",
-            "card_3_bg": "#1f1f20",
-            "card_3_fg": "#BEBAB2",
-            "card_4_number": "TM 04",
-            "card_4_title": "PIAȚA UNIRII TM",
-            "card_4_subtitle": "Baroque square, halftone",
-            "card_4_bg": "#242220",
-            "card_4_fg": "#BEBAB2",
-            "card_5_number": "TM 05",
-            "card_5_title": "FABRIC",
-            "card_5_subtitle": "Industrial district scan",
-            "card_5_bg": "#1d1d1d",
-            "card_5_fg": "#BEBAB2"
-          }
-        }
+        { "type": "carousel_row", "settings": { "card_bg": "#F2EFE7", "card_fg": "#0D0D0D" } },
+        { "type": "carousel_row", "settings": { "card_bg": "#1C1C1C", "card_fg": "#BEBAB2" } },
+        { "type": "carousel_row", "settings": { "card_bg": "#23211E", "card_fg": "#BEBAB2" } }
       ]
     }
   ]
