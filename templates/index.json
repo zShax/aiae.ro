@@ -108,7 +108,7 @@
         "unt_row": {
           "type": "carousel_row",
           "settings": {
-            "collection": "",
+            "collection": "concept-street-cats",
             "products_to_show": 5,
             "title": "",
             "note": "",
@@ -124,7 +124,7 @@
         "buc_row": {
           "type": "carousel_row",
           "settings": {
-            "collection": "",
+            "collection": "concept-faith",
             "products_to_show": 5,
             "title": "",
             "note": "",
@@ -135,6 +135,22 @@
             "show_sold_out": true,
             "card_bg": "#1c1c1c",
             "card_fg": "#bebab2"
+          }
+        },
+        "carousel_row_J4N8zQ": {
+          "type": "carousel_row",
+          "settings": {
+            "collection": "concept-ingredients",
+            "products_to_show": 5,
+            "title": "",
+            "note": "",
+            "show_collection_link": true,
+            "collection_link_label": "VEZI COLECȚIA",
+            "code_prefix": "",
+            "show_price": true,
+            "show_sold_out": true,
+            "card_bg": "#e7e3d8",
+            "card_fg": "#0d0d0d"
           }
         },
         "tm_row": {
@@ -157,6 +173,7 @@
       "block_order": [
         "unt_row",
         "buc_row",
+        "carousel_row_J4N8zQ",
         "tm_row"
       ],
       "settings": {
