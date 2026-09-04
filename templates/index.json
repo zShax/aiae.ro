@@ -133,8 +133,8 @@
             "code_prefix": "BUC",
             "show_price": true,
             "show_sold_out": true,
-            "card_bg": "#1C1C1C",
-            "card_fg": "#bebab2"
+            "card_bg": "#1c1c1c",
+            "card_fg": "#1C1C1C"
           }
         },
         "carousel_row_J4N8zQ": {
