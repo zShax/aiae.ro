@@ -45,7 +45,74 @@
 
     initMenu();
     initPod(reduceMotion);
+    initCarousels(reduceMotion);
     initReveal(reduceMotion, loader);
+  }
+
+  // ─── Concept carousels: hovering prev/next arrows ──────
+  // Desktop has no visible scrollbar on these tracks, so the arrows are
+  // the only affordance. Each click lands on a real card edge, which is
+  // the snap the CSS proximity scroller would otherwise only approximate.
+  function initCarousels(reduceMotion) {
+    Array.prototype.slice.call(document.querySelectorAll('[data-aiae-carousel]'))
+      .forEach(function(root) { setupCarousel(root, reduceMotion); });
+
+    document.addEventListener('shopify:section:load', function(e) {
+      Array.prototype.slice.call(e.target.querySelectorAll('[data-aiae-carousel]'))
+        .forEach(function(root) { setupCarousel(root, reduceMotion); });
+    });
+  }
+
+  function setupCarousel(root, reduceMotion) {
+    if (root.dataset.aiaeCarouselReady === 'true') return;
+    const track = root.querySelector('[data-aiae-carousel-track]');
+    const prev = root.querySelector('[data-aiae-carousel-prev]');
+    const next = root.querySelector('[data-aiae-carousel-next]');
+    if (!track || !prev || !next) return;
+    root.dataset.aiaeCarouselReady = 'true';
+
+    const behavior = reduceMotion ? 'auto' : 'smooth';
+
+    function cards() {
+      return Array.prototype.slice.call(track.children);
+    }
+
+    // 1px of slack absorbs sub-pixel scroll positions so the card the
+    // viewport is already parked on is never picked as "the next one".
+    function step(dir) {
+      const list = cards();
+      if (!list.length) return;
+      const left = track.scrollLeft;
+      let target = null;
+      if (dir > 0) {
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].offsetLeft > left + 1) { target = list[i]; break; }
+        }
+        if (!target) target = list[list.length - 1];
+      } else {
+        for (let i = list.length - 1; i >= 0; i--) {
+          if (list[i].offsetLeft < left - 1) { target = list[i]; break; }
+        }
+        if (!target) target = list[0];
+      }
+      track.scrollTo({ left: target.offsetLeft, behavior: behavior });
+    }
+
+    function sync() {
+      const max = track.scrollWidth - track.clientWidth;
+      const overflows = max > 2;
+      prev.hidden = !overflows || track.scrollLeft <= 2;
+      next.hidden = !overflows || track.scrollLeft >= max - 2;
+    }
+
+    prev.addEventListener('click', function() { step(-1); });
+    next.addEventListener('click', function() { step(1); });
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    if (window.ResizeObserver) new ResizeObserver(sync).observe(track);
+    // Lazy-loaded card images change scrollWidth after first paint.
+    window.addEventListener('load', sync);
+    sync();
   }
 
   // ─── Scroll-entrance reveals ───────────────────────────

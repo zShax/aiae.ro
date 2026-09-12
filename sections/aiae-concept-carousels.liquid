@@ -42,73 +42,77 @@
           {%- endif -%}
         </div>
 
-        <div class="aiae-con__track aiae-noscroll">
-          {%- if row_collection != blank and row_collection.products_count > 0 -%}
-            {%- for product in row_collection.products limit: block.settings.products_to_show -%}
-              {%- assign card_number = product.metafields.aiae.code -%}
-              {%- if card_number == blank -%}
-                {%- if forloop.index < 10 -%}
-                  {%- assign card_number = code_prefix | append: ' 0' | append: forloop.index -%}
-                {%- else -%}
-                  {%- assign card_number = code_prefix | append: ' ' | append: forloop.index -%}
+        <div class="aiae-con__scroller" data-aiae-carousel>
+          <button type="button" class="aiae-con__arrow aiae-con__arrow--prev" data-aiae-carousel-prev aria-label="Derulează înapoi" hidden>&larr;</button>
+          <button type="button" class="aiae-con__arrow aiae-con__arrow--next" data-aiae-carousel-next aria-label="Derulează înainte" hidden>&rarr;</button>
+          <div class="aiae-con__track aiae-noscroll" data-aiae-carousel-track>
+            {%- if row_collection != blank and row_collection.products_count > 0 -%}
+              {%- for product in row_collection.products limit: block.settings.products_to_show -%}
+                {%- assign card_number = product.metafields.aiae.code -%}
+                {%- if card_number == blank -%}
+                  {%- if forloop.index < 10 -%}
+                    {%- assign card_number = code_prefix | append: ' 0' | append: forloop.index -%}
+                  {%- else -%}
+                    {%- assign card_number = code_prefix | append: ' ' | append: forloop.index -%}
+                  {%- endif -%}
                 {%- endif -%}
-              {%- endif -%}
 
-              {%- assign card_sub = product.metafields.aiae.detail -%}
-              {%- if card_sub == blank -%}{%- assign card_sub = product.type -%}{%- endif -%}
-              {%- if card_sub == blank -%}
-                {%- assign card_sub = product.description | strip_html | strip | truncate: 60 -%}
-              {%- endif -%}
+                {%- assign card_sub = product.metafields.aiae.detail -%}
+                {%- if card_sub == blank -%}{%- assign card_sub = product.type -%}{%- endif -%}
+                {%- if card_sub == blank -%}
+                  {%- assign card_sub = product.description | strip_html | strip | truncate: 60 -%}
+                {%- endif -%}
 
-              <div class="aiae-cc">
-                <a href="{{ product.url }}">
-                  <div class="aiae-cc__media" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
-                    {%- if product.featured_image -%}
-                      <img src="{{ product.featured_image | image_url: width: 660 }}"
-                           alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                           width="660"
-                           height="{{ 660 | divided_by: product.featured_image.aspect_ratio | round }}"
-                           loading="lazy">
-                    {%- else -%}
-                      <span class="aiae-cc__tag">[ {{ card_number }} ]</span>
-                    {%- endif -%}
-                    <span class="aiae-cc__num{% if product.featured_image %} aiae-cc__num--over{% endif %}">{{ card_number }}</span>
-                    {%- if block.settings.show_sold_out and product.available == false -%}
-                      <span class="aiae-cc__flag">SOLD OUT</span>
-                    {%- endif -%}
+                <div class="aiae-cc">
+                  <a href="{{ product.url }}">
+                    <div class="aiae-cc__media" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+                      {%- if product.featured_image -%}
+                        <img src="{{ product.featured_image | image_url: width: 660 }}"
+                             alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                             width="660"
+                             height="{{ 660 | divided_by: product.featured_image.aspect_ratio | round }}"
+                             loading="lazy">
+                      {%- else -%}
+                        <span class="aiae-cc__tag">[ {{ card_number }} ]</span>
+                      {%- endif -%}
+                      <span class="aiae-cc__num{% if product.featured_image %} aiae-cc__num--over{% endif %}">{{ card_number }}</span>
+                      {%- if block.settings.show_sold_out and product.available == false -%}
+                        <span class="aiae-cc__flag">SOLD OUT</span>
+                      {%- endif -%}
+                    </div>
+                    <div class="aiae-cc__body">
+                      <div class="aiae-cc__row">
+                        <h4 class="aiae-cc__title">{{ product.title }}</h4>
+                        {%- if block.settings.show_price -%}
+                          <span class="aiae-cc__price">{{ product.price | money }}</span>
+                        {%- endif -%}
+                      </div>
+                      {%- if card_sub != blank -%}
+                        <p class="aiae-cc__sub">{{ card_sub }}</p>
+                      {%- endif -%}
+                    </div>
+                  </a>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- comment -%} Placeholder cards while no concept collection is assigned {%- endcomment -%}
+              {%- assign placeholder_count = block.settings.products_to_show | default: 5 | at_most: 5 -%}
+              {%- for i in (1..placeholder_count) -%}
+                <div class="aiae-cc">
+                  <div class="aiae-cc__media aiae-cc__media--ph" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+                    <span class="aiae-cc__tag">[ {{ code_prefix }} 0{{ forloop.index }} ]</span>
+                    <span class="aiae-cc__num">{{ code_prefix }} 0{{ forloop.index }}</span>
                   </div>
                   <div class="aiae-cc__body">
                     <div class="aiae-cc__row">
-                      <h4 class="aiae-cc__title">{{ product.title }}</h4>
-                      {%- if block.settings.show_price -%}
-                        <span class="aiae-cc__price">{{ product.price | money }}</span>
-                      {%- endif -%}
+                      <h4 class="aiae-cc__title">CONCEPT {{ forloop.index }}</h4>
                     </div>
-                    {%- if card_sub != blank -%}
-                      <p class="aiae-cc__sub">{{ card_sub }}</p>
-                    {%- endif -%}
+                    <p class="aiae-cc__sub">Alege o colec&#539;ie din set&#259;rile blocului.</p>
                   </div>
-                </a>
-              </div>
-            {%- endfor -%}
-          {%- else -%}
-            {%- comment -%} Placeholder cards while no concept collection is assigned {%- endcomment -%}
-            {%- assign placeholder_count = block.settings.products_to_show | default: 5 | at_most: 5 -%}
-            {%- for i in (1..placeholder_count) -%}
-              <div class="aiae-cc">
-                <div class="aiae-cc__media aiae-cc__media--ph" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
-                  <span class="aiae-cc__tag">[ {{ code_prefix }} 0{{ forloop.index }} ]</span>
-                  <span class="aiae-cc__num">{{ code_prefix }} 0{{ forloop.index }}</span>
                 </div>
-                <div class="aiae-cc__body">
-                  <div class="aiae-cc__row">
-                    <h4 class="aiae-cc__title">CONCEPT {{ forloop.index }}</h4>
-                  </div>
-                  <p class="aiae-cc__sub">Alege o colec&#539;ie din set&#259;rile blocului.</p>
-                </div>
-              </div>
-            {%- endfor -%}
-          {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
         </div>
       </div>
     {%- endif -%}

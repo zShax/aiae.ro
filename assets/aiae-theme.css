@@ -1643,7 +1643,61 @@ body.aiae-menu-lock .aiae-hero__ticker {
   border-color: var(--aiae-ink);
   color: var(--aiae-paper);
 }
+/* The scroller wraps the track so the arrows can hover over the cards.
+   It bleeds into the page gutter so the arrows sit half-off the rail
+   edges rather than covering card content. */
+.aiae-con__scroller {
+  position: relative;
+}
+.aiae-con__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid var(--aiae-ink);
+  background: var(--aiae-paper);
+  color: var(--aiae-ink);
+  font-size: 18px;
+  line-height: 1;
+  transform: translateY(-50%);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    opacity 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.aiae-con__arrow--prev {
+  left: -14px;
+}
+.aiae-con__arrow--next {
+  right: -14px;
+}
+.aiae-con__arrow:hover {
+  background: var(--aiae-ink);
+  color: var(--aiae-paper);
+}
+.aiae-con__arrow:focus-visible {
+  outline: 2px solid var(--aiae-ink);
+  outline-offset: 3px;
+}
+/* Hidden via [hidden] at the ends of the track and when nothing overflows;
+   on coarse pointers the native swipe is the control, so they stay out. */
+.aiae-con__arrow[hidden] {
+  display: none;
+}
+@media (pointer: coarse) {
+  .aiae-con__arrow {
+    display: none;
+  }
+}
+
 .aiae-con__track {
+  position: relative; /* offsetParent for the arrow step maths */
   display: flex;
   gap: 14px;
   overflow-x: auto;

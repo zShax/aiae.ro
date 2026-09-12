@@ -50,7 +50,7 @@
         "vision_title": "NIMIC LA INDIGO",
         "vision_text": "Fiecare piesă spune ceva al tău. Fără uniforme, fără haine care ar putea fi ale altcuiva.",
         "cta_label": "PERSONALIZEAZĂ O PIESĂ",
-        "cta_link": "/pages/custom"
+        "cta_link": "#custom"
       }
     },
     "aiae_print_on_demand": {
