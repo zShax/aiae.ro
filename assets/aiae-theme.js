@@ -46,7 +46,84 @@
     initMenu();
     initPod(reduceMotion);
     initCarousels(reduceMotion);
+    initCardFlips(reduceMotion);
     initReveal(reduceMotion, loader);
+  }
+
+  // ─── Collection cards: automatic flip-through of the shots ─────
+  // Front / back / sides rotate by themselves on every device — the card
+  // is a link, so there is no tap or hover affordance to hang this on.
+  // Cards are staggered and only run while on screen.
+  function initCardFlips(reduceMotion) {
+    setupCardFlips(document, reduceMotion);
+
+    document.addEventListener('shopify:section:load', function(e) {
+      setupCardFlips(e.target, reduceMotion);
+    });
+  }
+
+  function setupCardFlips(scope, reduceMotion) {
+    if (reduceMotion) return;
+
+    const STEP = 2600;
+    const items = Array.prototype.slice.call(scope.querySelectorAll('[data-aiae-flip]'))
+      .filter(function(el) { return el.dataset.aiaeFlipReady !== 'true'; })
+      .map(function(el, i) {
+        el.dataset.aiaeFlipReady = 'true';
+        return {
+          shots: Array.prototype.slice.call(el.querySelectorAll('.aiae-card__shot')),
+          ticks: Array.prototype.slice.call(el.querySelectorAll('.aiae-card__tick')),
+          idx: 0,
+          timer: null,
+          inView: false,
+          // Neighbouring cards flip out of step rather than in unison
+          phase: (i % 4) * 620
+        };
+      })
+      .filter(function(it) { return it.shots.length > 1; });
+
+    if (!items.length) return;
+
+    function paint(it) {
+      it.shots.forEach(function(img, k) { img.classList.toggle('is-active', k === it.idx); });
+      it.ticks.forEach(function(t, k) { t.classList.toggle('is-active', k === it.idx); });
+    }
+    function stop(it) {
+      if (it.timer) { clearTimeout(it.timer); it.timer = null; }
+    }
+    function schedule(it, delay) {
+      stop(it);
+      if (!it.inView || document.hidden) return;
+      it.timer = setTimeout(function() {
+        it.idx = (it.idx + 1) % it.shots.length;
+        paint(it);
+        schedule(it, STEP);
+      }, delay);
+    }
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          const it = entry.target.aiaeFlip;
+          if (!it) return;
+          it.inView = entry.isIntersecting;
+          if (it.inView) schedule(it, STEP + it.phase); else stop(it);
+        });
+      }, { threshold: 0.2 });
+      items.forEach(function(it) {
+        it.shots[0].parentNode.aiaeFlip = it;
+        io.observe(it.shots[0].parentNode);
+      });
+    } else {
+      items.forEach(function(it) { it.inView = true; schedule(it, STEP + it.phase); });
+    }
+
+    document.addEventListener('visibilitychange', function() {
+      items.forEach(function(it) {
+        // Phase kept on resume, or every card would come back in lockstep
+        if (document.hidden) stop(it); else schedule(it, STEP + it.phase);
+      });
+    });
   }
 
   // ─── Concept carousels: hovering prev/next arrows ──────

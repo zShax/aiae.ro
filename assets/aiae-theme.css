@@ -910,22 +910,35 @@ body.aiae-menu-lock .aiae-hero__ticker {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   COLLECTION GRID — hairline grid
+   COLLECTION GRID — free-floating cards on solid borders.
+   Centred rather than column-locked, so a short lot (5 pieces)
+   closes its last row on the centre line instead of orphaning
+   a card against the left edge.
    ═══════════════════════════════════════════════════════════ */
 .aiae-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1px;
-  background: var(--sec-line);
-  border: 1px solid var(--sec-line);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: clamp(16px, 2.2vw, 26px);
+  max-width: 1160px;
+  margin: 0 auto;
 }
 .aiae-card {
   position: relative;
+  flex: 0 1 clamp(240px, 25vw, 310px);
+  text-align: left;
   background: var(--sec-surface);
-  transition: background 0.4s ease;
+  border: 2px solid var(--lot-edge, var(--sec-text));
+  transition:
+    background 0.4s ease,
+    transform 0.4s var(--aiae-ease),
+    box-shadow 0.4s ease;
 }
 .aiae-card:hover {
   background: var(--sec-surface-hover);
+  transform: translate(-4px, -6px);
+  box-shadow: 6px 8px 0 0 var(--lot-edge, var(--sec-text));
 }
 .aiae-card a {
   text-decoration: none;
@@ -936,6 +949,7 @@ body.aiae-menu-lock .aiae-hero__ticker {
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--sec-media);
+  border-bottom: 2px solid var(--lot-edge, var(--sec-text));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -959,6 +973,54 @@ body.aiae-menu-lock .aiae-hero__ticker {
 .aiae-card:hover .aiae-card__media img {
   transform: scale(1.045);
 }
+/* Front / back / sides stacked in place — aiae-theme.js moves .is-active
+   down the pile. Only the first shot is marked active in the markup, so
+   with no JS the card is an ordinary single-image card. */
+/* Qualified with img so these outrank `.aiae-card__media img` above,
+   which would otherwise win on specificity and drop the opacity
+   transition — the shots would hard-cut instead of fading. */
+img.aiae-card__shot {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  /* The outgoing shot holds at full opacity until the incoming one has
+     covered it, then drops unseen — a straight cross-fade would dip to
+     the media colour halfway through. */
+  transition:
+    opacity 0.5s ease 0.5s,
+    transform 0.7s var(--aiae-ease);
+}
+img.aiae-card__shot.is-active {
+  opacity: 1;
+  z-index: 1;
+  transition:
+    opacity 0.5s ease 0s,
+    transform 0.7s var(--aiae-ease);
+}
+/* Which shot is up. Sits on a plate so it survives a pale photo. */
+.aiae-card__ticks {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 2;
+  display: flex;
+  gap: 4px;
+  padding: 6px 7px;
+  background: rgba(13, 13, 13, 0.5);
+}
+.aiae-card__tick {
+  width: 12px;
+  height: 2px;
+  background: #f2efe7;
+  opacity: 0.4;
+  transition:
+    background 0.3s ease,
+    opacity 0.3s ease;
+}
+.aiae-card__tick.is-active {
+  background: var(--aiae-accent);
+  opacity: 1;
+}
 .aiae-card__code {
   font-family: var(--aiae-font-mono);
   font-size: 11px;
@@ -972,6 +1034,7 @@ body.aiae-menu-lock .aiae-hero__ticker {
   position: absolute;
   top: 12px;
   left: 12px;
+  z-index: 2; /* clears the active shot's stacking context */
   font-family: var(--aiae-font-mono);
   font-size: 10px;
   letter-spacing: 0.14em;
@@ -1010,6 +1073,132 @@ body.aiae-menu-lock .aiae-hero__ticker {
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--sec-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LOT PLATE — the collection shell, centred and bracketed.
+   The lot is announced: accent tape runs in, a stamped rule
+   opens it, the cards sit on the centre line, a second stamp
+   closes it and the tape runs back out the other way.
+   ═══════════════════════════════════════════════════════════ */
+.aiae-lot {
+  --lot-edge: var(--sec-text);
+  position: relative;
+  overflow: hidden; /* keeps the bled tapes from widening the page */
+  text-align: center;
+  /* the tapes sit inside the shell's own padding — buy back the height
+     they occupy so the stamps still clear them */
+  padding-top: calc(clamp(64px, 9vh, 120px) + 26px);
+  padding-bottom: calc(clamp(64px, 9vh, 120px) + 26px);
+}
+
+/* ── Tape: pinned to the shell's own edges, so it bleeds past the
+   gutter without having to cancel the padding with negative margins ── */
+.aiae-lot__tape {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  height: 38px;
+  overflow: hidden;
+  background: var(--aiae-accent);
+}
+.aiae-lot__tape--in {
+  top: 0;
+}
+.aiae-lot__tape--out {
+  bottom: 0;
+}
+.aiae-lot__tape .aiae-marquee-inner {
+  color: var(--aiae-ink);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  animation-duration: 34s;
+}
+/* Out-tape runs the other way, so the section reads as a loop closing */
+.aiae-lot__tape--out .aiae-marquee-inner {
+  animation-direction: reverse;
+}
+.aiae-lot__tape .aiae-marquee-inner span {
+  padding: 0 22px;
+}
+.aiae-lot__tape .aiae-tick-dot {
+  color: rgba(13, 13, 13, 0.5);
+}
+
+/* ── Stamped rules that open and close the lot ── */
+.aiae-lot__edge {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2vw, 22px);
+  margin: 0 0 clamp(32px, 5vh, 56px);
+}
+.aiae-lot__edge--out {
+  margin: clamp(44px, 6.5vh, 78px) 0 0;
+}
+.aiae-lot__rule {
+  flex: 1;
+  height: 0;
+  border-top: 2px solid var(--lot-edge);
+  opacity: 0.5;
+}
+.aiae-lot__stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  border: 2px solid var(--lot-edge);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sec-text);
+  white-space: nowrap;
+}
+.aiae-lot__stamp b {
+  font-weight: 400;
+  color: var(--aiae-accent);
+}
+.aiae-lot__stamp em {
+  font-style: normal;
+  color: var(--sec-muted);
+}
+.aiae-lot__stamp--out {
+  color: var(--sec-muted);
+  border-color: var(--sec-line-strong);
+}
+.aiae-lot__dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 auto;
+  background: var(--aiae-accent);
+  border-radius: 50%;
+  animation: aiae-blink 1.7s steps(1) infinite;
+}
+
+/* ── Centred head + exit CTA ── */
+.aiae-lot__head {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 18px;
+}
+.aiae-lot__head .aiae-section__aside {
+  align-items: center;
+  max-width: 46ch;
+}
+.aiae-lot__head .aiae-section__desc {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 44ch;
+}
+.aiae-lot__out {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(22px, 3.4vh, 34px);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2031,9 +2220,32 @@ body.aiae-menu-lock .aiae-hero__ticker {
     padding: 16px 26px;
   }
 
-  /* Collection: 2-up editorial grid */
+  /* Collection: one card per row, centred — a 5-piece lot never
+     leaves an orphan hanging against the left edge */
   .aiae-grid {
-    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .aiae-card {
+    flex: 0 1 min(340px, 100%);
+  }
+  .aiae-lot__tape {
+    height: 32px;
+  }
+  .aiae-lot__tape .aiae-marquee-inner {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+  }
+  .aiae-lot__tape .aiae-marquee-inner span {
+    padding: 0 16px;
+  }
+  .aiae-lot__edge {
+    gap: 10px;
+  }
+  .aiae-lot__stamp {
+    gap: 8px;
+    padding: 7px 10px;
+    font-size: 9px;
+    letter-spacing: 0.13em;
   }
   .aiae-card__body {
     padding: 12px 12px 16px;
@@ -2109,12 +2321,6 @@ body.aiae-menu-lock .aiae-hero__ticker {
   /* Footer wordmark breathing room */
   .aiae-footer__top {
     flex-direction: column;
-  }
-}
-
-@media (max-width: 330px) {
-  .aiae-grid {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -3140,6 +3346,10 @@ body.aiae-menu-lock .aiae-hero__ticker {
 .aiae-reduce-motion .aiae-card__media img {
   transition: none;
 }
+.aiae-reduce-motion .aiae-marquee-inner,
+.aiae-reduce-motion .aiae-lot__dot {
+  animation-play-state: paused;
+}
 .aiae-reduce-motion .aiae-menu {
   transition: none;
 }
@@ -3168,7 +3378,8 @@ body.aiae-menu-lock .aiae-hero__ticker {
     animation: none;
     display: none;
   }
-  .aiae-marquee-inner {
+  .aiae-marquee-inner,
+  .aiae-lot__dot {
     animation-play-state: paused;
   }
   .aiae-prod__atc,

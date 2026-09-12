@@ -1,40 +1,103 @@
-<section id="collection" class="aiae-section aiae-section--void">
+{%- liquid
+  assign coll = collections[section.settings.collection]
+  assign has_products = false
+  if coll != blank and coll.products_count > 0
+    assign has_products = true
+  endif
 
-  <div class="aiae-section__head">
+  assign limit = section.settings.products_to_show | default: 6
+  if has_products
+    assign shown = coll.products_count
+    if shown > limit
+      assign shown = limit
+    endif
+  else
+    assign shown = 6
+  endif
+
+  assign piece_word = 'PIESE'
+  if shown == 1
+    assign piece_word = 'PIESĂ'
+  endif
+
+  assign ticker_items = section.settings.ticker_text | split: '|'
+-%}
+
+<section id="collection" class="aiae-section aiae-section--void aiae-lot">
+
+  {%- comment -%}
+    ENTRANCE — a full-bleed accent tape runs into the section, then a
+    stamped rule opens the lot. The exit mirrors both, in reverse.
+  {%- endcomment -%}
+  {%- if ticker_items.size > 0 -%}
+    <div class="aiae-lot__tape aiae-lot__tape--in aiae-noscroll" aria-hidden="true">
+      <div class="aiae-marquee-inner">
+        {%- comment -%} Twice through, for a seamless loop {%- endcomment -%}
+        {%- for pass in (1..2) -%}
+          {%- for item in ticker_items -%}
+            <span>{{ item | strip }}</span>
+            <span class="aiae-tick-dot">●</span>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="aiae-lot__edge" data-aiae-reveal="fade">
+    <i class="aiae-lot__rule"></i>
+    <span class="aiae-lot__stamp">
+      <i class="aiae-lot__dot"></i>
+      <b>{{ section.settings.section_number }}</b>
+      <span>{{ section.settings.open_label }}</span>
+      <em>{{ shown }} {{ piece_word }}</em>
+    </span>
+    <i class="aiae-lot__rule"></i>
+  </div>
+
+  <div class="aiae-section__head aiae-lot__head">
     <div data-aiae-reveal>
       <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
       <h2 class="aiae-display aiae-section__title">{{ section.settings.title | newline_to_br }}</h2>
     </div>
     <div class="aiae-section__aside" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">
       <p class="aiae-section__desc">{{ section.settings.description }}</p>
-      {%- if section.settings.redirect_label != blank -%}
-        <a href="{{ section.settings.redirect_link | default: '#custom' }}" class="aiae-section__redirect">
-          <span>{{ section.settings.redirect_label }}</span>
-          <span aria-hidden="true">↑</span>
-        </a>
-      {%- endif -%}
     </div>
   </div>
 
   <div class="aiae-grid">
 
-    {%- assign collection = collections[section.settings.collection] -%}
-    {%- if collection != blank and collection.products_count > 0 -%}
-      {%- for product in collection.products limit: section.settings.products_to_show -%}
+    {%- if has_products -%}
+      {%- for product in coll.products limit: limit -%}
         <div class="aiae-card" data-aiae-reveal="scale" style="--aiae-reveal-delay: {{ forloop.index0 | modulo: 3 | times: 0.09 }}s;">
           <a href="{{ product.url }}">
-            <div class="aiae-card__media">
-              {%- if product.featured_image -%}
-                <img src="{{ product.featured_image | image_url: width: 600 }}"
-                     alt="{{ product.featured_image.alt | escape }}"
-                     width="600"
-                     height="{{ 600 | divided_by: product.featured_image.aspect_ratio | round }}"
-                     loading="lazy">
+            {%- comment -%}
+              The first four shots of the piece — front, back, sides — stacked
+              and cross-faded by aiae-theme.js. Without JS (or with reduced
+              motion) the first one simply stays up.
+            {%- endcomment -%}
+            <div class="aiae-card__media"{% if product.images.size > 1 %} data-aiae-flip{% endif %}>
+              {%- if product.images.size > 0 -%}
+                {%- for image in product.images limit: 4 -%}
+                  <img class="aiae-card__shot{% if forloop.first %} is-active{% endif %}"
+                       src="{{ image | image_url: width: 600 }}"
+                       alt="{% if forloop.first %}{{ image.alt | default: product.title | escape }}{% endif %}"
+                       width="600"
+                       height="{{ 600 | divided_by: image.aspect_ratio | round }}"
+                       loading="lazy"
+                       {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+                {%- endfor -%}
               {%- else -%}
                 <span class="aiae-card__code">[ {{ product.title | upcase }} ]</span>
               {%- endif -%}
               {%- if product.metafields.aiae.lot != blank -%}
                 <span class="aiae-card__lot">{{ product.metafields.aiae.lot }}</span>
+              {%- endif -%}
+              {%- if product.images.size > 1 -%}
+                <span class="aiae-card__ticks" aria-hidden="true">
+                  {%- for image in product.images limit: 4 -%}
+                    <i class="aiae-card__tick{% if forloop.first %} is-active{% endif %}"></i>
+                  {%- endfor -%}
+                </span>
               {%- endif -%}
             </div>
             <div class="aiae-card__body">
@@ -72,6 +135,38 @@
     {%- endif -%}
 
   </div>
+
+  {%- comment -%} EXIT — closing stamp, the nudge back to the personalizer, tape out {%- endcomment -%}
+  <div class="aiae-lot__edge aiae-lot__edge--out" data-aiae-reveal="fade">
+    <i class="aiae-lot__rule"></i>
+    <span class="aiae-lot__stamp aiae-lot__stamp--out">
+      <b>{{ section.settings.section_number }}</b>
+      <span>{{ section.settings.close_label }}</span>
+    </span>
+    <i class="aiae-lot__rule"></i>
+  </div>
+
+  {%- if section.settings.redirect_label != blank -%}
+    <div class="aiae-lot__out" data-aiae-reveal style="--aiae-reveal-delay: 0.1s;">
+      <a href="{{ section.settings.redirect_link | default: '#custom' }}" class="aiae-section__redirect">
+        <span>{{ section.settings.redirect_label }}</span>
+        <span aria-hidden="true">↑</span>
+      </a>
+    </div>
+  {%- endif -%}
+
+  {%- if ticker_items.size > 0 -%}
+    <div class="aiae-lot__tape aiae-lot__tape--out aiae-noscroll" aria-hidden="true">
+      <div class="aiae-marquee-inner">
+        {%- for pass in (1..2) -%}
+          {%- for item in ticker_items -%}
+            <span>{{ item | strip }}</span>
+            <span class="aiae-tick-dot">●</span>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
 </section>
 
 {% schema %}
@@ -103,6 +198,29 @@
       "default": "Tricouri, hanorace și șepci gata făcute, din aceleași materiale grele și cu aceleași printuri ca piesele personalizate. Le alegi, le porți, gata."
     },
     {
+      "type": "header",
+      "content": "Intrare / ieșire"
+    },
+    {
+      "type": "text",
+      "id": "ticker_text",
+      "label": "Tape text",
+      "info": "Separate items with |. Leave blank to hide both tapes.",
+      "default": "GATA FĂCUTE|MATERIALE GRELE|PRINTURI CARE REZISTĂ|FABRICAT ÎN RO|AIA E. ASTA E."
+    },
+    {
+      "type": "text",
+      "id": "open_label",
+      "label": "Opening stamp",
+      "default": "LOT DESCHIS"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Closing stamp",
+      "default": "LOT ÎNCHIS — ASTA E"
+    },
+    {
       "type": "text",
       "id": "redirect_label",
       "label": "Redirect link label",
@@ -113,6 +231,10 @@
       "id": "redirect_link",
       "label": "Redirect link",
       "info": "Defaults to the personalized collections section on this page."
+    },
+    {
+      "type": "header",
+      "content": "Produse"
     },
     {
       "type": "collection",
