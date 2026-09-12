@@ -27,14 +27,16 @@
       {%- endif -%}
       {%- assign code_prefix = code_prefix | default: 'CONCEPT' -%}
 
-      <div class="aiae-con__row" {{ block.shopify_attributes }}>
+      {%- comment -%} Rows alternate light / inverted down the section {%- endcomment -%}
+      {%- assign row_mod = forloop.index | modulo: 2 -%}
+      <div class="aiae-con__row{% if row_mod == 0 %} aiae-con__row--inv{% endif %}" {{ block.shopify_attributes }}>
         <div class="aiae-con__rowhead" data-aiae-reveal>
           <h3 class="aiae-con__rowtitle">{{ row_title | default: 'CONCEPT' }}</h3>
           <span class="aiae-con__rownote">{{ row_note }}</span>
           <span class="aiae-con__rowline"></span>
           {%- if block.settings.show_collection_link and row_collection.url != blank -%}
             <a href="{{ row_collection.url }}" class="aiae-con__rowlink">
-              <span>{{ block.settings.collection_link_label | default: 'VEZI COLECTIA' }}</span>
+              <span>{{ block.settings.collection_link_label | default: 'VEZI COLECȚIA' }}</span>
               <span aria-hidden="true">&rarr;</span>
             </a>
           {%- endif -%}
@@ -129,7 +131,7 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow text",
-      "default": "CONCEPTE — POTENȚIAL DE CUSTOMIZARE"
+      "default": "CONCEPTE — IDEI DE PERSONALIZARE"
     },
     {
       "type": "text",
@@ -212,7 +214,7 @@
           "type": "color",
           "id": "card_bg",
           "label": "Card media background",
-          "default": "#E7E3D8"
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
@@ -227,9 +229,9 @@
     {
       "name": "AIAE Concept Carousels",
       "blocks": [
-        { "type": "carousel_row", "settings": { "card_bg": "#F2EFE7", "card_fg": "#0D0D0D" } },
-        { "type": "carousel_row", "settings": { "card_bg": "#1C1C1C", "card_fg": "#BEBAB2" } },
-        { "type": "carousel_row", "settings": { "card_bg": "#23211E", "card_fg": "#BEBAB2" } }
+        { "type": "carousel_row", "settings": { "card_bg": "#FFFFFF", "card_fg": "#0D0D0D" } },
+        { "type": "carousel_row", "settings": { "card_bg": "#FFFFFF", "card_fg": "#0D0D0D" } },
+        { "type": "carousel_row", "settings": { "card_bg": "#FFFFFF", "card_fg": "#0D0D0D" } }
       ]
     }
   ]

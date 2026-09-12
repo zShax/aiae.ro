@@ -24,6 +24,7 @@
 
   /* Brand */
   --aiae-accent: #d94f1e;
+  --aiae-stone: #5a564f;
 
   /* Rhythm */
   --aiae-gutter: clamp(20px, 4vw, 56px);
@@ -1550,7 +1551,7 @@ body.aiae-menu-lock .aiae-hero__ticker {
    ═══════════════════════════════════════════════════════════ */
 .aiae-con {
   padding: clamp(64px, 9vh, 120px) 0 clamp(40px, 6vh, 80px);
-  border-bottom: 1px solid var(--aiae-line);
+  border-bottom: 2px solid var(--aiae-ink);
   background: var(--aiae-paper);
 }
 .aiae-con__head {
@@ -1563,6 +1564,36 @@ body.aiae-menu-lock .aiae-hero__ticker {
 .aiae-con__row {
   margin-bottom: clamp(40px, 6vh, 72px);
 }
+/* Every second row flips its cards to brand stone with inverted type.
+   The band itself stays on paper - only the cards go dark. */
+.aiae-con__row--inv .aiae-cc {
+  background: var(--aiae-stone);
+  border-color: var(--aiae-stone);
+}
+.aiae-con__row--inv .aiae-cc:hover {
+  box-shadow: 6px 8px 0 0 var(--aiae-stone);
+}
+.aiae-con__row--inv .aiae-cc__media {
+  border-bottom-color: var(--aiae-stone);
+}
+.aiae-con__row--inv .aiae-cc__title,
+.aiae-con__row--inv .aiae-cc__price {
+  color: var(--aiae-d-text);
+}
+.aiae-con__row--inv .aiae-cc__sub {
+  color: var(--aiae-d-muted);
+}
+.aiae-con__row--inv .aiae-cc__num--over {
+  background: var(--aiae-stone);
+  border-color: var(--aiae-stone);
+  color: var(--aiae-d-text);
+}
+.aiae-con__row--inv .aiae-cc__flag {
+  background: var(--aiae-stone);
+  border-color: var(--aiae-d-text);
+  color: var(--aiae-d-text);
+}
+
 .aiae-con__rowhead {
   display: flex;
   align-items: baseline;
@@ -1586,8 +1617,8 @@ body.aiae-menu-lock .aiae-hero__ticker {
 }
 .aiae-con__rowline {
   flex: 1;
-  height: 1px;
-  background: var(--aiae-line);
+  height: 0;
+  border-top: 2px solid var(--aiae-ink);
 }
 .aiae-con__rowlink {
   display: inline-flex;
@@ -1595,7 +1626,7 @@ body.aiae-menu-lock .aiae-hero__ticker {
   gap: 8px;
   flex: 0 0 auto;
   padding: 7px 12px;
-  border: 1px solid var(--aiae-line);
+  border: 2px solid var(--aiae-ink);
   color: var(--aiae-muted);
   text-decoration: none;
   font-family: var(--aiae-font-mono);
@@ -1614,10 +1645,14 @@ body.aiae-menu-lock .aiae-hero__ticker {
 }
 .aiae-con__track {
   display: flex;
-  gap: 1px;
+  gap: 14px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding: 0 var(--aiae-gutter);
+  /* Without this the first card snaps flush to the scrollport edge and the
+     gutter padding gets scrolled away, so the row loses its left margin. */
+  scroll-padding-left: var(--aiae-gutter);
+  scroll-padding-right: var(--aiae-gutter);
   scrollbar-width: none;
 }
 .aiae-con__spacer {
@@ -1627,15 +1662,15 @@ body.aiae-menu-lock .aiae-hero__ticker {
 .aiae-cc {
   scroll-snap-align: start;
   flex: 0 0 clamp(230px, 28vw, 330px);
-  border: 1px solid var(--aiae-line);
+  border: 2px solid var(--aiae-ink);
   background: var(--aiae-paper);
   transition:
     transform 0.4s var(--aiae-ease),
     box-shadow 0.4s ease;
 }
 .aiae-cc:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 40px -22px rgba(13, 13, 13, 0.35);
+  transform: translate(-4px, -6px);
+  box-shadow: 6px 8px 0 0 var(--aiae-ink);
 }
 .aiae-cc a {
   display: block;
@@ -1644,6 +1679,7 @@ body.aiae-menu-lock .aiae-hero__ticker {
 }
 .aiae-cc__media {
   aspect-ratio: 1 / 1.18;
+  border-bottom: 2px solid var(--aiae-ink);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -1669,7 +1705,7 @@ body.aiae-menu-lock .aiae-hero__ticker {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 6px 11px;
-  border: 1px solid currentColor;
+  border: 2px solid currentColor;
   opacity: 0.85;
 }
 .aiae-cc__num {
@@ -1684,6 +1720,7 @@ body.aiae-menu-lock .aiae-hero__ticker {
 /* Over a photo the raw code loses contrast, so it gets a chip */
 .aiae-cc__num--over {
   padding: 4px 8px;
+  border: 2px solid var(--aiae-ink);
   background: var(--aiae-ink);
   color: var(--aiae-paper);
   opacity: 1;
@@ -1699,7 +1736,7 @@ body.aiae-menu-lock .aiae-hero__ticker {
   padding: 4px 8px;
   background: var(--aiae-paper);
   color: var(--aiae-ink);
-  border: 1px solid var(--aiae-ink);
+  border: 2px solid var(--aiae-ink);
 }
 .aiae-cc__body {
   padding: 16px 16px 20px;
