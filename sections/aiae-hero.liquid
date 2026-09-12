@@ -1,6 +1,13 @@
-<section id="top" class="aiae-hero">
+{%- liquid
+  assign hero_image = section.settings.image_desktop | default: section.settings.image_mobile
+  assign has_media = false
+  if section.settings.image_desktop != blank or section.settings.image_mobile != blank
+    assign has_media = true
+  endif
+-%}
+<section id="top" class="aiae-hero{% if has_media %} aiae-hero--has-media{% endif %}">
 
-  {%- if section.settings.image_desktop != blank or section.settings.image_mobile != blank -%}
+  {%- if has_media -%}
     <div class="aiae-hero__media" data-aiae-reveal="fade" style="--aiae-reveal-delay: 0.05s;">
       <picture>
         {%- if section.settings.image_mobile != blank -%}
@@ -8,7 +15,7 @@
             media="(max-width: 749px)"
             srcset="{{ section.settings.image_mobile | image_url: width: 1100 }}">
         {%- endif -%}
-        {%- assign fallback_image = section.settings.image_desktop | default: section.settings.image_mobile -%}
+        {%- assign fallback_image = hero_image -%}
         <img
           src="{{ fallback_image | image_url: width: 2200 }}"
           srcset="{{ fallback_image | image_url: width: 1100 }} 1100w,

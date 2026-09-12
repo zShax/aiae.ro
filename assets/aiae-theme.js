@@ -17,9 +17,13 @@
 
     // Nav scroll
     const nav = document.getElementById('aiae-nav');
+    // The hero ticker is the header's second row — it shares the nav's state.
+    const ticker = document.querySelector('.aiae-hero__ticker');
     function onScroll() {
       const y = window.scrollY || window.pageYOffset;
-      if (nav) nav.classList.toggle('is-scrolled', y > 40);
+      const scrolled = y > 40;
+      if (nav) nav.classList.toggle('is-scrolled', scrolled);
+      if (ticker) ticker.classList.toggle('is-scrolled', scrolled);
       if (!reduceMotion) {
         const word = document.getElementById('aiae-footer-word');
         if (word) {
