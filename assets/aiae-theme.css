@@ -1549,13 +1549,14 @@ body.aiae-menu-lock .aiae-hero__ticker {
 /* ═══════════════════════════════════════════════════════════
    CONCEPT CAROUSELS — paper gallery walls
    ═══════════════════════════════════════════════════════════ */
+/* One page gutter for the whole section: the head, the row heads and the
+   carousel tracks all live inside it, so nothing re-adds its own inset. */
 .aiae-con {
-  padding: clamp(64px, 9vh, 120px) 0 clamp(40px, 6vh, 80px);
+  padding: clamp(64px, 9vh, 120px) var(--aiae-gutter) clamp(40px, 6vh, 80px);
   border-bottom: 2px solid var(--aiae-ink);
   background: var(--aiae-paper);
 }
 .aiae-con__head {
-  padding: 0 var(--aiae-gutter);
   margin-bottom: clamp(36px, 5vh, 56px);
 }
 .aiae-con__title {
@@ -1598,7 +1599,6 @@ body.aiae-menu-lock .aiae-hero__ticker {
   display: flex;
   align-items: baseline;
   gap: 16px;
-  padding: 0 var(--aiae-gutter);
   margin-bottom: 18px;
 }
 .aiae-con__rowtitle {
@@ -1647,16 +1647,11 @@ body.aiae-menu-lock .aiae-hero__ticker {
   display: flex;
   gap: 14px;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 0 var(--aiae-gutter);
-  /* Without this the first card snaps flush to the scrollport edge and the
-     gutter padding gets scrolled away, so the row loses its left margin. */
-  scroll-padding-left: var(--aiae-gutter);
-  scroll-padding-right: var(--aiae-gutter);
+  /* Proximity, not mandatory: the cards carry a translateX entrance reveal,
+     and a mandatory scroller re-snaps to the transformed card mid-animation,
+     which drags the row sideways and jumps it back when it lands. */
+  scroll-snap-type: x proximity;
   scrollbar-width: none;
-}
-.aiae-con__spacer {
-  flex: 0 0 var(--aiae-gutter);
 }
 
 .aiae-cc {

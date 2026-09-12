@@ -29,8 +29,8 @@
 
       {%- comment -%} Rows alternate light / inverted down the section {%- endcomment -%}
       {%- assign row_mod = forloop.index | modulo: 2 -%}
-      <div class="aiae-con__row{% if row_mod == 0 %} aiae-con__row--inv{% endif %}" {{ block.shopify_attributes }}>
-        <div class="aiae-con__rowhead" data-aiae-reveal>
+      <div class="aiae-con__row{% if row_mod == 0 %} aiae-con__row--inv{% endif %}" data-aiae-reveal {{ block.shopify_attributes }}>
+        <div class="aiae-con__rowhead">
           <h3 class="aiae-con__rowtitle">{{ row_title | default: 'CONCEPT' }}</h3>
           <span class="aiae-con__rownote">{{ row_note }}</span>
           <span class="aiae-con__rowline"></span>
@@ -60,7 +60,7 @@
                 {%- assign card_sub = product.description | strip_html | strip | truncate: 60 -%}
               {%- endif -%}
 
-              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;">
+              <div class="aiae-cc">
                 <a href="{{ product.url }}">
                   <div class="aiae-cc__media" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
                     {%- if product.featured_image -%}
@@ -95,7 +95,7 @@
             {%- comment -%} Placeholder cards while no concept collection is assigned {%- endcomment -%}
             {%- assign placeholder_count = block.settings.products_to_show | default: 5 | at_most: 5 -%}
             {%- for i in (1..placeholder_count) -%}
-              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;">
+              <div class="aiae-cc">
                 <div class="aiae-cc__media aiae-cc__media--ph" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
                   <span class="aiae-cc__tag">[ {{ code_prefix }} 0{{ forloop.index }} ]</span>
                   <span class="aiae-cc__num">{{ code_prefix }} 0{{ forloop.index }}</span>
@@ -109,7 +109,6 @@
               </div>
             {%- endfor -%}
           {%- endif -%}
-          <div class="aiae-con__spacer"></div>
         </div>
       </div>
     {%- endif -%}
