@@ -18,7 +18,7 @@
     "aiae_hero": {
       "type": "aiae-hero",
       "settings": {
-        "image_desktop": "shopify://shop_images/Gemini_Generated_Image_q2mn5tq2mn5tq2mn.png",
+        "image_desktop": "shopify://shop_images/ezgif.com-gif-to-webp-converter.webp",
         "image_mobile": "shopify://shop_images/hero_mobile.gif",
         "ticker_text": "DEGEABA CLUB 2026 — LOT 200/200|PRINT ON DEMAND — TOATE CULORILE|BUCUREȘTI / TIMIȘOARA|AIA E. ASTA E.",
         "label": "STREETWEAR POST-IRONIC",
@@ -134,7 +134,7 @@
             "show_price": true,
             "show_sold_out": true,
             "card_bg": "#1c1c1c",
-            "card_fg": "#1C1C1C"
+            "card_fg": "#1c1c1c"
           }
         },
         "carousel_row_J4N8zQ": {
