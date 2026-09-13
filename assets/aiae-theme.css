@@ -1200,20 +1200,12 @@ img.aiae-card__shot.is-active {
   justify-content: center;
   margin-top: clamp(22px, 3.4vh, 34px);
 }
-
 /* ═══════════════════════════════════════════════════════════
-   PRINT-ON-DEMAND — light paper module (fullscreen)
-   Tokenised so the whole module can be flipped to the void
-   palette with .aiae-pod--void without touching every rule.
+   PRINT-ON-DEMAND — the hero piece, centred and floating
+   No frame, no crop: the garment sits in a pool of white light
+   that bleeds off into the paper. Tokenised so the whole module
+   can be flipped to the void palette with .aiae-pod--void.
    ═══════════════════════════════════════════════════════════ */
-@keyframes aiae-pod-scan {
-  0% {
-    transform: translateY(-120%);
-  }
-  100% {
-    transform: translateY(120%);
-  }
-}
 @keyframes aiae-pod-pulse {
   0%,
   100% {
@@ -1221,6 +1213,15 @@ img.aiae-card__shot.is-active {
   }
   50% {
     opacity: 1;
+  }
+}
+@keyframes aiae-pod-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
   }
 }
 
@@ -1231,19 +1232,27 @@ img.aiae-card__shot.is-active {
   --pod-muted: var(--aiae-muted);
   --pod-line: var(--aiae-line);
   --pod-line-strong: var(--aiae-line-strong);
-  /* The display frame stays inverted so garments pop off the paper */
-  --pod-frame-bg: var(--aiae-d-bg);
-  --pod-frame-text: var(--aiae-d-text);
-  --pod-badge-bg: var(--aiae-paper);
+  /* The solid bars the piece is framed by */
+  --pod-rail: #ffffff;
+  --pod-numeral: rgba(13, 13, 13, 0.07);
+  --pod-deck-bg: rgba(255, 255, 255, 0.62);
+  --pod-badge-bg: var(--aiae-accent);
   --pod-badge-text: var(--aiae-ink);
+  /* Carousel geometry — read back by the JS that lays the strip out */
+  --pod-step: 104;
+  --pod-ghost: 0.82;
 
   position: relative;
-  min-height: 100vh;
+  overflow: hidden; /* the full-bleed stage stays inside the page */
   min-height: 100svh;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   scroll-margin-top: 0;
-  padding: clamp(84px, 11vh, 128px) var(--aiae-gutter) clamp(40px, 6vh, 72px);
+  /* #custom is the anchor the whole site points at — the head has to clear
+     the fixed nav + ticker when you land on it */
+  padding: calc(var(--aiae-header-h) + clamp(18px, 3.4vh, 46px)) var(--aiae-gutter) clamp(48px, 7vh, 88px);
   background: var(--pod-bg);
   color: var(--pod-text);
   border-top: 1px solid var(--aiae-line);
@@ -1255,38 +1264,59 @@ img.aiae-card__shot.is-active {
   --pod-muted: var(--aiae-d-muted);
   --pod-line: var(--aiae-d-line);
   --pod-line-strong: rgba(242, 239, 231, 0.3);
-  --pod-frame-bg: var(--aiae-cream);
-  --pod-frame-text: var(--aiae-ink);
-  --pod-badge-bg: var(--aiae-ink);
-  --pod-badge-text: var(--aiae-paper);
+  --pod-rail: #f2efe7;
+  --pod-numeral: rgba(242, 239, 231, 0.1);
+  --pod-deck-bg: rgba(242, 239, 231, 0.06);
+  --pod-badge-bg: var(--aiae-accent);
+  --pod-badge-text: var(--aiae-ink);
 }
+
+/* ── Head ── */
 .aiae-pod__head {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
-  flex-wrap: wrap;
-  margin-bottom: clamp(20px, 3vh, 36px);
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-bottom: clamp(20px, 3vh, 34px);
 }
 .aiae-pod__title {
   padding-top: 0.14em;
-  font-size: clamp(40px, 6.4vw, 104px);
+  font-size: clamp(44px, 8.2vw, 116px);
+  line-height: 0.86;
   color: var(--pod-text);
+  max-width: 16ch;
+  justify-self: center;
 }
 .aiae-pod__title .aiae-dot {
   color: var(--aiae-accent);
+  /* the accent phrase wraps as one unit, never mid-phrase */
+  white-space: nowrap;
+}
+.aiae-pod__sub {
+  margin: 0;
+  max-width: 40ch;
+  font-family: var(--aiae-font-body);
+  font-size: clamp(14px, 1.5vw, 17px);
+  line-height: 1.5;
+  color: var(--pod-muted);
 }
 .aiae-pod__meta {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
   font-family: var(--aiae-font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 10px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--pod-muted);
-  text-align: right;
+}
+.aiae-pod__meta i {
+  width: 20px;
+  height: 1px;
+  background: var(--pod-line-strong);
 }
 .aiae-pod__meta .aiae-live {
   color: var(--aiae-accent);
@@ -1295,12 +1325,11 @@ img.aiae-card__shot.is-active {
 /* Collection switcher — one tab per personalized collection */
 .aiae-pod__tabs {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 18px;
-  margin-bottom: clamp(18px, 2.6vh, 30px);
-  border-top: 1px solid var(--pod-line);
-  border-bottom: 1px solid var(--pod-line);
-  padding: 10px 0;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: clamp(14px, 2vh, 24px);
 }
 .aiae-pod__tabs-label {
   flex: none;
@@ -1312,7 +1341,9 @@ img.aiae-card__shot.is-active {
 }
 .aiae-pod__tabs-row {
   display: flex;
+  justify-content: center;
   gap: 8px;
+  max-width: 100%;
   overflow-x: auto;
   min-width: 0;
 }
@@ -1355,46 +1386,133 @@ img.aiae-card__shot.is-active {
   opacity: 1;
 }
 
+/* ── Stage: one centred column, piece first ── */
 .aiae-pod-stage {
+  /* --pod-size drives the band, the piece and the light pool alike, so it
+     lives on the stage where both the frame and the glow can read it.
+     The stage is the common wrapper: the light pool sits behind on a
+     negative layer, everything else rides above it on z-index 1.
+     isolate keeps that negative layer from sinking behind the paper. */
+  --pod-size: min(92vw, 64svh, 700px);
+  position: relative;
+  isolation: isolate;
   display: flex;
-  gap: clamp(20px, 3vw, 48px);
-  flex: 1;
-  min-height: 0;
-  align-items: stretch;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+/* ── Rails: the geometric separator ──
+   Two thick solid bars stood either side of the product box. They take over
+   from the old light pool: a hard edge instead of a gradient, and the pieces
+   drifting in and out of the strip pass behind them, so only the active one
+   is ever fully in the clear. Sat inside the clipping band, above the cards
+   but under the PREVIEW badge. */
+.aiae-pod-rails {
+  --pod-rail-w: clamp(26px, 5vw, 74px);
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.aiae-pod-rails i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: block;
+  width: var(--pod-rail-w);
+  background: var(--pod-rail);
+}
+/* A hairline on the inner face so each bar reads as a band in its own right
+   rather than melting into the white plate behind the piece. */
+.aiae-pod-rails i:nth-child(1) {
+  right: calc(50% + var(--pod-size) / 2);
+  border-right: 1px solid var(--pod-line);
+}
+.aiae-pod-rails i:nth-child(2) {
+  left: calc(50% + var(--pod-size) / 2);
+  border-left: 1px solid var(--pod-line);
 }
 
-/* The frame is always the inverse of the section — a lit stage */
+/* The "frame" is only a clipping band for the card strip now — the light pool
+   sits behind it on its own layer. It stays taller than the piece so the
+   ghosts either side have room to slide in and out of the clip. */
 .aiae-pod-frame {
   position: relative;
-  flex: 1.55;
-  min-height: 0;
-  overflow: hidden;
-  border: 1px solid var(--pod-line-strong);
-  background: var(--pod-frame-bg);
-}
-.aiae-pod-frame {
+  z-index: 1;
+  isolation: isolate;
+  align-self: stretch;
+  width: calc(100% + var(--aiae-gutter) * 2);
+  margin-inline: calc(var(--aiae-gutter) * -1);
+  height: calc(var(--pod-size) * 1.3);
+  /* overflow: hidden; */
+  border: 0;
+  background: none;
   cursor: grab;
   touch-action: pan-y;
 }
 .aiae-pod-frame.is-grabbing {
   cursor: grabbing;
 }
+/* The plate the piece stands on — the same solid white as the rails, run the
+   full height of the band so the product photo's own edges never show as a
+   rectangle. Plate + rails read as one hard-edged column. */
+.aiae-pod-frame::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--pod-size);
+  transform: translateX(-50%);
+  background: var(--pod-rail);
+  pointer-events: none;
+}
+/* Oversized index numeral behind the piece */
+.aiae-pod-frame__num {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--aiae-font-display);
+  font-size: calc(var(--pod-size) * 0.5);
+  line-height: 0.78;
+  letter-spacing: 0.02em;
+  color: var(--pod-numeral);
+  pointer-events: none;
+  user-select: none;
+  /* The numeral marks the change of piece, it doesn't sit under it — it comes
+     up on the swap and fades straight back out. */
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.aiae-pod-frame__num.is-flash {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+/* The track is only as big as the piece it carries — the light pool lives
+   outside it now, so it no longer needs to span the whole band. */
 .aiae-pod-track {
   position: absolute;
-  inset: 0;
+  top: 50%;
+  left: 50%;
+  width: var(--pod-size);
+  height: var(--pod-size);
+  transform: translate(-50%, -50%);
 }
 
-/* Cards on a circular strip: active centered, ghosts peeking left/right */
+/* Cards on a circular strip — a square the size of the band, so the piece
+   lands as large as the screen allows and the neighbours only peek. */
 .aiae-pod-card {
   position: absolute;
   top: 50%;
   left: 50%;
-  height: 86%;
-  aspect-ratio: 4 / 5;
-  max-width: 62%;
-  overflow: hidden;
-  border: 1px solid var(--aiae-line-strong);
-  background: var(--aiae-paper);
+  height: var(--pod-size);
+  width: var(--pod-size);
+  max-width: none;
+  border: 0;
+  background: none;
   opacity: 0;
   transform: translate(-50%, -50%);
   transition:
@@ -1412,16 +1530,43 @@ img.aiae-card__shot.is-active {
   opacity: 1;
 }
 .aiae-pod-card.is-ghost {
-  opacity: 0.38;
-  filter: saturate(0.45) contrast(0.92);
+  opacity: 0.22;
+  filter: saturate(0.3) contrast(0.9);
   cursor: pointer;
+}
+/* The stack of shots — front, back, sides — fills the card so the flip-through
+   in aiae-theme.js can cross-fade them in place. */
+.aiae-pod-card__media {
+  position: absolute;
+  inset: 0;
 }
 .aiae-pod-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   pointer-events: none;
+}
+.aiae-pod-card.is-active img {
+  animation: aiae-pod-float 7s ease-in-out infinite;
+}
+/* Whatever of a neighbour clears the rails is faded off at its own edge, so
+   the photo's white box never reads as a rectangle sat on the paper. */
+.aiae-pod-card.is-ghost img {
+  -webkit-mask-image: radial-gradient(
+    closest-side circle at 50% 50%,
+    #000 0%,
+    #000 66%,
+    rgba(0, 0, 0, 0.5) 84%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    closest-side circle at 50% 50%,
+    #000 0%,
+    #000 66%,
+    rgba(0, 0, 0, 0.5) 84%,
+    transparent 100%
+  );
 }
 
 /* App blocks (Printify personalizer buttons) pinned to the active card */
@@ -1444,7 +1589,7 @@ img.aiae-card__shot.is-active {
   pointer-events: auto;
 }
 
-/* Placeholder slide (no gif uploaded yet) — lives on the cream frame */
+/* Placeholder slide (no image uploaded yet) */
 .aiae-pod-ph {
   width: 100%;
   height: 100%;
@@ -1491,47 +1636,56 @@ img.aiae-card__shot.is-active {
   text-transform: uppercase;
 }
 
-/* Scan line over the active frame */
-.aiae-pod-frame::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 38%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent);
-  pointer-events: none;
-  animation: aiae-pod-scan 5.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
-  mix-blend-mode: overlay;
-}
+/* Accent tag floating over the top of the light pool */
 .aiae-pod-frame__badge {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 3;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
   font-family: var(--aiae-font-mono);
   font-size: 10px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.2em;
   color: var(--pod-badge-text);
   background: var(--pod-badge-bg);
-  padding: 5px 10px;
+  padding: 6px 14px;
   text-transform: uppercase;
 }
-.aiae-pod-frame__caption {
+
+/* ── Plinth: the stamped rule the piece stands on ── */
+.aiae-pod__plinth {
+  /* Floats under the PREVIEW badge at the top of the band — taken out of the
+     flow so it costs the stage no height. Centred with auto margins, not a
+     transform: the reveal owns transform, and fighting it broke the fade. */
   position: absolute;
-  bottom: 14px;
-  right: 16px;
   z-index: 3;
-  font-family: var(--aiae-font-mono);
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  color: var(--pod-frame-text);
-  text-transform: uppercase;
+  top: 30px;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: clamp(12px, 2.4vw, 22px);
+  width: min(780px, 100% - var(--aiae-gutter) * 2);
+  pointer-events: none;
 }
-.aiae-pod-frame__caption i {
+.aiae-pod__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--pod-line-strong);
+}
+.aiae-pod__caption {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pod-muted);
+}
+.aiae-pod__caption i {
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -1539,14 +1693,45 @@ img.aiae-card__shot.is-active {
   animation: aiae-pod-pulse 1.6s ease-in-out infinite;
 }
 
+/* ── Controls deck + read-out ──
+   The deck carries the two actions (browse, personalise) and sits directly
+   under the piece so neither is buried below the spec copy. */
 .aiae-pod-panel {
-  flex: 1;
-  max-width: 520px;
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 760px;
+  gap: clamp(20px, 3vh, 34px);
+  margin-top: clamp(18px, 2.6vh, 30px);
+}
+.aiae-pod-deck {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(12px, 1.8vh, 18px);
+  width: 100%;
+  max-width: 560px;
+  padding: clamp(14px, 2vw, 20px);
+  border: 1px solid var(--pod-line-strong);
+  background: var(--pod-deck-bg);
+  box-shadow: 0 18px 40px -30px rgba(0, 0, 0, 0.55);
+}
+.aiae-pod-deck__head {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: clamp(16px, 2.6vh, 28px);
-  min-height: 0;
+  gap: 12px;
+  padding-bottom: clamp(10px, 1.4vh, 14px);
+  border-bottom: 1px solid var(--pod-line);
+}
+.aiae-pod-deck__count {
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--pod-muted);
 }
 .aiae-pod__focus {
   font-family: var(--aiae-font-mono);
@@ -1554,7 +1739,6 @@ img.aiae-card__shot.is-active {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--aiae-accent);
-  margin-bottom: 14px;
 }
 .aiae-pod-info {
   transition:
@@ -1565,40 +1749,47 @@ img.aiae-card__shot.is-active {
   opacity: 0;
   transform: translateY(10px);
 }
+.aiae-pod-info {
+  text-align: center;
+}
 .aiae-pod-info__row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  justify-content: center;
   gap: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   font-family: var(--aiae-font-mono);
+  font-size: 11px;
   letter-spacing: 0.14em;
   color: var(--pod-muted);
 }
-.aiae-pod-info__row [data-pod-code] {
-  font-size: 12px;
-}
-.aiae-pod-info__row [data-pod-counter] {
-  font-size: 11px;
-  margin-left: auto;
+.aiae-pod-info__row i {
+  width: 28px;
+  height: 1px;
+  background: var(--pod-line-strong);
 }
 .aiae-pod-info__name {
   font-family: var(--aiae-font-display);
-  font-size: clamp(34px, 4.6vw, 64px);
-  line-height: 0.86;
+  font-size: clamp(22px, 2.6vw, 34px);
+  line-height: 0.98;
   text-transform: uppercase;
   letter-spacing: -0.01em;
   color: var(--pod-text);
+  max-width: 22ch;
+  margin: 0 auto;
 }
 .aiae-pod-info__desc {
-  margin: 12px 0 0;
-  max-width: 42ch;
+  margin: 12px auto 0;
+  max-width: 46ch;
   font-family: var(--aiae-font-body);
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--pod-muted);
 }
 .aiae-pod__notes {
   display: flex;
+  justify-content: center;
+  margin-top: clamp(14px, 2vh, 20px);
   gap: 10px;
   flex-wrap: wrap;
   font-family: var(--aiae-font-mono);
@@ -1612,16 +1803,30 @@ img.aiae-card__shot.is-active {
   padding: 7px 12px;
 }
 
-/* Thumbnails */
+/* Browse row — arrows flanking the thumbnail strip */
+.aiae-pod__browse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.6vw, 14px);
+  width: 100%;
+}
+.aiae-pod__thumbwrap {
+  flex: 0 1 auto;
+  min-width: 0;
+}
 .aiae-pod__thumbs {
   display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
+  justify-content: center;
+  gap: 8px;
+  max-width: 100%;
+  overflow-x: auto;
 }
 .aiae-pod-thumb {
   position: relative;
   cursor: pointer;
-  flex: 1;
+  flex: none;
+  width: clamp(48px, 12vw, 66px);
   aspect-ratio: 1 / 1;
   overflow: hidden;
   padding: 0;
@@ -1669,21 +1874,11 @@ img.aiae-card__shot.is-active {
 }
 
 /* Arrows */
-.aiae-pod__navrow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.aiae-pod__navrow i {
-  flex: 1;
-  height: 1px;
-  background: var(--pod-line);
-}
 .aiae-pod-arrow {
   cursor: pointer;
-  width: 46px;
-  height: 46px;
+  flex: none;
+  width: clamp(48px, 12vw, 66px);
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1708,12 +1903,12 @@ img.aiae-card__shot.is-active {
 
 /* Personalizer CTA */
 .aiae-pod-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
   width: 100%;
-  padding: 18px 22px;
+  padding: 20px 26px;
   background: var(--aiae-accent);
   color: var(--aiae-ink);
   text-decoration: none;
@@ -1722,17 +1917,26 @@ img.aiae-card__shot.is-active {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   border: 1px solid var(--aiae-accent);
+  box-shadow: 0 14px 30px -18px var(--aiae-accent);
   transition:
     background 0.35s ease,
     color 0.35s ease,
     border-color 0.35s ease,
+    box-shadow 0.35s ease,
     transform 0.35s var(--aiae-ease);
+}
+.aiae-pod-btn__arrow {
+  transition: transform 0.35s var(--aiae-ease);
 }
 .aiae-pod-btn:hover {
   background: var(--pod-text);
   color: var(--pod-bg);
   border-color: var(--pod-text);
+  box-shadow: 0 16px 32px -18px rgba(0, 0, 0, 0.6);
   transform: translateY(-2px);
+}
+.aiae-pod-btn:hover .aiae-pod-btn__arrow {
+  transform: translateX(5px);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2264,34 +2468,75 @@ img.aiae-card__shot.is-active {
     gap: 4px 12px;
   }
 
-  /* POD stacks */
+  /* POD: the piece takes the whole width, neighbours only peek in */
+  .aiae-pod {
+    --pod-step: 86;
+    --pod-ghost: 0.78;
+  }
   .aiae-pod-stage {
-    flex-direction: column;
-    gap: 16px;
+    --pod-size: min(100vw, 56svh);
   }
   .aiae-pod-frame {
-    flex: none;
-    height: 42svh;
-    min-height: 230px;
+    min-height: 280px;
   }
-  .aiae-pod-card {
-    height: 92%;
+  .aiae-pod-frame__num {
+    font-size: calc(var(--pod-size) * 0.56);
   }
-  .aiae-pod-panel {
-    max-width: none;
-    flex: none;
+  .aiae-pod__title {
+    max-width: 12ch;
   }
   .aiae-pod__meta {
-    align-items: flex-start;
-    text-align: left;
+    font-size: 9px;
+    letter-spacing: 0.12em;
   }
-  .aiae-pod__tabs {
-    flex-direction: column;
-    align-items: flex-start;
+  .aiae-pod__meta i {
+    display: none;
+  }
+  .aiae-pod-info__name {
+    font-size: clamp(24px, 7vw, 34px);
+  }
+  .aiae-pod-info__desc {
+    font-size: 14px;
+  }
+  .aiae-pod__browse {
+    gap: 6px;
+  }
+  .aiae-pod-arrow {
+    width: 38px;
+    font-size: 15px;
+  }
+  .aiae-pod__thumbs {
+    gap: 6px;
+  }
+  .aiae-pod-thumb {
+    width: 38px;
+  }
+  .aiae-pod-deck {
+    max-width: 420px;
+    padding: 13px 11px;
+    gap: 12px;
+    margin-top: -60px;
+  }
+  .aiae-pod-deck__head {
+    padding-bottom: 10px;
+  }
+  .aiae-pod__focus {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+  .aiae-pod-deck__count {
+    font-size: 9px;
+  }
+  .aiae-pod-btn {
     gap: 10px;
+    padding: 17px 14px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
   }
-  .aiae-pod__tabs-row {
-    width: 100%;
+  /* At this size the neighbours are all but off-screen, and their soft white
+     backdrops only haze the stage — the strip is browsed by thumb and arrow. */
+  .aiae-pod-card.is-ghost {
+    opacity: 0;
   }
 
   /* About: pillars stack under the letter */
@@ -3336,9 +3581,9 @@ img.aiae-card__shot.is-active {
   transform: none;
   transition: none;
 }
-.aiae-reduce-motion .aiae-pod-frame::after {
+.aiae-reduce-motion .aiae-pod-card.is-active img,
+.aiae-reduce-motion .aiae-pod__caption i {
   animation: none;
-  display: none;
 }
 .aiae-reduce-motion .aiae-pod-card {
   transition: opacity 0.3s ease;
@@ -3374,9 +3619,9 @@ img.aiae-card__shot.is-active {
     transform: none;
     transition: none;
   }
-  .aiae-pod-frame::after {
+  .aiae-pod-card.is-active img,
+  .aiae-pod__caption i {
     animation: none;
-    display: none;
   }
   .aiae-marquee-inner,
   .aiae-lot__dot {

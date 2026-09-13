@@ -6,13 +6,36 @@
   endif
   assign limit = section.settings.products_to_show | default: 5
   assign ph_names = 'TRICOU,HANORAC,TRICOU OVERSIZE,ȘAPCA,TOTEBAG' | split: ','
+
+  comment
+    Piece count for the meta strip — the first collection wins, falling back to
+    the placeholder line-up so the strip never reads "0".
+  endcomment
+  assign first_coll = section.settings.collection
+  if tab_blocks.size > 0 and tab_blocks[0].settings.collection != blank
+    assign first_coll = tab_blocks[0].settings.collection
+  endif
+  assign piece_count = 0
+  if first_coll != blank
+    assign piece_count = first_coll.products.size
+  endif
+  if piece_count > limit
+    assign piece_count = limit
+  endif
+  if piece_count == 0
+    assign piece_count = ph_names.size
+  endif
+  assign piece_word = 'PIESE'
+  if piece_count == 1
+    assign piece_word = 'PIESĂ'
+  endif
 -%}
 
 <section id="custom" class="aiae-pod"
          data-autoplay="{% if section.settings.auto_rotate %}true{% else %}false{% endif %}"
          data-autoplay-speed="{{ section.settings.autoplay_speed | default: 4 }}">
 
-  {%- comment -%} Header {%- endcomment -%}
+  {%- comment -%} Header — centred; the whole module reads from the middle out {%- endcomment -%}
   <div class="aiae-pod__head">
     <div data-aiae-reveal>
       <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
@@ -21,9 +44,15 @@
         {{ section.settings.title | replace: section.settings.accent_word, accent_html }}
       </h2>
     </div>
+    {%- if section.settings.subtitle != blank -%}
+      <p class="aiae-pod__sub" data-aiae-reveal style="--aiae-reveal-delay: 0.1s;">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
     <div class="aiae-pod__meta" data-aiae-reveal style="--aiae-reveal-delay: 0.16s;">
       <span>{{ section.settings.module_label }}</span>
+      <i></i>
       <span class="aiae-live">● {{ section.settings.status_label }}</span>
+      <i></i>
+      <span>{{ piece_count }} {{ piece_word }}</span>
     </div>
   </div>
 
@@ -47,11 +76,16 @@
     </div>
   {%- endif -%}
 
-  {%- comment -%} Stage: infinite carousel frame + control panel {%- endcomment -%}
+  {%- comment -%}
+    Stage — no frame, no crop: the piece floats in a pool of white light that
+    bleeds off into the paper, so the garment itself is the hero.
+  {%- endcomment -%}
   <div class="aiae-pod-stage">
 
-    {%- comment -%} Frame — active product centered, neighbours as ghost cards {%- endcomment -%}
     <div class="aiae-pod-frame" data-pod-frame data-aiae-reveal="scale">
+      {%- comment -%} Oversized index numeral, sitting behind the piece {%- endcomment -%}
+      <span class="aiae-pod-frame__num" data-pod-num aria-hidden="true"></span>
+
       {%- for _g in (1..group_count) -%}
         {%- liquid
           assign gi = forloop.index0
@@ -78,11 +112,22 @@
                    data-code="{{ pod_code }}"
                    data-desc="{{ product.description | strip_html | truncate: 120 | escape }}"
                    data-url="{{ product.url }}">
-                {%- if product.featured_image != blank -%}
-                  <img src="{{ product.featured_image | image_url: width: 1200 }}"
-                       alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                       width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}"
-                       loading="lazy">
+                {%- if product.images.size > 0 -%}
+                  {%- comment -%}
+                    The first four shots of the piece stacked and cross-faded by
+                    aiae-theme.js, exactly like the collection cards. With no JS
+                    (or reduced motion) the first one simply stays up.
+                  {%- endcomment -%}
+                  <div class="aiae-pod-card__media"{% if product.images.size > 1 %} data-aiae-flip{% endif %}>
+                    {%- for image in product.images limit: 4 -%}
+                      <img class="aiae-card__shot{% if forloop.first %} is-active{% endif %}"
+                           src="{{ image | image_url: width: 1400 }}"
+                           alt="{% if forloop.first %}{{ image.alt | default: product.title | escape }}{% endif %}"
+                           width="{{ image.width }}" height="{{ image.height }}"
+                           loading="lazy"
+                           {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+                    {%- endfor -%}
+                  </div>
                 {%- else -%}
                   <div class="aiae-pod-ph">
                     <div>
@@ -126,78 +171,98 @@
         </div>
       {%- endfor -%}
 
-      {%- comment -%} Overlay tags {%- endcomment -%}
+      {%- comment -%}
+        Rails — two thick solid bars hugging the product box. They replace the
+        old light pool: hard geometry instead of a gradient, and the pieces
+        either side of the active one slide in behind them.
+      {%- endcomment -%}
+      <div class="aiae-pod-rails" aria-hidden="true"><i></i><i></i></div>
+
       <span class="aiae-pod-frame__badge">{{ section.settings.frame_badge }}</span>
-      <span class="aiae-pod-frame__caption"><i></i>{{ section.settings.frame_caption }}</span>
+
+      
+    {%- comment -%} Plinth — the stamped rule the piece appears to stand on {%- endcomment -%}
+    <div class="aiae-pod__plinth" data-aiae-reveal="fade">
+      <i class="aiae-pod__rule"></i>
+      <span class="aiae-pod__caption"><i></i>{{ section.settings.frame_caption }}</span>
+      <i class="aiae-pod__rule"></i>
+    </div>
     </div>
 
-    {%- comment -%} Control panel {%- endcomment -%}
-    <div class="aiae-pod-panel" data-aiae-reveal="right" style="--aiae-reveal-delay: 0.18s;">
 
-      <div>
-        <div class="aiae-pod__focus">{{ section.settings.focus_label }}</div>
-        <div class="aiae-pod-info" data-pod-info>
-          <div class="aiae-pod-info__row">
-            <span data-pod-code></span>
-            <span data-pod-counter></span>
-          </div>
-          <div class="aiae-pod-info__name" data-pod-name></div>
-          <p class="aiae-pod-info__desc" data-pod-desc></p>
+    {%- comment -%}
+      Deck — the two things a visitor needs next (browse the line-up, start the
+      personalizer) sit directly under the piece; the spec read-out follows.
+    {%- endcomment -%}
+    <div class="aiae-pod-panel" data-aiae-reveal style="--aiae-reveal-delay: 0.18s;">
+
+      <div class="aiae-pod-deck">
+        <div class="aiae-pod-deck__head">
+          <span class="aiae-pod__focus">{{ section.settings.focus_label }}</span>
+          <span class="aiae-pod-deck__count" data-pod-counter></span>
         </div>
-      </div>
 
-      {%- comment -%} Print & color note {%- endcomment -%}
-      <div class="aiae-pod__notes">
-        <span>↻ {{ section.settings.print_note }}</span>
-        <span>◐ {{ section.settings.color_note }}</span>
-      </div>
-
-      {%- comment -%} Thumbnails + navigation {%- endcomment -%}
-      <div>
-        {%- for _g in (1..group_count) -%}
-          {%- liquid
-            assign gi = forloop.index0
-            assign gb = tab_blocks[gi]
-            if gb
-              assign coll = gb.settings.collection
-            else
-              assign coll = section.settings.collection
-            endif
-            assign has_products = false
-            if coll != blank and coll.products.size > 0
-              assign has_products = true
-            endif
-          -%}
-          <div class="aiae-pod__thumbs" data-pod-group="{{ gi }}"{% unless forloop.first %} hidden{% endunless %}>
-            {%- if has_products -%}
-              {%- for product in coll.products limit: limit -%}
-                <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ product.title | escape }}">
-                  {%- if product.featured_image != blank -%}
-                    <img src="{{ product.featured_image | image_url: width: 240 }}" alt="{{ product.title | escape }}" width="120" height="120" loading="lazy">
-                  {%- else -%}
-                    <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
-                  {%- endif -%}
-                </button>
-              {%- endfor -%}
-            {%- else -%}
-              {%- for ph_name in ph_names -%}
-                <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ ph_name | escape }}">
-                  <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
-                </button>
-              {%- endfor -%}
-            {%- endif -%}
-          </div>
-        {%- endfor -%}
-
-        <div class="aiae-pod__navrow">
+        {%- comment -%} Arrows flanking the thumbnail strip {%- endcomment -%}
+        <div class="aiae-pod__browse">
           <button type="button" class="aiae-pod-arrow" data-pod-prev aria-label="Anterior">&larr;</button>
+          <div class="aiae-pod__thumbwrap">
+            {%- for _g in (1..group_count) -%}
+              {%- liquid
+                assign gi = forloop.index0
+                assign gb = tab_blocks[gi]
+                if gb
+                  assign coll = gb.settings.collection
+                else
+                  assign coll = section.settings.collection
+                endif
+                assign has_products = false
+                if coll != blank and coll.products.size > 0
+                  assign has_products = true
+                endif
+              -%}
+              <div class="aiae-pod__thumbs aiae-noscroll" data-pod-group="{{ gi }}"{% unless forloop.first %} hidden{% endunless %}>
+                {%- if has_products -%}
+                  {%- for product in coll.products limit: limit -%}
+                    <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ product.title | escape }}">
+                      {%- if product.featured_image != blank -%}
+                        <img src="{{ product.featured_image | image_url: width: 240 }}" alt="{{ product.title | escape }}" width="120" height="120" loading="lazy">
+                      {%- else -%}
+                        <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
+                      {%- endif -%}
+                    </button>
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- for ph_name in ph_names -%}
+                    <button type="button" class="aiae-pod-thumb" data-pod-thumb="{{ forloop.index0 }}" aria-label="{{ ph_name | escape }}">
+                      <span class="aiae-pod-thumb__num">{{ forloop.index }}</span>
+                    </button>
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
           <button type="button" class="aiae-pod-arrow" data-pod-next aria-label="Următor">&rarr;</button>
-          <i></i>
         </div>
+
         <a href="#" class="aiae-pod-btn" data-pod-btn>
           <span>{{ section.settings.button_label }}</span>
-          <span aria-hidden="true">→</span>
+          <span class="aiae-pod-btn__arrow" aria-hidden="true">&rarr;</span>
         </a>
+      </div>
+
+      {%- comment -%} Spec read-out for the piece currently on the stage {%- endcomment -%}
+      <div class="aiae-pod-info" data-pod-info>
+        <div class="aiae-pod-info__row">
+          <i></i>
+          <span data-pod-code></span>
+          <i></i>
+        </div>
+        <div class="aiae-pod-info__name" data-pod-name></div>
+        <p class="aiae-pod-info__desc" data-pod-desc></p>
+        <div class="aiae-pod__notes">
+          <span>&#8635; {{ section.settings.print_note }}</span>
+          <span>&#9680; {{ section.settings.color_note }}</span>
+        </div>
       </div>
 
     </div>
@@ -209,10 +274,11 @@
 {
   "name": "AIAE Print on Demand",
   "settings": [
-    { "type": "text", "id": "section_number", "label": "Section number", "default": "02" },
+    { "type": "text", "id": "section_number", "label": "Section number", "default": "01" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "PERSONALIZARE — TRICOURI, HANORACE, ȘEPCI" },
-    { "type": "text", "id": "title", "label": "Section title", "default": "FĂ-ȚI-O SINGUR" },
-    { "type": "text", "id": "accent_word", "label": "Accent word in title", "default": "SINGUR" },
+    { "type": "text", "id": "title", "label": "Section title", "default": "INVESTEȘTE ÎN STILUL TĂU" },
+    { "type": "text", "id": "accent_word", "label": "Accent word in title", "default": "STILUL TĂU" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Piesa o alegi tu. Textul îl scrii tu. Noi o trimitem la print." },
     { "type": "text", "id": "module_label", "label": "Module label", "default": "MODUL PERSONALIZER" },
     { "type": "text", "id": "status_label", "label": "Status label", "default": "LIVE — TOATE CULORILE" },
     { "type": "header", "content": "Collections" },
@@ -221,9 +287,9 @@
     { "type": "range", "id": "products_to_show", "min": 2, "max": 10, "step": 1, "label": "Products per collection", "default": 5 },
     { "type": "checkbox", "id": "auto_rotate", "label": "Auto-rotate carousel", "default": true },
     { "type": "range", "id": "autoplay_speed", "min": 2, "max": 8, "step": 1, "unit": "s", "label": "Change product every", "default": 4 },
-    { "type": "header", "content": "Frame & focus copy" },
-    { "type": "text", "id": "frame_badge", "label": "Frame badge", "default": "PREVIEW" },
-    { "type": "text", "id": "frame_caption", "label": "Frame caption", "default": "PRINTURI ÎN TIMP REAL" },
+    { "type": "header", "content": "Stage & focus copy" },
+    { "type": "text", "id": "frame_badge", "label": "Stage badge", "default": "PREVIEW" },
+    { "type": "text", "id": "frame_caption", "label": "Plinth caption", "default": "PRINTURI ÎN TIMP REAL" },
     { "type": "text", "id": "focus_label", "label": "Focus label", "default": "ALEGE PIESA → PERSONALIZEAZĂ" },
     { "type": "text", "id": "print_note", "label": "Print note", "default": "PRINT SCHIMBABIL" },
     { "type": "text", "id": "color_note", "label": "Color note", "default": "CULOARE PRODUS" },

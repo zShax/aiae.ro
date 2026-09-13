@@ -12,10 +12,10 @@ Ești consultant SEO senior + copywriter de brand, nativ român, specializat în
 
 **aiae.ro** — brand de streetwear din România, lansat 2026, magazin pe Shopify.
 
-- Model de business: **print on demand / personalizare**. Clientul alege piesa (tricou, hanorac, șapcă, bluză), apoi îi pune propriul text, propria culoare și propria grafică. Fiecare comandă e produsă separat, la comandă.
+- Model de business: **print on demand / personalizare**. Clientul alege piesa (tricou, hanorac, șapcă, bluză), apoi îi pune propriul text, propria culoare și propria grafică. Fiecare comandă se printează separat, la comandă, prin parteneri de producție print-on-demand.
 - Există și colecții „gata făcute" (Degeaba Club) — piese proprii ale brandului, fără personalizare.
 - Există colecții-concept care arată potențialul de customizare: Street Cats (pisici/meme), Faith (creștin), Ingredients (minimalist).
-- Materiale: bumbac greu, tricotaje dense, printuri rezistente. Producție la comandă, 2–5 zile lucrătoare + curier.
+- Materiale: bumbac greu, tricotaje dense, printuri rezistente. Printare la comandă prin parteneri de producție, 2–5 zile lucrătoare + curier.
 - Preț: 22,99 – 349,00 lei.
 - Piață: România (București, Timișoara menționate).
 - Ton de voce actual: **post-ironic, deadpan, autodepreciativ**. Numele vine de la expresia „aia e" / „asta e". Sloganuri existente: „AIA E. ASTA E.", „TOATE DREPTURILE, DEGEABA", „NU CONTEAZĂ", „NIMIC LA INDIGO".
@@ -82,8 +82,8 @@ Rescrie fiecare câmp de mai jos. Pentru fiecare dă: **(a)** varianta recomanda
 - Lead: `Am făcut aiae.ro pentru că ne-am săturat de haine care arată la fel pe toată lumea.`
 - Body p1: `Lucrăm în serii mici, cu materiale grele și finisaje pe care le purtăm noi înainte să ajungă la tine. Dacă o piesă nu trece testul ăsta, nu ajunge în magazin.`
 - Body p2: `Restul e treaba ta: alege produsul, pune-ți cuvintele, culorile și ideile pe el. Noi ne ocupăm de calitate — tu de mesaj.`
-- Semnătură: `A.E` / `Fondatorii AIAE` / `EST. 2026 — FABRICAT ÎN RO`
-- Misiune: `MISIUNEA` / `CALITATE, APOI LIBERTATE` / `Produse pe care merită să pui ceva personal: materiale bune, printuri care rezistă, făcute la comandă pentru o singură persoană — tine.`
+- Semnătură: `A.E` / `Fondatorii AIAE` / `EST. 2026 — DESENAT ÎN RO`
+- Misiune: `MISIUNEA` / `CALITATE, APOI LIBERTATE` / `Produse pe care merită să pui ceva personal: materiale bune, printuri care rezistă, printate la comandă pentru o singură persoană — tine.`
 - Viziune: `VIZIUNEA` / `NIMIC LA INDIGO` / `O garderobă în care fiecare piesă spune ceva al tău. Fără uniforme, fără copii, fără haine care ar putea fi ale altcuiva.`
 - CTA: `PERSONALIZEAZĂ O PIESĂ`
 
@@ -134,8 +134,8 @@ Propune și **2 întrebări noi** cu potențial SEO care lipsesc acum.
 ### FOOTER
 
 - Tagline: `AIAE.RO — ASTA E.`
-- Descriere: `Brand de streetwear din România. Produs la comandă, în loturi. Fără reaprovizionare, fără scuze. Aia e.`
-- Copyright: `© 2026 AIAE.RO — TOATE DREPTURILE, DEGEABA` · `FABRICAT ÎN RO`
+- Descriere: `Brand de streetwear din România. Printat la comandă, prin parteneri de producție. Fără reaprovizionare, fără scuze. Aia e.`
+- Copyright: `© 2026 AIAE.RO — TOATE DREPTURILE, DEGEABA` · `PRINT ON DEMAND`
 
 ## TASK 4 — META & STRUCTURED DATA
 

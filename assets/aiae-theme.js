@@ -289,6 +289,7 @@
     const codeEl = pod.querySelector('[data-pod-code]');
     const descEl = pod.querySelector('[data-pod-desc]');
     const counterEl = pod.querySelector('[data-pod-counter]');
+    const numEl = pod.querySelector('[data-pod-num]');
     const btn = pod.querySelector('[data-pod-btn]');
     const prev = pod.querySelector('[data-pod-prev]');
     const next = pod.querySelector('[data-pod-next]');
@@ -299,13 +300,36 @@
 
     function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
+    // The oversized numeral is a marker for the change of piece, not a
+    // backdrop: it comes up as the strip moves and fades out behind it.
+    let numTimer = null;
+    function flashNum() {
+      if (!numEl) return;
+      numEl.classList.add('is-flash');
+      if (numTimer) clearTimeout(numTimer);
+      numTimer = setTimeout(function() { numEl.classList.remove('is-flash'); }, 850);
+    }
+
     function paint(i) {
       const d = g.cards[i].dataset;
       if (nameEl) nameEl.textContent = d.name || '';
       if (codeEl) codeEl.textContent = d.code || '';
       if (descEl) descEl.textContent = d.desc || '';
       if (counterEl) counterEl.textContent = pad(i + 1) + ' / ' + pad(g.cards.length);
+      if (numEl) { numEl.textContent = pad(i + 1); flashNum(); }
       if (btn) btn.setAttribute('href', (d.url && d.url.length) ? d.url : '#');
+    }
+
+    // How far apart the cards sit and how small the ghosts get is a CSS
+    // decision (it changes with the breakpoint), so read it back from there.
+    function geom() {
+      const cs = getComputedStyle(pod);
+      const step = parseFloat(cs.getPropertyValue('--pod-step'));
+      const ghost = parseFloat(cs.getPropertyValue('--pod-ghost'));
+      return {
+        step: isNaN(step) ? 104 : step,
+        ghost: isNaN(ghost) ? 0.82 : ghost
+      };
     }
 
     // Position every card on a circular strip around the active one.
@@ -314,14 +338,15 @@
     function layout(instant) {
       const total = g.cards.length;
       const half = Math.floor(total / 2);
+      const gm = geom();
       g.cards.forEach(function(card, k) {
         const off = ((k - idx) % total + total + half) % total - half;
         const dist = Math.abs(off);
         const snap = instant || (g.lastOff[k] !== undefined && Math.abs(off - g.lastOff[k]) > 1);
         g.lastOff[k] = off;
         if (snap) card.classList.add('is-snap');
-        const scale = dist === 0 ? 1 : (dist === 1 ? 0.86 : 0.76);
-        card.style.transform = 'translate(-50%, -50%) translateX(' + (off * 104) + '%) scale(' + scale + ')';
+        const scale = dist === 0 ? 1 : (dist === 1 ? gm.ghost : gm.ghost * 0.9);
+        card.style.transform = 'translate(-50%, -50%) translateX(' + (off * gm.step) + '%) scale(' + scale + ')';
         card.style.zIndex = String(3 - Math.min(dist, 2));
         card.classList.toggle('is-active', dist === 0);
         card.classList.toggle('is-ghost', dist === 1);
@@ -471,6 +496,13 @@
         setTimeout(function() { wheelLock = false; }, 450);
       }, { passive: false });
     }
+
+    // The strip geometry is breakpoint-dependent — re-lay it out after a resize
+    let resizeTimer = null;
+    window.addEventListener('resize', function() {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() { layout(true); }, 150);
+    });
 
     setActive(0, true);
     startAuto();

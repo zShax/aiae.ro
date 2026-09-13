@@ -24,7 +24,7 @@
         "label": "TRICOURI PERSONALIZATE",
         "sublabel": "STREETWEAR POST-IRONIC",
         "headline": "AIA.E",
-        "tagline": "Tricouri și hanorace personalizate, făcute la comandă în România. Materiale grele, printuri care rezistă. Tu pui mesajul.",
+        "tagline": "Tricouri și hanorace personalizate, printate la comandă. Materiale grele, printuri care rezistă. Tu pui mesajul.",
         "cta_label": "PERSONALIZEAZĂ ACUM",
         "cta_link": "#custom"
       }
@@ -39,10 +39,10 @@
         "letter_date": "",
         "salutation": "Salut,",
         "lead": "Am făcut aiae.ro pentru că ne-am săturat de haine care arată la fel pe toată lumea.",
-        "body": "<p>Lucrăm cu materiale grele și printuri care rezistă, iar fiecare piesă e produsă la comandă, pentru o singură persoană. Tu alegi produsul, textul și culorile — noi ne ocupăm de calitate.</p>",
+        "body": "<p>Alegem materiale grele și printuri care rezistă, iar fiecare piesă se printează la comandă, la partenerii noștri de producție, pentru o singură persoană. Tu alegi produsul, textul și culorile — noi ne ocupăm de design și de calitate.</p>",
         "signature_mark": "A.E",
         "signature_name": "Fondatorii AIAE",
-        "signature_role": "EST. 2026 — FABRICAT ÎN RO",
+        "signature_role": "EST. 2026 — DESENAT ÎN RO",
         "mission_label": "MISIUNEA",
         "mission_title": "CALITATE, APOI LIBERTATE",
         "mission_text": "Materiale bune, printuri care rezistă, tricouri și hanorace făcute la comandă pentru o singură persoană — tine.",
@@ -71,8 +71,9 @@
       "settings": {
         "section_number": "01",
         "eyebrow": "PERSONALIZARE — TRICOURI, HANORACE, ȘEPCI",
-        "title": "FĂ-ȚI-O SINGUR",
-        "accent_word": "SINGUR",
+        "title": "INVESTEȘTE ÎN STILUL TĂU",
+        "accent_word": "STILUL TĂU",
+        "subtitle": "Piesa o alegi tu. Textul îl scrii tu. Noi o trimitem la print.",
         "module_label": "MODUL PERSONALIZER",
         "status_label": "LIVE — TOATE CULORILE",
         "tabs_label": "COLECȚII",
@@ -173,7 +174,7 @@
           "settings": {
             "heading": "Ce înseamnă un tricou sau hanorac personalizat?",
             "icon": "none",
-            "row_content": "<p>Alegi piesa, apoi îi pui textul, culoarea și grafica ta. Fiecare comandă e produsă separat, pentru o singură persoană. Nu ținem stoc din ea și nu o mai face nimeni altcineva.</p>",
+            "row_content": "<p>Alegi piesa, apoi îi pui textul, culoarea și grafica ta. Fiecare comandă se printează separat, pentru o singură persoană. Nu ținem stoc din ea și nu o mai face nimeni altcineva.</p>",
             "page": ""
           }
         },
@@ -191,7 +192,7 @@
           "settings": {
             "heading": "Cât durează livrarea unui produs personalizat?",
             "icon": "none",
-            "row_content": "<p>Producem la comandă, deci durează puțin mai mult decât la un magazin cu stoc: în general 2–5 zile lucrătoare pentru producție, plus timpul curierului.</p>",
+            "row_content": "<p>Totul se printează la comandă, deci durează puțin mai mult decât la un magazin cu stoc: în general 2–5 zile lucrătoare pentru producție, plus timpul curierului.</p>",
             "page": ""
           }
         },
@@ -200,7 +201,7 @@
           "settings": {
             "heading": "Pot returna un tricou personalizat?",
             "icon": "none",
-            "row_content": "<p>Piesele personalizate sunt făcute doar pentru tine, așa că nu pot fi revândute. Dacă am greșit noi ceva sau produsul are un defect, îl refacem sau îți dăm banii înapoi. Scrie-ne și rezolvăm.</p>",
+            "row_content": "<p>Piesele personalizate sunt făcute doar pentru tine, așa că nu pot fi revândute. Dacă am greșit noi ceva sau produsul are un defect, îl înlocuim sau îți dăm banii înapoi. Scrie-ne și rezolvăm.</p>",
             "page": ""
           }
         },
@@ -312,10 +313,10 @@
       ],
       "settings": {
         "brand_tagline": "AIAE.RO — ASTA E.",
-        "brand_description": "Brand românesc de streetwear. Tricouri, hanorace și șepci personalizate, produse la comandă în România. Fără reaprovizionare, fără scuze. Aia e.",
+        "brand_description": "Brand românesc de streetwear. Tricouri, hanorace și șepci personalizate, printate la comandă de partenerii noștri de producție. Fără reaprovizionare, fără scuze. Aia e.",
         "wordmark": "AIAE",
         "copyright": "© 2026 AIAE.RO — TOATE DREPTURILE, DEGEABA",
-        "made_in": "FABRICAT ÎN RO"
+        "made_in": "PRINT ON DEMAND"
       }
     }
   },
