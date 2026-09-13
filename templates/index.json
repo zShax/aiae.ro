@@ -35,7 +35,7 @@
         "tab_1": {
           "type": "collection_tab",
           "settings": {
-            "collection": "filozofia-ta",
+            "collection": "concept-faith",
             "label": "FILOZOFIA TA",
             "code": "POD"
           }
