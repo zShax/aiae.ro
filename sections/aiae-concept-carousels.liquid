@@ -65,19 +65,34 @@
 
                 <div class="aiae-cc">
                   <a href="{{ product.url }}">
-                    <div class="aiae-cc__media" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
-                      {%- if product.featured_image -%}
-                        <img src="{{ product.featured_image | image_url: width: 660 }}"
-                             alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                             width="660"
-                             height="{{ 660 | divided_by: product.featured_image.aspect_ratio | round }}"
-                             loading="lazy">
+                    <div class="aiae-cc__media"{% if product.images.size > 1 %} data-aiae-flip{% endif %} style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+                      {%- if product.images.size > 0 -%}
+                        {%- comment -%}
+                          The first four shots of the piece stacked and cross-faded by
+                          aiae-theme.js, exactly like the collection and POD cards. With
+                          no JS (or reduced motion) the first one simply stays up.
+                        {%- endcomment -%}
+                        {%- for image in product.images limit: 4 -%}
+                          <img class="aiae-card__shot{% if forloop.first %} is-active{% endif %}"
+                               src="{{ image | image_url: width: 660 }}"
+                               alt="{% if forloop.first %}{{ image.alt | default: product.title | escape }}{% endif %}"
+                               width="660"
+                               height="{{ 660 | divided_by: image.aspect_ratio | round }}"
+                               loading="lazy"
+                               {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+                        {%- endfor -%}
                       {%- else -%}
                         <span class="aiae-cc__tag">[ {{ card_number }} ]</span>
                       {%- endif -%}
-                      <span class="aiae-cc__num{% if product.featured_image %} aiae-cc__num--over{% endif %}">{{ card_number }}</span>
                       {%- if block.settings.show_sold_out and product.available == false -%}
                         <span class="aiae-cc__flag">SOLD OUT</span>
+                      {%- endif -%}
+                      {%- if product.images.size > 1 -%}
+                        <span class="aiae-card__ticks" aria-hidden="true">
+                          {%- for image in product.images limit: 4 -%}
+                            <i class="aiae-card__tick{% if forloop.first %} is-active{% endif %}"></i>
+                          {%- endfor -%}
+                        </span>
                       {%- endif -%}
                     </div>
                     <div class="aiae-cc__body">
@@ -101,7 +116,6 @@
                 <div class="aiae-cc">
                   <div class="aiae-cc__media aiae-cc__media--ph" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
                     <span class="aiae-cc__tag">[ {{ code_prefix }} 0{{ forloop.index }} ]</span>
-                    <span class="aiae-cc__num">{{ code_prefix }} 0{{ forloop.index }}</span>
                   </div>
                   <div class="aiae-cc__body">
                     <div class="aiae-cc__row">

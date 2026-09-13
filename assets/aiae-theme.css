@@ -2147,6 +2147,25 @@ img.aiae-card__shot.is-active {
 .aiae-cc:hover .aiae-cc__media img {
   transform: scale(1.045);
 }
+/* The stacked shots cross-fade exactly like the collection cards. Restated
+   here because `.aiae-cc__media img` above ties on specificity and would win
+   on source order, hard-cutting the outgoing shot instead of fading it. */
+.aiae-cc__media img.aiae-card__shot {
+  transition:
+    opacity 0.5s ease 0.5s,
+    transform 0.7s var(--aiae-ease);
+}
+.aiae-cc__media img.aiae-card__shot.is-active {
+  transition:
+    opacity 0.5s ease 0s,
+    transform 0.7s var(--aiae-ease);
+}
+/* Bottom-right on these cards belongs to the SOLD OUT flag */
+.aiae-cc__media .aiae-card__ticks {
+  right: auto;
+  left: 12px;
+  bottom: 12px;
+}
 .aiae-cc__media--ph {
   background-image: repeating-linear-gradient(45deg, rgba(13, 13, 13, 0.05) 0 11px, transparent 11px 22px);
 }
