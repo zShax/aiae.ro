@@ -29,30 +29,6 @@
         "cta_link": "#custom"
       }
     },
-    "aiae_about": {
-      "type": "aiae-about",
-      "settings": {
-        "section_number": "04",
-        "eyebrow": "DESPRE NOI — DIRECT DE LA FONDATORI",
-        "title": "DE CE AIA E?",
-        "letterhead": "",
-        "letter_date": "",
-        "salutation": "Salut,",
-        "lead": "Am făcut aiae.ro pentru că ne-am săturat de haine care arată la fel pe toată lumea.",
-        "body": "<p>Alegem materiale grele și printuri care rezistă, iar fiecare piesă se printează la comandă, la partenerii noștri de producție, pentru o singură persoană. Tu alegi produsul, textul și culorile — noi ne ocupăm de design și de calitate.</p>",
-        "signature_mark": "A.E",
-        "signature_name": "Fondatorii AIAE",
-        "signature_role": "EST. 2026 — DESENAT ÎN RO",
-        "mission_label": "MISIUNEA",
-        "mission_title": "CALITATE, APOI LIBERTATE",
-        "mission_text": "Materiale bune, printuri care rezistă, tricouri și hanorace făcute la comandă pentru o singură persoană — tine.",
-        "vision_label": "VIZIUNEA",
-        "vision_title": "NIMIC LA INDIGO",
-        "vision_text": "Fiecare piesă spune ceva al tău. Fără uniforme, fără haine care ar putea fi ale altcuiva.",
-        "cta_label": "PERSONALIZEAZĂ O PIESĂ",
-        "cta_link": "#custom"
-      }
-    },
     "aiae_print_on_demand": {
       "type": "aiae-print-on-demand",
       "blocks": {
@@ -73,7 +49,7 @@
         "eyebrow": "PERSONALIZARE — TRICOURI, HANORACE, ȘEPCI",
         "title": "INVESTEȘTE ÎN STILUL TĂU",
         "accent_word": "STILUL TĂU",
-        "subtitle": "Piesa o alegi tu. Textul îl scrii tu. Noi o trimitem la print.",
+        "subtitle": "",
         "module_label": "MODUL PERSONALIZER",
         "status_label": "LIVE — TOATE CULORILE",
         "tabs_label": "COLECȚII",
@@ -97,6 +73,9 @@
         "eyebrow": "MAGAZINUL — PIESE GATA FĂCUTE",
         "title": "GATA\nFĂCUTE",
         "description": "Tricouri, hanorace și șepci gata făcute, din aceleași materiale grele și cu aceleași printuri ca piesele personalizate. Le alegi, le porți, gata.",
+        "ticker_text": "GATA FĂCUTE|MATERIALE GRELE|PRINTURI CARE REZISTĂ|PRINT ON DEMAND|AIA E. ASTA E.",
+        "open_label": "LOT DESCHIS",
+        "close_label": "LOT ÎNCHIS — ASTA E",
         "redirect_label": "SAU PERSONALIZEAZĂ-ȚI PROPRIA PIESĂ",
         "redirect_link": "#custom",
         "collection": "degeaba-club",
@@ -164,6 +143,30 @@
         "section_number": "03",
         "eyebrow": "CONCEPTE — IDEI DE PERSONALIZARE",
         "title": "CE S-AR PUTEA FACE"
+      }
+    },
+    "aiae_about": {
+      "type": "aiae-about",
+      "settings": {
+        "section_number": "04",
+        "eyebrow": "DESPRE NOI — DIRECT DE LA FONDATORI",
+        "title": "DE CE AIA E?",
+        "letterhead": "",
+        "letter_date": "",
+        "salutation": "Salut,",
+        "lead": "Am făcut aiae.ro pentru că ne-am săturat de haine care arată la fel pe toată lumea.",
+        "body": "<p>Alegem materiale grele și printuri care rezistă, iar fiecare piesă se printează la comandă, la partenerii noștri de producție, pentru o singură persoană. Tu alegi produsul, textul și culorile — noi ne ocupăm de design și de calitate.</p>",
+        "signature_mark": "A.E",
+        "signature_name": "Fondatorii AIAE",
+        "signature_role": "EST. 2026 — DESENAT ÎN RO",
+        "mission_label": "MISIUNEA",
+        "mission_title": "CALITATE, APOI LIBERTATE",
+        "mission_text": "Materiale bune, printuri care rezistă, tricouri și hanorace făcute la comandă pentru o singură persoană — tine.",
+        "vision_label": "VIZIUNEA",
+        "vision_title": "NIMIC LA INDIGO",
+        "vision_text": "Fiecare piesă spune ceva al tău. Fără uniforme, fără haine care ar putea fi ale altcuiva.",
+        "cta_label": "PERSONALIZEAZĂ O PIESĂ",
+        "cta_link": "#custom"
       }
     },
     "aiae_faq": {
