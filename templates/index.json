@@ -63,7 +63,7 @@
         "print_note": "PRINT SCHIMBABIL",
         "color_note": "CULOARE PRODUS",
         "empty_hint": "Alege o colecție cu produse personalizabile în setările secțiunii.",
-        "button_label": "PERSONALIZEAZĂ — PRINT & CULOARE"
+        "button_label": "PERSONALIZEAZĂ"
       }
     },
     "aiae_collection_grid": {

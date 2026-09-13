@@ -223,7 +223,18 @@
     }, { rootMargin: '0px 0px -10% 0px', threshold: 0.06 });
 
     function observeAll(els) {
-      els.forEach(function(el) { io.observe(el); });
+      els.forEach(function(el) {
+        // The -10% bottom inset keeps below-the-fold reveals from firing too
+        // early, but it also swallows anything already parked at the bottom of
+        // the first screen (the hero CTA). Those reveal straight away.
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('is-revealed');
+          settle(el);
+          return;
+        }
+        io.observe(el);
+      });
     }
 
     // Hold the first reveals until the intro loader curtain lifts

@@ -69,6 +69,14 @@
     transform: translateY(-101%);
   }
 }
+@keyframes aiae-loader-pattern-drift {
+  from {
+    transform: translate3d(0, 0, 0) rotate(-1.5deg);
+  }
+  to {
+    transform: translate3d(-5%, -4%, 0) rotate(-1.5deg);
+  }
+}
 @keyframes aiae-bar {
   from {
     width: 0%;
@@ -1906,18 +1914,19 @@ img.aiae-card__shot.is-active {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 14px;
   width: 100%;
-  padding: 20px 26px;
+  padding: 24px 26px;
   background: var(--aiae-accent);
   color: var(--aiae-ink);
   text-decoration: none;
   font-family: var(--aiae-font-mono);
-  font-size: 13px;
-  letter-spacing: 0.16em;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  border: 1px solid var(--aiae-accent);
-  box-shadow: 0 14px 30px -18px var(--aiae-accent);
+  border: 2px solid var(--aiae-ink);
+  box-shadow: 4px 4px 0 var(--aiae-ink);
   transition:
     background 0.35s ease,
     color 0.35s ease,
@@ -1932,8 +1941,8 @@ img.aiae-card__shot.is-active {
   background: var(--pod-text);
   color: var(--pod-bg);
   border-color: var(--pod-text);
-  box-shadow: 0 16px 32px -18px rgba(0, 0, 0, 0.6);
-  transform: translateY(-2px);
+  box-shadow: 2px 2px 0 var(--aiae-accent);
+  transform: translate(2px, 2px);
 }
 .aiae-pod-btn:hover .aiae-pod-btn__arrow {
   transform: translateX(5px);
@@ -2529,9 +2538,9 @@ img.aiae-card__shot.is-active {
   }
   .aiae-pod-btn {
     gap: 10px;
-    padding: 17px 14px;
-    font-size: 10px;
-    letter-spacing: 0.08em;
+    padding: 20px 14px;
+    font-size: 14px;
+    letter-spacing: 0.06em;
   }
   /* At this size the neighbours are all but off-screen, and their soft white
      backdrops only haze the stage — the strip is browsed by thumb and arrow. */
@@ -3634,3 +3643,4 @@ img.aiae-card__shot.is-active {
     animation: none !important;
   }
 }
+

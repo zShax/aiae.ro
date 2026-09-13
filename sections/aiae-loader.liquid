@@ -1,12 +1,13 @@
 {%- if section.settings.show_loader -%}
-<div id="aiae-loader" style="position:fixed; inset:0; z-index:9000; background:#0D0D0D; display:flex; flex-direction:column; justify-content:space-between; padding:28px clamp(20px,4vw,56px); animation:aiae-loader-out 2.1s cubic-bezier(0.76,0,0.24,1) 0.2s forwards;">
-  <div style="display:flex; justify-content:space-between; align-items:flex-start; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#BEBAB2; text-transform:uppercase;">
+<div id="aiae-loader" style="position:fixed; inset:0; z-index:9000; background:#0D0D0D; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; padding:28px clamp(20px,4vw,56px); animation:aiae-loader-out 2.1s cubic-bezier(0.76,0,0.24,1) 0.2s forwards;">
+  <span aria-hidden="true" style="display:block; position:absolute; inset:-10%; z-index:0; pointer-events:none; opacity:0.38; background-color:#0D0D0D; background-image:url({{ 'aiae-loader-pattern.svg' | asset_url }}); background-repeat:repeat; background-size:clamp(300px,46vw,760px) auto; animation:aiae-loader-pattern-drift 26s linear infinite alternate;"></span>
+  <div style="position:relative; z-index:1; display:flex; justify-content:space-between; align-items:flex-start; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#BEBAB2; text-transform:uppercase;">
     <span>AIAE.RO</span>
     <span>EST. 2026 — RO</span>
   </div>
-  <div style="font-family:'Anton',sans-serif; line-height:0.82; text-transform:uppercase; letter-spacing:-0.01em; font-size:clamp(56px,13vw,200px); color:#F2EFE7;">AIA<br>E<span style="color:var(--aiae-accent);">.</span></div>
-  <div>
-    <div style="height:2px; width:100%; background:rgba(242,239,231,0.14); overflow:hidden; margin-bottom:14px;">
+  <div style="position:relative; z-index:1; font-family:'Anton',sans-serif; line-height:0.82; text-transform:uppercase; letter-spacing:-0.01em; font-size:clamp(56px,13vw,200px); color:#F2EFE7;">AIA<br>E<span style="color:var(--aiae-accent);">.</span></div>
+  <div style="position:relative; z-index:1;">
+    <div style="height:2px; width:100%; background:#6e6a60; overflow:hidden; margin-bottom:14px;">
       <div style="height:100%; width:0%; background:var(--aiae-accent); animation:aiae-bar 1.35s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;"></div>
     </div>
     <div style="display:flex; justify-content:space-between; font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.18em; color:#BEBAB2; text-transform:uppercase;">
@@ -34,3 +35,4 @@
   ]
 }
 {% endschema %}
+
