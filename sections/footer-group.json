@@ -43,12 +43,7 @@
           }
         }
       },
-      "block_order": [
-        "brand",
-        "shop",
-        "legal",
-        "company"
-      ],
+      "block_order": ["brand", "shop", "legal", "company"],
       "settings": {
         "support_heading": "Suport & contact",
         "support_note": "Orice întrebare despre comandă, mărimi, livrare sau retur — scrie-ne și îți răspundem în maximum o zi lucrătoare.",
@@ -73,7 +68,5 @@
       }
     }
   },
-  "order": [
-    "footer"
-  ]
+  "order": ["footer"]
 }
