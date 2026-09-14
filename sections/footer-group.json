@@ -34,7 +34,6 @@
         "shop"
       ],
       "settings": {
-        "aiae_wordmark": "AIAE",
         "color_scheme": "scheme-1",
         "newsletter_enable": true,
         "newsletter_heading": "Newsletter",
