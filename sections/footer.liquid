@@ -27,7 +27,7 @@
   }
 {%- endstyle -%}
 
-<footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+<footer class="footer aiae-dfooter color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   {%- liquid
     assign has_social_icons = true
     if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
@@ -191,7 +191,7 @@
                       {% elsif form.posted_successfully? %}
                         aria-describedby="ContactFooter-success"
                       {% endif %}
-                      placeholder="{{ 'newsletter.label' | t }}"
+                      placeholder="{% if section.settings.aiae_newsletter_placeholder != blank %}{{ section.settings.aiae_newsletter_placeholder | escape }}{% else %}{{ 'newsletter.label' | t }}{% endif %}"
                       required
                     >
                     <label class="field__label" for="NewsletterForm--{{ section.id }}">
@@ -248,6 +248,14 @@
         </div>
       </div>
     {%- endunless -%}
+  {%- endif -%}
+
+  {%- if section.settings.aiae_wordmark != blank -%}
+    <div class="aiae-footer__wordwrap aiae-noscroll">
+      <div id="aiae-footer-word" class="aiae-footer__word">
+        <span class="aiae-footer__logo">{{ 'aiae-logo.svg' | inline_asset_content }}</span>
+      </div>
+    </div>
   {%- endif -%}
 
   <div
@@ -424,6 +432,19 @@
     }
   ],
   "settings": [
+    {
+      "type": "text",
+      "id": "aiae_newsletter_placeholder",
+      "label": "Newsletter email placeholder",
+      "default": "adresa@email.ro"
+    },
+    {
+      "type": "text",
+      "id": "aiae_wordmark",
+      "label": "AIAE wordmark",
+      "info": "Giant AIA.E logo strip above the copyright row. Any value shows it; leave blank to hide.",
+      "default": "AIAE"
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",

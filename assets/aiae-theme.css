@@ -295,8 +295,8 @@ body.aiae-body::after {
   display: inline-flex;
   gap: 8px;
   align-items: center;
-  color: var(--aiae-ink);
-  border: 1px solid var(--aiae-line-strong);
+  color: var(--aiae-accent);
+  border: 1px solid var(--aiae-accent);
   padding: 6px 11px;
   text-decoration: none;
   font-family: var(--aiae-font-mono);
@@ -309,9 +309,9 @@ body.aiae-body::after {
     border-color 0.25s ease;
 }
 .aiae-nav__cart:hover {
-  background: var(--aiae-ink);
-  color: var(--aiae-paper);
-  border-color: var(--aiae-ink);
+  background: var(--aiae-accent);
+  color: var(--aiae-ink);
+  border-color: var(--aiae-accent);
 }
 .aiae-nav__cart svg {
   display: block;
@@ -2311,6 +2311,109 @@ img.aiae-card__shot.is-active {
   color: var(--aiae-d-text);
   background-size: 100% 1px;
 }
+/* Newsletter — inside the dark AIAE footer */
+.aiae-footer__news {
+  flex: 0 1 340px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+.aiae-footer__news .aiae-footer__colhead {
+  color: var(--aiae-d-text);
+}
+.aiae-footer__newsnote {
+  margin: 0;
+  font-family: var(--aiae-font-body);
+  font-size: 13px;
+  line-height: 1.55;
+  letter-spacing: 0;
+  color: var(--aiae-d-muted);
+}
+.aiae-news {
+  margin-top: 6px;
+}
+.aiae-news__row {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--aiae-d-line);
+  background: rgba(255, 255, 255, 0.04);
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+}
+.aiae-news__row:focus-within {
+  border-color: var(--aiae-accent);
+  background: rgba(255, 255, 255, 0.07);
+}
+.aiae-news__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--aiae-d-text);
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 14px 12px;
+}
+.aiae-news__input::placeholder {
+  color: var(--aiae-d-faint);
+}
+.aiae-news__input:focus {
+  outline: none;
+}
+.aiae-news__btn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: var(--aiae-accent);
+  cursor: pointer;
+  color: var(--aiae-d-bg);
+  font-family: var(--aiae-font-mono);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 14px 18px;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+.aiae-news__btn i {
+  font-style: normal;
+  color: currentColor;
+  transition: transform 0.35s var(--aiae-ease);
+}
+.aiae-news__btn:hover {
+  background: var(--aiae-d-text);
+  color: var(--aiae-d-bg);
+}
+.aiae-news__btn:hover i {
+  transform: translateX(4px);
+}
+.aiae-news__btn:focus-visible {
+  outline: 2px solid var(--aiae-d-text);
+  outline-offset: 2px;
+}
+.aiae-news__msg {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--aiae-d-muted);
+}
+.aiae-news__msg--err {
+  color: var(--aiae-accent);
+}
+
 .aiae-footer__wordwrap {
   overflow: hidden;
   border-top: 1px solid var(--aiae-d-line);
@@ -2330,6 +2433,52 @@ img.aiae-card__shot.is-active {
   text-align: center;
   white-space: nowrap;
 }
+/* ── AIA.E logo mark ───────────────────────────────────── */
+/* Inlined from assets/aiae-logo.svg so the letters take currentColor
+   and the dot stays on the brand accent in every context. */
+.aiae-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.aiae-logo__dot {
+  fill: var(--aiae-accent);
+}
+/* Footer: replaces the old text wordmark inside the parallax strip */
+/* Sized to the cap height the old text wordmark had:
+   0.86 (Anton cap ratio) x clamp(120px, 29vw, 560px), x 2.006 aspect. */
+.aiae-footer__logo {
+  display: block;
+  width: clamp(207px, 50vw, 966px);
+  max-width: 100%;
+  margin: 0 auto;
+  font-size: 0;
+  line-height: 0;
+  color: var(--aiae-d-text);
+}
+
+/* Merchant identification strip — legally required, visually quiet. */
+.aiae-footer__legal {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px var(--aiae-gutter);
+  border-top: 1px solid var(--aiae-d-line);
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--aiae-d-faint);
+}
+.aiae-footer__legalhead {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.aiae-footer__legalline {
+  margin: 0;
+  line-height: 1.7;
+  color: var(--aiae-d-muted);
+}
+
 .aiae-footer__bottom {
   display: flex;
   justify-content: space-between;
@@ -3663,15 +3812,26 @@ img.aiae-card__shot.is-active {
   }
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    CONCEPT INDEX — the /collections/concepts sheet
-   Every row is a closed 2px box: a bordered number cell, a bordered
-   head band, a bordered rail. Nothing floats free on the paper.
+   Every row is a closed box: a bordered number cell, a bordered head
+   band, a bordered rail. Nothing floats free on the paper.
+
+   The page runs on paper and stone, not paper and ink. Structure — every
+   border and every band — is stone, so the only true blacks left are the
+   product cards' own frames and the headlines. That keeps the chrome
+   quieter than the content instead of competing with it.
    ═══════════════════════════════════════════════════════════ */
 .aiae-cx {
   padding: clamp(24px, 4vh, 44px) var(--aiae-gutter) clamp(56px, 8vh, 110px);
   background: var(--aiae-paper);
+
+  /* Section-local tones. Stone rows need the same light/dark pairing the
+     paper rows get from --aiae-paper / --aiae-paper-2: the rail sits a step
+     darker than the cards laid on it. --cx-dim is body copy on stone at
+     4.9:1, where --aiae-d-muted would only reach 3.8:1. */
+  --cx-stone-deep: #4a4740;
+  --cx-dim: #d8d4cb;
 }
 
 /* The active shot in a stacked-image card raises itself to z-index 1, so the
@@ -3690,7 +3850,7 @@ img.aiae-card__shot.is-active {
   gap: clamp(20px, 4vw, 64px);
   align-items: end;
   padding-bottom: clamp(20px, 3vh, 34px);
-  border-bottom: 3px solid var(--aiae-ink);
+  border-bottom: 3px solid var(--aiae-stone);
 }
 .aiae-cx__masttitle {
   margin: 10px 0 0;
@@ -3699,7 +3859,7 @@ img.aiae-card__shot.is-active {
 }
 .aiae-cx__mastaside {
   padding-left: clamp(16px, 2vw, 28px);
-  border-left: 2px solid var(--aiae-ink);
+  border-left: 3px solid var(--aiae-accent);
 }
 .aiae-cx__mastdesc {
   margin: 0 0 16px;
@@ -3720,7 +3880,7 @@ img.aiae-card__shot.is-active {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border: 2px solid var(--aiae-ink);
+  border: 2px solid var(--aiae-stone);
   font-family: var(--aiae-font-mono);
   font-size: 11px;
   letter-spacing: 0.14em;
@@ -3736,7 +3896,7 @@ img.aiae-card__shot.is-active {
 .aiae-cx__tallyrule {
   width: 0;
   height: 14px;
-  border-left: 2px solid var(--aiae-ink);
+  border-left: 3px solid var(--aiae-accent);
   margin: 0 2px;
 }
 
@@ -3747,7 +3907,7 @@ img.aiae-card__shot.is-active {
   align-items: center;
   gap: 8px;
   padding: 14px 0;
-  border-bottom: 2px solid var(--aiae-ink);
+  border-bottom: 2px solid var(--aiae-stone);
 }
 .aiae-cx__indexlabel {
   margin-right: 4px;
@@ -3760,7 +3920,7 @@ img.aiae-card__shot.is-active {
 .aiae-cx__indexlink {
   display: inline-flex;
   align-items: stretch;
-  border: 2px solid var(--aiae-ink);
+  border: 2px solid var(--aiae-stone);
   text-decoration: none;
   font-family: var(--aiae-font-mono);
   font-size: 10px;
@@ -3770,10 +3930,12 @@ img.aiae-card__shot.is-active {
     background 0.3s ease,
     color 0.3s ease;
 }
+/* Same cream-tab-plus-accent-numeral figure as the row number cells, shrunk */
 .aiae-cx__indexlink b {
   padding: 5px 7px;
-  background: var(--aiae-ink);
-  color: var(--aiae-paper);
+  border-right: 2px solid var(--aiae-stone);
+  background: var(--aiae-cream);
+  color: var(--aiae-accent);
   font-weight: 700;
 }
 .aiae-cx__indexlink span {
@@ -3781,7 +3943,8 @@ img.aiae-card__shot.is-active {
   color: var(--aiae-ink);
 }
 .aiae-cx__indexlink:hover {
-  background: var(--aiae-ink);
+  background: var(--aiae-stone);
+  border-color: var(--aiae-stone);
 }
 .aiae-cx__indexlink:hover span {
   color: var(--aiae-paper);
@@ -3790,7 +3953,7 @@ img.aiae-card__shot.is-active {
 /* ── Rows ──────────────────────────────────────────────── */
 .aiae-cx__row {
   margin-top: clamp(32px, 5vh, 56px);
-  border: 3px solid var(--aiae-ink);
+  border: 3px solid var(--aiae-stone);
   background: var(--aiae-paper);
   scroll-margin-top: calc(var(--aiae-nav-h) + 20px);
 }
@@ -3798,18 +3961,21 @@ img.aiae-card__shot.is-active {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: stretch;
-  border-bottom: 3px solid var(--aiae-ink);
+  border-bottom: 3px solid var(--aiae-stone);
 }
-/* The number cell is the anchor of the box — solid ink, its own rule */
+/* A cream tab rather than a filled black block: the rule on its right is what
+   defines the cell, so the fill only has to be a tonal step. It reads the same
+   on both row types, which is why it needs no inverted override — and accent
+   on cream still clears 3:1 at this display size. */
 .aiae-cx__num {
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: clamp(64px, 8vw, 104px);
   padding: 0 14px;
-  border-right: 3px solid var(--aiae-ink);
-  background: var(--aiae-ink);
-  color: var(--aiae-paper);
+  border-right: 3px solid var(--aiae-stone);
+  background: var(--aiae-cream);
+  color: var(--aiae-accent);
   font-family: var(--aiae-font-display);
   font-size: clamp(30px, 4.4vw, 58px);
   line-height: 1;
@@ -3836,7 +4002,8 @@ img.aiae-card__shot.is-active {
   transition: background-size 0.4s var(--aiae-ease);
 }
 .aiae-cx__title a:hover {
-  background-size: 100% 2px;
+  background-image: linear-gradient(var(--aiae-accent), var(--aiae-accent));
+  background-size: 100% 4px;
 }
 .aiae-cx__desc {
   margin: 10px 0 0;
@@ -3858,11 +4025,13 @@ img.aiae-card__shot.is-active {
   align-items: stretch;
   justify-content: center;
   gap: 0;
-  border-left: 3px solid var(--aiae-ink);
+  min-width: 178px;
+  border-left: 3px solid var(--aiae-stone);
 }
 .aiae-cx__count {
+  flex: 0 0 auto;
   padding: 10px 16px;
-  border-bottom: 2px solid var(--aiae-ink);
+  border-bottom: 2px solid var(--aiae-stone);
   font-family: var(--aiae-font-mono);
   font-size: 10px;
   letter-spacing: 0.16em;
@@ -3870,26 +4039,39 @@ img.aiae-card__shot.is-active {
   text-align: center;
   color: var(--aiae-muted);
 }
+/* The one real call to action on the page, so it is the one solid accent
+   fill. Ink on accent clears 4.5:1 — paper on accent does not, which is why
+   the label is ink here and not the usual reversed-out paper. */
 .aiae-cx__link {
   display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 16px;
+  padding: 15px 16px;
+  background: var(--aiae-accent);
   color: var(--aiae-ink);
   text-decoration: none;
   font-family: var(--aiae-font-mono);
-  font-size: 10px;
+  font-weight: 700;
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
   transition:
     background 0.3s ease,
-    color 0.3s ease;
+    color 0.3s ease,
+    letter-spacing 0.3s var(--aiae-ease);
+}
+.aiae-cx__link span[aria-hidden] {
+  transition: transform 0.3s var(--aiae-ease);
 }
 .aiae-cx__link:hover {
   background: var(--aiae-ink);
-  color: var(--aiae-paper);
+  color: var(--aiae-accent);
+}
+.aiae-cx__link:hover span[aria-hidden] {
+  transform: translateX(4px);
 }
 /* The rail sits on the second paper tone so the bordered cards read as
    objects laid on the sheet rather than holes cut out of it */
@@ -3908,32 +4090,89 @@ img.aiae-card__shot.is-active {
   background: var(--aiae-paper-2);
 }
 
-/* Alternating rows flip to ink. Only the head band inverts — the rail keeps
-   its paper cards so the shirts stay readable down the whole page. */
+/* ── Stone rows ────────────────────────────────────────── */
+/* Alternating rows go stone end to end — head band, rail and cards — so the
+   row reads as one dark object instead of a dark hat on a light body. The
+   rail drops to --cx-stone-deep and the cards sit back at stone, keeping the
+   same "cards one step lighter than the rail" relationship the paper rows
+   get from --aiae-paper over --aiae-paper-2. */
 .aiae-cx__row--inv .aiae-cx__head {
-  background: var(--aiae-ink);
-}
-.aiae-cx__row--inv .aiae-cx__num {
-  background: var(--aiae-paper);
-  color: var(--aiae-ink);
-  border-right-color: var(--aiae-paper);
+  background: var(--aiae-stone);
 }
 .aiae-cx__row--inv .aiae-cx__title a {
-  color: var(--aiae-d-text);
+  color: var(--aiae-paper);
 }
 .aiae-cx__row--inv .aiae-cx__desc {
-  color: var(--aiae-d-muted);
+  color: var(--cx-dim);
+}
+/* Dividers inside a stone band go deeper, not lighter: a paper hairline here
+   cuts the band into pieces, a deeper one just seats the cells. */
+.aiae-cx__row--inv .aiae-cx__num {
+  border-right-color: var(--cx-stone-deep);
+  background-color: var(--cx-stone-deep);
 }
 .aiae-cx__row--inv .aiae-cx__headside {
-  border-left-color: var(--aiae-paper);
+  border-left-color: var(--cx-stone-deep);
 }
 .aiae-cx__row--inv .aiae-cx__count {
-  border-bottom-color: var(--aiae-paper);
-  color: var(--aiae-d-muted);
+  border-bottom-color: var(--cx-stone-deep);
+  color: var(--cx-dim);
 }
-.aiae-cx__row--inv .aiae-cx__link {
-  color: var(--aiae-d-text);
+.aiae-cx__row--inv .aiae-cx__body {
+  background: var(--cx-stone-deep);
 }
+.aiae-cx__row--inv .aiae-cc {
+  background: var(--aiae-stone);
+  border-color: var(--aiae-stone);
+}
+.aiae-cx__row--inv .aiae-cc:hover {
+  box-shadow: 6px 8px 0 0 rgba(13, 13, 13, 0.32);
+}
+.aiae-cx__row--inv .aiae-cc__media {
+  border-bottom-color: var(--aiae-stone);
+}
+.aiae-cx__row--inv .aiae-cc__title,
+.aiae-cx__row--inv .aiae-cc__price {
+  color: var(--aiae-paper);
+}
+.aiae-cx__row--inv .aiae-cc__sub {
+  color: var(--cx-dim);
+}
+.aiae-cx__row--inv .aiae-cc__num--over {
+  background: var(--cx-stone-deep);
+  border-color: var(--cx-stone-deep);
+  color: var(--aiae-paper);
+}
+.aiae-cx__row--inv .aiae-cc__flag {
+  background: var(--aiae-stone);
+  border-color: var(--aiae-paper);
+  color: var(--aiae-paper);
+}
+.aiae-cx__row--inv .aiae-con__arrow {
+  background: var(--aiae-stone);
+  border-color: var(--aiae-paper);
+  color: var(--aiae-paper);
+}
+.aiae-cx__row--inv .aiae-con__arrow:hover {
+  background: var(--aiae-paper);
+  color: var(--aiae-ink);
+}
+.aiae-cx__row--inv .aiae-cx__more {
+  border-color: rgba(242, 239, 231, 0.4);
+  color: var(--cx-dim);
+}
+.aiae-cx__row--inv .aiae-cx__more:hover {
+  border-color: var(--aiae-accent);
+  background: var(--aiae-stone);
+  color: var(--aiae-paper);
+}
+/* Accent only reaches 2.3:1 against the deep rail, so the tail numeral goes
+   paper on the stone rows and keeps the accent for the light ones */
+.aiae-cx__row--inv .aiae-cx__morenum {
+  color: var(--aiae-paper);
+}
+/* The accent fill carries across both bands — only the hover has to change,
+   since ink-on-ink would swallow the button inside an inverted head */
 .aiae-cx__row--inv .aiae-cx__link:hover {
   background: var(--aiae-paper);
   color: var(--aiae-ink);
@@ -3959,7 +4198,7 @@ img.aiae-card__shot.is-active {
     background 0.3s ease;
 }
 .aiae-cx__more:hover {
-  border-color: var(--aiae-ink);
+  border-color: var(--aiae-accent);
   background: var(--aiae-paper);
   color: var(--aiae-ink);
 }
@@ -3967,7 +4206,7 @@ img.aiae-card__shot.is-active {
   font-family: var(--aiae-font-display);
   font-size: clamp(30px, 3.6vw, 46px);
   line-height: 1;
-  color: var(--aiae-ink);
+  color: var(--aiae-accent);
 }
 .aiae-cx__moretext {
   font-family: var(--aiae-font-mono);
@@ -3997,7 +4236,7 @@ img.aiae-card__shot.is-active {
 .aiae-cx__outrule {
   flex: 1;
   height: 0;
-  border-top: 3px solid var(--aiae-ink);
+  border-top: 3px solid var(--aiae-stone);
 }
 .aiae-cx__outlink {
   display: inline-flex;
@@ -4005,7 +4244,7 @@ img.aiae-card__shot.is-active {
   gap: 10px;
   flex: 0 0 auto;
   padding: 12px 18px;
-  border: 3px solid var(--aiae-ink);
+  border: 3px solid var(--aiae-stone);
   color: var(--aiae-ink);
   text-decoration: none;
   font-family: var(--aiae-font-mono);
@@ -4017,8 +4256,9 @@ img.aiae-card__shot.is-active {
     color 0.3s ease;
 }
 .aiae-cx__outlink:hover {
-  background: var(--aiae-ink);
-  color: var(--aiae-paper);
+  background: var(--aiae-accent);
+  border-color: var(--aiae-accent);
+  color: var(--aiae-ink);
 }
 
 /* ── Narrow ────────────────────────────────────────────── */
@@ -4031,7 +4271,7 @@ img.aiae-card__shot.is-active {
     padding-left: 0;
     padding-top: 16px;
     border-left: 0;
-    border-top: 2px solid var(--aiae-ink);
+    border-top: 2px solid var(--aiae-stone);
   }
   /* The number stops being a full-height cell and becomes a corner stamp
      above the title, so the head can stack without a 3-column squeeze */
@@ -4045,12 +4285,12 @@ img.aiae-card__shot.is-active {
     grid-column: 1 / -1;
     flex-direction: row;
     border-left: 0;
-    border-top: 2px solid var(--aiae-ink);
+    border-top: 2px solid var(--aiae-stone);
   }
   .aiae-cx__count {
     flex: 0 0 auto;
     border-bottom: 0;
-    border-right: 2px solid var(--aiae-ink);
+    border-right: 2px solid var(--aiae-stone);
   }
   .aiae-cx__link {
     flex: 1;
@@ -4079,4 +4319,2107 @@ img.aiae-card__shot.is-active {
   .aiae-cx__outlink {
     justify-content: center;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DEFAULT COLLECTION PAGE — Dawn, moved onto the paper system
+   No markup changes: filtering, sorting and pagination stay exactly as
+   Dawn ships them, and only the surface is restyled. Everything is
+   scoped to .aiae-template-collection, and the concepts template shares
+   that body class but renders none of these Dawn classes, so it is
+   untouched by all of it.
+   ═══════════════════════════════════════════════════════════ */
+
+/* The page runs on the brand gutter instead of Dawn's 1200px measure, so the
+   hero, the filter bar and the grid line up with the nav and the footer.
+   Confined to #MainContent — the footer's own .page-width must not move. */
+.aiae-template-collection #MainContent .page-width {
+  max-width: none;
+  padding-left: var(--aiae-gutter);
+  padding-right: var(--aiae-gutter);
+}
+
+/* ── Header ────────────────────────────────────────────── */
+.aiae-template-collection .collection-hero {
+  padding: clamp(18px, 3vh, 34px) 0 0;
+  background: var(--aiae-paper);
+}
+.aiae-template-collection .collection-hero__inner {
+  padding-bottom: clamp(18px, 3vh, 30px);
+  border-bottom: 3px solid var(--aiae-stone);
+}
+/* An accent tick in place of an eyebrow: the same opening beat as the concept
+   index, without putting translatable copy inside a stylesheet. */
+.aiae-template-collection .collection-hero__text-wrapper::before {
+  content: '';
+  display: block;
+  width: 54px;
+  height: 0;
+  margin-bottom: 18px;
+  border-top: 6px solid var(--aiae-accent);
+}
+.aiae-template-collection .collection-hero__title {
+  margin: 0;
+  font-family: var(--aiae-font-display);
+  font-size: clamp(38px, 6.5vw, 96px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+}
+.aiae-template-collection .collection-hero__description {
+  margin: 18px 0 0;
+  max-width: 62ch;
+  padding-left: 16px;
+  border-left: 3px solid var(--aiae-stone);
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--aiae-muted);
+}
+.aiae-template-collection .collection-hero__description > :first-child {
+  margin-top: 0;
+}
+.aiae-template-collection .collection-hero__description > :last-child {
+  margin-bottom: 0;
+}
+
+/* ── Filter + sort bar ─────────────────────────────────── */
+.aiae-template-collection .facets-container {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--aiae-stone);
+}
+.aiae-template-collection .facets__heading,
+.aiae-template-collection .facet-filters__label,
+.aiae-template-collection .facets__label,
+.aiae-template-collection .product-count,
+.aiae-template-collection .product-count__text,
+.aiae-template-collection .mobile-facets__count {
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aiae-faint);
+}
+/* Each filter becomes a bordered tab. Dawn positions the popup off the
+   summary's own box, so padding here moves the panel with it. */
+.aiae-template-collection .facets__summary {
+  padding: 9px 12px;
+  border: 2px solid var(--aiae-stone);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+.aiae-template-collection .facets__summary:hover,
+.aiae-template-collection .js-filter[open] > .facets__summary {
+  background: var(--aiae-stone);
+  border-color: var(--aiae-stone);
+  color: var(--aiae-paper);
+}
+.aiae-template-collection .facets__display {
+  border: 2px solid var(--aiae-stone);
+  border-radius: 0;
+  box-shadow: 5px 6px 0 0 rgba(13, 13, 13, 0.14);
+  background: var(--aiae-paper);
+}
+.aiae-template-collection .facets__item,
+.aiae-template-collection .facets__price,
+.aiae-template-collection .mobile-facets__item {
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  color: var(--aiae-ink);
+}
+/* Dawn's select is an underlined field; here it matches the filter tabs */
+.aiae-template-collection .facet-filters__sort,
+.aiae-template-collection .select__select {
+  padding: 9px 30px 9px 12px;
+  border: 2px solid var(--aiae-stone);
+  border-radius: 0;
+  background: var(--aiae-paper);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+}
+.aiae-template-collection .select:after,
+.aiae-template-collection .select:before {
+  display: none;
+}
+/* Active filter pills */
+.aiae-template-collection .active-facets__button,
+.aiae-template-collection .active-facets__button-remove {
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+}
+.aiae-template-collection .active-facets__button .active-facets__button-inner {
+  padding: 7px 10px;
+  border: 2px solid var(--aiae-accent);
+  border-radius: 0;
+  background: var(--aiae-paper);
+}
+/* The mobile drawer's trigger and its footer buttons */
+.aiae-template-collection .mobile-facets__open,
+.aiae-template-collection .mobile-facets__close,
+.aiae-template-collection .mobile-facets__footer button,
+.aiae-template-collection .mobile-facets__footer a {
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.aiae-template-collection .mobile-facets__open {
+  padding: 9px 12px;
+  border: 2px solid var(--aiae-stone);
+  color: var(--aiae-ink);
+}
+
+/* ── Grid ──────────────────────────────────────────────── */
+.aiae-template-collection #product-grid {
+  --grid-desktop-horizontal-spacing: 14px;
+  --grid-desktop-vertical-spacing: 14px;
+  --grid-mobile-horizontal-spacing: 10px;
+  --grid-mobile-vertical-spacing: 10px;
+  margin-top: clamp(20px, 3vh, 32px);
+}
+
+/* ── Cards — the same object as the concept rails ──────── */
+.aiae-template-collection .card-wrapper .card {
+  border: 2px solid var(--aiae-ink);
+  background: var(--aiae-paper);
+  transition:
+    transform 0.4s var(--aiae-ease),
+    box-shadow 0.4s ease;
+}
+.aiae-template-collection .card-wrapper:hover .card {
+  transform: translate(-4px, -6px);
+  box-shadow: 6px 8px 0 0 var(--aiae-ink);
+}
+.aiae-template-collection .card__inner {
+  border-bottom: 2px solid var(--aiae-ink);
+  background: var(--aiae-paper);
+}
+.aiae-template-collection .card--standard > .card__content {
+  padding: 14px 14px 18px;
+}
+.aiae-template-collection .card__information {
+  padding: 0;
+}
+.aiae-template-collection .card__heading {
+  margin: 0;
+  font-family: var(--aiae-font-body);
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.aiae-template-collection .card__heading a {
+  color: var(--aiae-ink);
+}
+.aiae-template-collection .card-information > .price,
+.aiae-template-collection .card__information .price {
+  margin-top: 8px;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  color: var(--aiae-ink);
+}
+.aiae-template-collection .price--on-sale .price-item--sale {
+  color: var(--aiae-accent);
+}
+/* Badges read as stamped flags, like the SOLD OUT chip on the concept cards */
+.aiae-template-collection .card__badge .badge {
+  padding: 4px 8px;
+  border: 2px solid var(--aiae-ink);
+  border-radius: 0;
+  background: var(--aiae-paper);
+  color: var(--aiae-ink);
+  font-family: var(--aiae-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ── Pagination ────────────────────────────────────────── */
+.aiae-template-collection .pagination__list li .pagination__item {
+  min-width: 38px;
+  height: 38px;
+  border: 2px solid var(--aiae-stone);
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  color: var(--aiae-ink);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+.aiae-template-collection .pagination__item:hover {
+  background: var(--aiae-stone);
+  color: var(--aiae-paper);
+}
+.aiae-template-collection .pagination__item--current {
+  background: var(--aiae-ink);
+  border-color: var(--aiae-ink);
+  color: var(--aiae-accent);
+}
+.aiae-template-collection .pagination__item--current:after {
+  display: none;
+}
+
+/* ── Empty collection ──────────────────────────────────── */
+.aiae-template-collection .collection--empty .title-wrapper {
+  padding: 40px 0;
+  border: 2px dashed var(--aiae-line-strong);
+  font-family: var(--aiae-font-mono);
+  color: var(--aiae-muted);
+}
+
+/* Both collection sections sit on paper — Dawn leaves the grid section's
+   background to the body, which is white underneath the theme's own paper. */
+.aiae-template-collection #MainContent .shopify-section {
+  background: var(--aiae-paper);
+}
+/* Dawn packs the caret hard against the filter label; the bordered tab needs
+   the two to be spaced like a real control. */
+.aiae-template-collection .facets__summary > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.aiae-template-collection .facets__wrapper,
+.aiae-template-collection .facet-filters {
+  align-items: center;
+  gap: 8px;
+}
+/* Dawn's facet form is a grid; without this the sort control sits a few px
+   below the filter tabs instead of sharing their centre line. */
+.aiae-template-collection .facets__form {
+  align-items: center;
+}
+/* Dawn hangs a 15px margin under each filter summary and pulls the "Filter:"
+   heading back up by the same amount, which makes the row 51px tall and
+   leaves the sort control sitting 7px below the tabs. Flattening both lets
+   the bar be one clean 36px line that centres on its own; the popup is
+   positioned off the summary, so it simply follows it up. */
+.aiae-template-collection .facets__summary {
+  margin-bottom: 0;
+}
+.aiae-template-collection .facets__heading {
+  margin-top: 0;
+}
+
+/* ── Mobile filter drawer ──────────────────────────────── */
+.aiae-template-collection .mobile-facets__inner,
+.aiae-template-collection .mobile-facets__submenu {
+  background: var(--aiae-paper);
+}
+.aiae-template-collection .mobile-facets__header {
+  border-bottom: 2px solid var(--aiae-stone);
+  background: var(--aiae-paper);
+}
+.aiae-template-collection .mobile-facets__heading {
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+}
+/* Each filter row is a rule-separated line, matching the desktop tabs */
+.aiae-template-collection .mobile-facets__summary {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--aiae-stone);
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+}
+.aiae-template-collection .mobile-facets__label,
+.aiae-template-collection .facet-checkbox__text {
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  color: var(--aiae-ink);
+}
+.aiae-template-collection .mobile-facets__footer {
+  border-top: 2px solid var(--aiae-stone);
+  background: var(--aiae-paper);
+}
+.aiae-template-collection .mobile-facets__footer .mobile-facets__clear,
+.aiae-template-collection .mobile-facets__footer .button {
+  border-radius: 0;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+/* Apply is the drawer's call to action, so it takes the accent fill the way
+   VEZI COLECȚIA does — ink on accent, which is the pairing that clears 4.5:1 */
+.aiae-template-collection .mobile-facets__footer .button {
+  border: 2px solid var(--aiae-accent);
+  background: var(--aiae-accent);
+  color: var(--aiae-ink);
+  font-weight: 700;
+}
+.aiae-template-collection .mobile-facets__footer .button:after,
+.aiae-template-collection .mobile-facets__footer .button:before {
+  display: none;
+}
+
+/* ── Filter + sort carets ──────────────────────────────── */
+/* Dawn pins the caret absolutely at right: 1.5rem inside the summary, which
+   predates the bordered tab: the arrow lands 15px in from the border, sitting
+   on the label with an empty gutter behind it. Taking it out of absolute flow
+   hands spacing back to the flex row above (gap: 10px) and lets the tab's own
+   12px padding set the distance to the border. */
+.aiae-template-collection .facets__summary .icon-caret,
+.aiae-template-collection .mobile-facets__summary .icon-caret {
+  position: static;
+  top: auto;
+  right: auto;
+  flex: 0 0 auto;
+  width: 9px;
+  height: 6px;
+}
+/* The sort select's caret is the same arrow, but Dawn hangs it at right: 0 —
+   flush against the 2px border. Pull it in to the tabs' 12px inset so the two
+   controls read as one row. */
+.aiae-template-collection .select .svg-wrapper {
+  right: 12px;
+  width: 9px;
+  height: 6px;
+  color: var(--aiae-ink);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DEGEABA CLUB — the vault: a dark, limited lot
+   The paper collection page is riso-brutalist: 2px slab borders, hard
+   offset shadows, solid fills. That vocabulary shouts, and a closing
+   edition wants the opposite — so this template keeps the same bones and
+   swaps the treatment. Hairlines instead of slabs, ambient shadow instead
+   of offset blocks, slow easing instead of snap.
+
+   Every rule in the collection block above is written against the --aiae-*
+   tokens, so remapping those on the body flips the whole page in one move;
+   what follows is only the places where "dark" and "premium" are not the
+   same instruction.
+   ═══════════════════════════════════════════════════════════ */
+.aiae-template-collection--degeaba {
+  /* A warm near-black, not #000: the products are photographed on warm grey
+     and a blue-black ground makes them read cold. */
+  --aiae-paper: #0b0a09;
+  --aiae-paper-2: #131210;
+  --aiae-cream: #131210;
+  --aiae-ink: #f4f1ea;
+  --aiae-muted: #b8b3a9;
+  --aiae-faint: #8f8a80;
+  --aiae-line: rgba(244, 241, 234, 0.1);
+  --aiae-line-strong: rgba(244, 241, 234, 0.22);
+  /* Stone is the paper side's border-and-fill workhorse. Almost every use of
+     it is overridden below, but it still has to clear 4.5:1 against the
+     near-black wherever one slips through. */
+  --aiae-stone: #8a857c;
+
+  /* The vault's own scale: one hairline, one lifted hairline, two surfaces. */
+  --vault-edge: rgba(244, 241, 234, 0.13);
+  --vault-edge-hi: rgba(244, 241, 234, 0.3);
+  --vault-surface: #121110;
+  --vault-surface-2: #191715;
+
+  background: #0b0a09;
+}
+
+/* A large flat black field looks like a hole in the screen. A trace of grain
+   gives it a surface, the way the paper side gets one from its own colour.
+   Fixed, so it reads as film over the page rather than as texture that
+   scrolls with the content. */
+.aiae-template-collection--degeaba::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Header ────────────────────────────────────────────── */
+/* More air above the title than the paper page takes: the lot opens on an
+   empty screen, which is most of the premium. */
+.aiae-template-collection--degeaba .collection-hero {
+  position: relative;
+  padding-top: clamp(30px, 7vh, 78px);
+  overflow: hidden;
+}
+/* One soft ember behind the wordmark, off-centre and very low contrast —
+   enough to keep the top of the page from reading as flat black. */
+.aiae-template-collection--degeaba .collection-hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: -10%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 820px;
+  max-height: 820px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(217, 79, 30, 0.13), transparent 62%);
+}
+.aiae-template-collection--degeaba .collection-hero__inner {
+  position: relative;
+  padding-bottom: clamp(26px, 5vh, 54px);
+  border-bottom: 1px solid var(--vault-edge);
+}
+/* The paper page opens on a 6px accent slab. Here it draws as a thin rule:
+   same beat, stated quietly. */
+.aiae-template-collection--degeaba .collection-hero__text-wrapper::before {
+  width: 92px;
+  margin-bottom: 22px;
+  border-top-width: 2px;
+}
+.aiae-template-collection--degeaba .collection-hero__title {
+  font-size: clamp(42px, 8vw, 128px);
+  letter-spacing: -0.015em;
+}
+.aiae-template-collection--degeaba .collection-hero__description {
+  padding-left: 18px;
+  border-left: 1px solid var(--vault-edge);
+}
+
+/* ── Filter + sort bar ─────────────────────────────────── */
+/* The paper tabs invert to a solid fill on hover. Inverting a control on a
+   dark page means firing a light block at the reader every time the pointer
+   crosses it, so the vault lifts the surface a step and draws the accent
+   under the open one instead. */
+.aiae-template-collection--degeaba .facets-container {
+  padding-top: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--vault-edge);
+}
+.aiae-template-collection--degeaba .facets__summary,
+.aiae-template-collection--degeaba .facet-filters__sort,
+.aiae-template-collection--degeaba .select__select,
+.aiae-template-collection--degeaba .mobile-facets__open {
+  border: 1px solid var(--vault-edge);
+  background: var(--vault-surface);
+  transition:
+    background 0.45s var(--aiae-ease),
+    border-color 0.45s var(--aiae-ease),
+    box-shadow 0.45s var(--aiae-ease);
+}
+.aiae-template-collection--degeaba .facets__summary:hover,
+.aiae-template-collection--degeaba .facet-filters__sort:hover,
+.aiae-template-collection--degeaba .select__select:hover,
+.aiae-template-collection--degeaba .mobile-facets__open:hover {
+  background: var(--vault-surface-2);
+  border-color: var(--vault-edge-hi);
+  color: var(--aiae-ink);
+}
+.aiae-template-collection--degeaba .js-filter[open] > .facets__summary {
+  background: var(--vault-surface-2);
+  border-color: var(--vault-edge-hi);
+  color: var(--aiae-ink);
+  box-shadow: inset 0 -2px 0 0 var(--aiae-accent);
+}
+.aiae-template-collection--degeaba .facets__display {
+  border: 1px solid var(--vault-edge-hi);
+  background: var(--vault-surface);
+  box-shadow: 0 26px 60px -24px rgba(0, 0, 0, 0.95);
+}
+.aiae-template-collection--degeaba .active-facets__button .active-facets__button-inner {
+  border: 1px solid var(--aiae-accent);
+  background: rgba(217, 79, 30, 0.1);
+}
+
+/* ── Grid ──────────────────────────────────────────────── */
+/* Wider gutters than the paper grid: the cards stop being a contact sheet
+   and start being objects with room around them. */
+.aiae-template-collection--degeaba #product-grid {
+  --grid-desktop-horizontal-spacing: 26px;
+  --grid-desktop-vertical-spacing: 26px;
+  --grid-mobile-horizontal-spacing: 14px;
+  --grid-mobile-vertical-spacing: 14px;
+  margin-top: clamp(28px, 4.5vh, 48px);
+  counter-reset: vault-lot;
+}
+.aiae-template-collection--degeaba #product-grid > li {
+  counter-increment: vault-lot;
+}
+
+/* ── Cards ─────────────────────────────────────────────── */
+/* No offset shadow and no snap: the card lifts a little, the frame warms,
+   and the shot pushes in slowly behind it. */
+.aiae-template-collection--degeaba .card-wrapper .card {
+  border: 1px solid var(--vault-edge);
+  background: var(--vault-surface);
+  transition:
+    transform 0.7s var(--aiae-ease),
+    border-color 0.7s ease,
+    box-shadow 0.7s ease;
+}
+.aiae-template-collection--degeaba .card-wrapper:hover .card {
+  transform: translateY(-5px);
+  border-color: var(--vault-edge-hi);
+  box-shadow: 0 30px 60px -26px rgba(0, 0, 0, 0.95);
+}
+.aiae-template-collection--degeaba .card__inner {
+  border-bottom: 1px solid var(--vault-edge);
+  background: var(--vault-surface);
+  overflow: hidden;
+}
+/* The shots are studio mockups on white, so on the vault each card carries a
+   lit rectangle. A touch off full brightness stops the grid reading as a row
+   of lightboxes; hover takes it back to true, so nobody ever judges the
+   garment's colour from the dimmed state. */
+.aiae-template-collection--degeaba .card__media img,
+.aiae-template-collection--degeaba .card__inner img {
+  filter: brightness(0.93);
+  transition:
+    transform 1.3s var(--aiae-ease),
+    filter 0.7s ease;
+}
+.aiae-template-collection--degeaba .card-wrapper:hover .card__inner img {
+  transform: scale(1.05);
+  filter: brightness(1);
+}
+.aiae-template-collection--degeaba .card--standard > .card__content {
+  padding: 18px 18px 22px;
+}
+/* Each piece carries its number in the lot. It sits above the title rather
+   than over the shot, so it never lands on a light part of the photograph,
+   and it is outside the product link so it stays out of the link's
+   accessible name. */
+.aiae-template-collection--degeaba .card__information::before {
+  content: counter(vault-lot, decimal-leading-zero);
+  display: block;
+  margin-bottom: 10px;
+  font-family: var(--aiae-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  color: var(--aiae-faint);
+}
+.aiae-template-collection--degeaba .card__heading {
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+.aiae-template-collection--degeaba .card-information > .price,
+.aiae-template-collection--degeaba .card__information .price {
+  margin-top: 12px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--aiae-muted);
+}
+/* The sold-out flag is the one place the accent is allowed to sit on a card:
+   in a lot that closes, "gone" is the information that matters. */
+.aiae-template-collection--degeaba .card__badge .badge {
+  border: 1px solid var(--aiae-accent);
+  background: rgba(11, 10, 9, 0.88);
+  color: var(--aiae-accent);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  backdrop-filter: blur(4px);
+}
+
+/* ── Pagination ────────────────────────────────────────── */
+.aiae-template-collection--degeaba .pagination__list li .pagination__item {
+  border: 1px solid var(--vault-edge);
+}
+/* Both of these name .pagination__list li so they outrank the base rule
+   .aiae-template-collection .pagination__list li .pagination__item, which
+   sets colour at (0,3,1) and would otherwise swallow the colour here. */
+.aiae-template-collection--degeaba .pagination__list li .pagination__item:hover {
+  background: var(--vault-surface-2);
+  border-color: var(--vault-edge-hi);
+  color: var(--aiae-ink);
+}
+.aiae-template-collection--degeaba .pagination__list li .pagination__item--current {
+  border-color: var(--aiae-accent);
+  background: transparent;
+  color: var(--aiae-accent);
+}
+.aiae-template-collection--degeaba .collection--empty .title-wrapper {
+  border: 1px solid var(--vault-edge);
+}
+
+/* ── Chrome that is not token-driven ───────────────────── */
+/* The nav's text, borders and mobile panel flip with the remap, but its solid
+   bar is a hardcoded paper wash — left alone it would put the now-light
+   wordmark on a light strip. The footer needs no counterpart: it is already
+   built on the --aiae-d-* tokens, which this block never touches. */
+/* .aiae-body is named here only to clear the specificity of the global rule
+   that paints this bar, .aiae-body:not(.aiae-template-index) .aiae-nav — the
+   :not() gives that selector three classes, so a two-class override loses to
+   it and the wordmark stays light-on-light. */
+.aiae-body.aiae-template-collection--degeaba .aiae-nav,
+.aiae-body.aiae-template-collection--degeaba .aiae-nav.is-scrolled {
+  background: rgba(11, 10, 9, 0.9);
+  border-bottom-color: var(--vault-edge);
+}
+/* Dawn paints a few of its own parts straight from its colour-scheme triples
+   rather than the AIAE tokens — the "0 selected" counts, the Reset links, the
+   price field labels and the From/To inputs. On paper they read fine; on the
+   void they land at 1.04:1. Confined to #MainContent so the cart drawer and
+   the header keep their own surface. The scheme wrapper Dawn puts around each
+   section redeclares these on itself, so naming #MainContent alone is
+   shadowed — the wrapper has to be named too. */
+.aiae-template-collection--degeaba #MainContent,
+.aiae-template-collection--degeaba #MainContent [class*='color-scheme-'] {
+  --color-foreground: 244, 241, 234;
+  --color-background: 11, 10, 9;
+  --color-shadow: 244, 241, 234;
+  /* The Reset links read --color-link, not --color-foreground. */
+  --color-link: 244, 241, 234;
+  /* Dawn's scheme wrapper paints from this literal rather than from
+     --color-background, so remapping the triple alone leaves it white. */
+  --gradient-background: #0b0a09;
+}
+/* The native dropdown list the sort select opens is painted by the OS. */
+.aiae-template-collection--degeaba .facet-filters__sort,
+.aiae-template-collection--degeaba .select__select {
+  color-scheme: dark;
+}
+/* The drawer's Apply button is ink on accent, a pairing chosen on the paper
+   side for clearing 4.5:1. Ink flips here, so the button holds the near-black
+   itself rather than following the token. */
+.aiae-template-collection--degeaba .mobile-facets__footer .button {
+  color: #0b0a09;
+}
+.aiae-template-collection--degeaba .mobile-facets__inner,
+.aiae-template-collection--degeaba .mobile-facets__submenu,
+.aiae-template-collection--degeaba .mobile-facets__header,
+.aiae-template-collection--degeaba .mobile-facets__footer {
+  background: var(--vault-surface);
+}
+.aiae-template-collection--degeaba .mobile-facets__header,
+.aiae-template-collection--degeaba .mobile-facets__summary,
+.aiae-template-collection--degeaba .mobile-facets__footer {
+  border-color: var(--vault-edge);
+}
+
+/* ── The footer ────────────────────────────────────────── */
+/* The home page closes on the AIAE footer; every other page gets Dawn's
+   stock one, which is a white slab with the newsletter in it. On the paper
+   pages that only reads as slightly too bright — under the vault it is a
+   lit billboard at the end of a dark room, so the footer group takes the
+   same treatment as the main content. The header and the cart drawer are
+   still left alone: they are chrome shared with the rest of the site. */
+.aiae-template-collection--degeaba .shopify-section-group-footer-group,
+.aiae-template-collection--degeaba .shopify-section-group-footer-group [class*='color-scheme-'] {
+  --color-foreground: 244, 241, 234;
+  --color-background: 11, 10, 9;
+  --color-shadow: 244, 241, 234;
+  --color-link: 244, 241, 234;
+  --gradient-background: #0b0a09;
+}
+.aiae-template-collection--degeaba .footer {
+  border-top: 1px solid var(--vault-edge);
+}
+.aiae-template-collection--degeaba .footer__content-top,
+.aiae-template-collection--degeaba .footer__content-bottom,
+.aiae-template-collection--degeaba .footer-block--newsletter {
+  border-color: var(--vault-edge);
+}
+.aiae-template-collection--degeaba .footer__content-bottom {
+  border-top: 1px solid var(--vault-edge);
+}
+/* Dawn's newsletter field is a boxed input with its own border token; on the
+   vault it becomes the same hairline-on-surface control as the filter tabs. */
+.aiae-template-collection--degeaba .footer-block__newsletter .field__input,
+.aiae-template-collection--degeaba .newsletter-form__field-wrapper .field__input {
+  border-radius: 0;
+  border: 1px solid var(--vault-edge);
+  background: var(--vault-surface);
+  color: var(--aiae-ink);
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+}
+.aiae-template-collection--degeaba .newsletter-form__field-wrapper .field:after,
+.aiae-template-collection--degeaba .newsletter-form__field-wrapper .field:before {
+  display: none;
+}
+.aiae-template-collection--degeaba .newsletter-form__button {
+  color: var(--aiae-accent);
+}
+.aiae-template-collection--degeaba .footer-block__heading,
+.aiae-template-collection--degeaba .footer__content-bottom .copyright__content {
+  font-family: var(--aiae-font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.aiae-template-collection--degeaba .footer-block__heading {
+  font-size: 11px;
+  color: var(--aiae-faint);
+}
+/* The stock footer's payment marks are full-colour logos on a white plate.
+   Knocked back a little they sit on the dark ground without turning the
+   bottom of the page into a sticker sheet. */
+.aiae-template-collection--degeaba .list-payment__item svg {
+  opacity: 0.55;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LOT SEAL — the closing date, stamped
+   The theme already reads collections as lots that open and close, so a
+   collection with an end date is a sealed lot rather than a new idea. The
+   plate is the one loud object on the page: everything else is hairlines,
+   so the accent tape and the numerals carry all the urgency without the
+   page having to shout anywhere else.
+   ═══════════════════════════════════════════════════════════ */
+.aiae-seal {
+  position: relative;
+  border-top: 1px solid var(--vault-edge);
+  border-bottom: 1px solid var(--vault-edge);
+  background: var(--vault-surface);
+}
+.aiae-seal__tape {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  overflow: hidden;
+  background: var(--aiae-accent);
+}
+.aiae-seal__tape .aiae-marquee-inner {
+  color: #0b0a09;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  animation-duration: 42s;
+}
+.aiae-seal__tape .aiae-marquee-inner span {
+  padding: 0 22px;
+}
+.aiae-seal__tape .aiae-tick-dot {
+  color: rgba(11, 10, 9, 0.45);
+}
+/* Two columns on desktop — the claim on the left, the clock on the right —
+   so the plate is read against the sentence that explains it. */
+.aiae-seal__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(28px, 5vw, 72px);
+  padding: clamp(34px, 6.5vh, 74px) var(--aiae-gutter);
+}
+.aiae-seal__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  font-size: 11px;
+  letter-spacing: 0.26em;
+}
+.aiae-seal__tick {
+  width: 30px;
+  height: 0;
+  flex: 0 0 auto;
+  border-top: 2px solid var(--aiae-accent);
+}
+.aiae-seal__note {
+  margin: 0;
+  max-width: 46ch;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--aiae-muted);
+}
+.aiae-seal__clock {
+  text-align: right;
+}
+.aiae-seal__lede {
+  margin: 0 0 14px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--aiae-faint);
+}
+/* grid-auto-flow: column is the whole guarantee here — the row cannot wrap,
+   so a fourth plate can never fall to a second line no matter how long the
+   labels get. In an auto-width container the 1fr max sizes every column to
+   the widest plate's content, so ZILE and SEC come out the same width
+   without any of them being hardcoded. */
+.aiae-seal__plates {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(clamp(58px, 6.4vw, 96px), 1fr);
+  justify-content: end;
+  gap: 10px;
+}
+/* Each unit is its own plate, hairline-framed, with the accent drawn across
+   the top edge — the same tick that opens the hero, repeated three times. */
+.aiae-seal__plate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 10px 12px;
+  border: 1px solid var(--vault-edge);
+  border-top: 2px solid var(--aiae-accent);
+  background: var(--aiae-paper);
+}
+.aiae-seal__plate b {
+  font-family: var(--aiae-font-display);
+  font-size: clamp(34px, 5vw, 62px);
+  font-weight: 400;
+  line-height: 0.85;
+  /* The minute rolls over while the page is open; tabular figures keep the
+     plate from changing width underneath it. */
+  font-variant-numeric: tabular-nums;
+  color: var(--aiae-ink);
+}
+.aiae-seal__plate em {
+  font-family: var(--aiae-font-mono);
+  font-size: 9px;
+  font-style: normal;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--aiae-faint);
+  /* The label is what would break a plate onto two lines if a merchant types
+     a longer word than SEC into the setting. */
+  white-space: nowrap;
+}
+.aiae-seal__stamp {
+  margin: 16px 0 0;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+.aiae-seal__closed-line {
+  margin: 0;
+  font-family: var(--aiae-font-display);
+  font-size: clamp(26px, 4vw, 48px);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+
+@media screen and (max-width: 860px) {
+  /* Stacked, and the clock swings back to the left margin so it lines up
+     with the claim above it instead of floating off the right edge. */
+  .aiae-seal__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(26px, 4vh, 40px);
+  }
+  .aiae-seal__clock {
+    text-align: left;
+  }
+  /* Stacked, the row has the full column to divide and the 1fr tracks take
+     all of it — four 150px plates around a 40px numeral. Capping the row
+     keeps the plates the same size they are on the wide layout. */
+  .aiae-seal__plates {
+    justify-content: start;
+    max-width: 460px;
+  }
+}
+@media screen and (max-width: 560px) {
+  /* Stacked, the row has a definite width to divide, so the columns drop
+     their floor and simply take a quarter each. */
+  .aiae-seal__plates {
+    grid-auto-columns: minmax(0, 1fr);
+    justify-content: stretch;
+    gap: 7px;
+  }
+  .aiae-seal__plate {
+    padding: 13px 4px 10px;
+    gap: 6px;
+  }
+  .aiae-seal__plate b {
+    font-size: clamp(24px, 7.4vw, 40px);
+  }
+  .aiae-seal__plate em {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CART — the lot grammar applied to the bill. The list is the
+   left column, the note of account is a sticky plate on the
+   right, and the whole thing lives on the void side so the
+   checkout button reads as the only lit control on the page.
+   ═══════════════════════════════════════════════════════════ */
+/* The head keeps the lot's centred rhythm; only the bill below it reads
+   as a document, left-aligned from its own margin. */
+.aiae-cart .aiae-section__title {
+  font-size: clamp(44px, 7vw, 108px);
+}
+.aiae-cart.is-busy .aiae-cart__body {
+  opacity: 0.55;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.aiae-cart__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(300px, 26vw, 360px);
+  gap: clamp(24px, 3vw, 46px);
+  align-items: start;
+  max-width: 1160px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* ── The list ── */
+.aiae-cart__list {
+  border: 2px solid var(--lot-edge);
+  background: var(--sec-surface);
+}
+.aiae-cart__head,
+.aiae-cart__row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) 132px 110px;
+  gap: clamp(12px, 1.6vw, 22px);
+  align-items: center;
+}
+.aiae-cart__head {
+  padding: 12px clamp(14px, 1.8vw, 22px);
+  border-bottom: 2px solid var(--lot-edge);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sec-faint);
+}
+/* The product column spans the thumbnail too — three labels, four tracks */
+.aiae-cart__head span:first-child {
+  grid-column: 1 / 3;
+}
+.aiae-cart__head span:nth-child(2) {
+  text-align: center;
+}
+.aiae-cart__head span:last-child {
+  text-align: right;
+}
+.aiae-cart__row {
+  padding: clamp(16px, 2vw, 22px) clamp(14px, 1.8vw, 22px);
+  border-bottom: 1px solid var(--sec-line);
+}
+.aiae-cart__row:last-of-type {
+  border-bottom: 0;
+}
+
+.aiae-cart__media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--sec-media);
+  border: 1px solid var(--sec-line-strong);
+  text-decoration: none;
+}
+.aiae-cart__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.aiae-cart__media-code {
+  font-family: var(--aiae-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--sec-faint);
+  text-align: center;
+  padding: 0 6px;
+}
+/* Line number, stamped into the corner of the shot */
+.aiae-cart__media-index {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 3px 6px;
+  font-family: var(--aiae-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--sec-bg);
+  background: var(--aiae-accent);
+}
+
+.aiae-cart__details {
+  min-width: 0;
+}
+.aiae-cart__title {
+  display: inline-block;
+  font-family: var(--aiae-font-body);
+  font-weight: 800;
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--sec-text);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+.aiae-cart__title:hover {
+  color: var(--aiae-accent);
+}
+.aiae-cart__specs {
+  margin: 10px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+}
+.aiae-cart__specs > div {
+  display: flex;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--sec-line);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.aiae-cart__specs dt {
+  color: var(--sec-faint);
+}
+.aiae-cart__specs dd {
+  margin: 0;
+  color: var(--sec-muted);
+}
+.aiae-cart__specs a {
+  color: var(--aiae-accent);
+}
+.aiae-cart__unit {
+  margin: 10px 0 0;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--sec-muted);
+}
+.aiae-cart__unit s {
+  color: var(--sec-faint);
+  margin-right: 6px;
+}
+.aiae-cart__unit strong {
+  color: var(--aiae-accent);
+  font-weight: 400;
+}
+.aiae-cart__unit em {
+  font-style: normal;
+  color: var(--sec-faint);
+  margin-left: 4px;
+}
+.aiae-cart__discounts {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+
+/* ── Quantity ── */
+.aiae-cart__qty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.aiae-cart__stepper {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--sec-line-strong);
+}
+.aiae-cart__step {
+  width: 32px;
+  border: 0;
+  background: transparent;
+  color: var(--sec-text);
+  font-family: var(--aiae-font-mono);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.aiae-cart__step:hover {
+  background: var(--aiae-accent);
+  color: var(--aiae-ink);
+}
+.aiae-cart__input {
+  width: 46px;
+  padding: 10px 0;
+  border: 0;
+  border-left: 1px solid var(--sec-line-strong);
+  border-right: 1px solid var(--sec-line-strong);
+  background: transparent;
+  color: var(--sec-text);
+  text-align: center;
+  font-family: var(--aiae-font-mono);
+  font-size: 13px;
+  -moz-appearance: textfield;
+}
+.aiae-cart__input::-webkit-outer-spin-button,
+.aiae-cart__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.aiae-cart__input:focus-visible {
+  outline: 2px solid var(--aiae-accent);
+  outline-offset: -2px;
+}
+.aiae-cart__remove {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sec-faint);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.aiae-cart__remove:hover {
+  color: var(--aiae-accent);
+}
+
+.aiae-cart__line {
+  text-align: right;
+  font-family: var(--aiae-font-mono);
+  font-size: 14px;
+  color: var(--sec-text);
+}
+.aiae-cart__line s {
+  display: block;
+  font-size: 11px;
+  color: var(--sec-faint);
+}
+.aiae-cart__line strong {
+  font-weight: 400;
+}
+
+.aiae-cart__update {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-top: 1px solid var(--sec-line);
+  background: transparent;
+  color: var(--sec-text);
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* ── The note of account ── */
+.aiae-cart__summary {
+  position: sticky;
+  top: calc(var(--aiae-header-h) + 20px);
+}
+.aiae-cart__summary-inner {
+  border: 2px solid var(--aiae-accent);
+  background: var(--sec-surface);
+  padding: clamp(18px, 2vw, 26px);
+}
+.aiae-cart__summary-tag {
+  margin: 0 0 18px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+.aiae-cart__note {
+  display: block;
+  margin-bottom: 18px;
+}
+.aiae-cart__note > span {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sec-faint);
+}
+.aiae-cart__note textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--sec-line-strong);
+  background: transparent;
+  color: var(--sec-text);
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+}
+.aiae-cart__note textarea:focus-visible {
+  outline: 2px solid var(--aiae-accent);
+  outline-offset: -2px;
+}
+
+.aiae-cart__totals {
+  margin: 0 0 12px;
+  padding-top: 4px;
+  border-top: 1px solid var(--sec-line);
+}
+.aiae-cart__totals > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sec-muted);
+}
+.aiae-cart__totals dd {
+  margin: 0;
+  color: var(--sec-text);
+}
+.aiae-cart__totals-discount dt,
+.aiae-cart__totals-discount dd {
+  color: var(--aiae-accent);
+}
+.aiae-cart__totals-grand {
+  border-top: 1px solid var(--sec-line-strong);
+  margin-top: 4px;
+}
+.aiae-cart__totals-grand dt {
+  color: var(--sec-text);
+}
+.aiae-cart__totals-grand dd {
+  font-size: clamp(20px, 2.4vw, 28px);
+  letter-spacing: 0;
+}
+.aiae-cart__tax {
+  margin: 0 0 16px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--sec-faint);
+}
+
+/* Same lit control as the product page's add-to-cart, minus the looping
+   attention animation — by this point the visitor is already committed. */
+.aiae-cart__checkout {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 22px;
+  border: 1px solid var(--aiae-accent);
+  background: var(--aiae-accent);
+  color: var(--aiae-paper);
+  font-family: var(--aiae-font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s var(--aiae-ease);
+}
+.aiae-cart__checkout:hover {
+  background: var(--aiae-ink);
+  border-color: var(--aiae-ink);
+  transform: translateY(-2px);
+}
+.aiae-cart__checkout-arrow {
+  transition: transform 0.25s var(--aiae-ease);
+}
+.aiae-cart__checkout:hover .aiae-cart__checkout-arrow {
+  transform: translateX(4px);
+}
+.aiae-cart__express {
+  margin-top: 12px;
+}
+.aiae-cart__assurances {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--sec-line);
+  display: grid;
+  gap: 8px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sec-faint);
+}
+.aiae-cart__assurances li {
+  display: flex;
+  gap: 8px;
+}
+.aiae-cart__assurances li::before {
+  content: '●';
+  color: var(--aiae-accent);
+  font-size: 7px;
+  line-height: 1.7;
+}
+
+/* ── Empty ── */
+.aiae-cart__void {
+  position: relative;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(36px, 6vw, 68px) clamp(24px, 4vw, 48px);
+  border: 2px dashed var(--sec-line-strong);
+  text-align: center;
+}
+.aiae-cart__void-mark {
+  display: block;
+  font-family: var(--aiae-font-display);
+  font-size: clamp(72px, 14vw, 156px);
+  line-height: 0.8;
+  color: var(--sec-media-alt);
+  letter-spacing: -0.03em;
+}
+.aiae-cart__void-title {
+  margin: 18px 0 0;
+  font-family: var(--aiae-font-body);
+  font-weight: 800;
+  font-size: clamp(18px, 2.6vw, 28px);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--sec-text);
+}
+.aiae-cart__void-note {
+  margin: 10px 0 0;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sec-faint);
+}
+.aiae-cart__void-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: clamp(24px, 3vw, 36px);
+}
+.aiae-cart__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--aiae-accent);
+  border: 1px solid var(--aiae-accent);
+  color: var(--aiae-paper);
+  text-decoration: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s var(--aiae-ease);
+}
+.aiae-cart__cta:hover {
+  background: var(--sec-text);
+  border-color: var(--sec-text);
+  color: var(--sec-bg);
+  transform: translateY(-2px);
+}
+.aiae-cart__login {
+  margin: clamp(22px, 3vh, 32px) 0 0;
+  text-align: center;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.aiae-cart__login a {
+  color: var(--sec-muted);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.aiae-cart__login a:hover {
+  color: var(--aiae-accent);
+}
+
+@media screen and (max-width: 980px) {
+  .aiae-cart__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .aiae-cart__summary {
+    position: static;
+  }
+}
+@media screen and (max-width: 640px) {
+  /* Stacked: the thumbnail keeps its column and the details run beside it,
+     while quantity and line total drop to a row of their own underneath. */
+  .aiae-cart__head {
+    display: none;
+  }
+  .aiae-cart__row {
+    grid-template-columns: 76px minmax(0, 1fr);
+    row-gap: 14px;
+  }
+  .aiae-cart__qty {
+    grid-column: 1 / 2;
+    align-items: flex-start;
+  }
+  .aiae-cart__line {
+    grid-column: 2 / 3;
+    align-self: center;
+    text-align: right;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COLLECTION RAIL — one collection read sideways. Used under
+   the cart, where a full lot would out-shout the bill.
+   ═══════════════════════════════════════════════════════════ */
+.aiae-rail {
+  --lot-edge: var(--sec-text);
+  overflow: hidden;
+  padding-left: 0;
+  padding-right: 0;
+}
+.aiae-rail__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 0 var(--aiae-gutter);
+  margin-bottom: clamp(24px, 4vh, 40px);
+}
+.aiae-rail__title {
+  margin: 0;
+  font-family: var(--aiae-font-display);
+  font-size: clamp(30px, 5vw, 62px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--sec-text);
+}
+.aiae-rail__desc {
+  margin-top: 12px;
+}
+.aiae-rail__link {
+  flex: 0 0 auto;
+}
+
+/* Bleeds to both edges so the row reads as a shelf continuing off-page,
+   with the gutter rebuilt as scroll padding. */
+.aiae-rail__track {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(14px, 1.8vw, 24px);
+  padding: 4px var(--aiae-gutter) 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sec-line-strong) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.aiae-rail__track::-webkit-scrollbar {
+  height: 3px;
+}
+.aiae-rail__track::-webkit-scrollbar-thumb {
+  background: var(--sec-line-strong);
+}
+.aiae-rail__card {
+  flex: 0 0 clamp(190px, 22vw, 260px);
+  scroll-snap-align: start;
+}
+.aiae-rail__card .aiae-card__media {
+  aspect-ratio: 1 / 1;
+}
+.aiae-rail__card .aiae-card__body {
+  padding: 14px 14px 16px;
+}
+.aiae-rail__card .aiae-card__title {
+  font-size: 13px;
+}
+.aiae-rail__card .aiae-card__price {
+  font-size: 12px;
+}
+.aiae-rail__sold {
+  position: absolute;
+  z-index: 2;
+  right: 10px;
+  top: 10px;
+  padding: 4px 8px;
+  background: var(--aiae-accent);
+  color: var(--aiae-ink);
+  font-family: var(--aiae-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+/* The tail of the rail — a card-shaped door to the full collection */
+.aiae-rail__more {
+  flex: 0 0 clamp(150px, 16vw, 190px);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px dashed var(--sec-line-strong);
+  color: var(--sec-muted);
+  text-decoration: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+.aiae-rail__more:hover {
+  color: var(--aiae-accent);
+  border-color: var(--aiae-accent);
+}
+.aiae-rail__hint {
+  margin: 0;
+  padding: 0 var(--aiae-gutter);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sec-faint);
+}
+@media screen and (min-width: 1100px) {
+  /* Wide enough that the whole rail is already on screen — the hint would
+     be telling the visitor to drag something that does not move. */
+  .aiae-rail__hint {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DEFAULT FOOTER — Dawn's footer section, re-skinned to match
+   the AIAE footer used on the homepage. Selectors are prefixed
+   with .aiae-body because base.css / section-footer.css load
+   after this file.
+   ═══════════════════════════════════════════════════════════ */
+.aiae-body .aiae-dfooter.footer {
+  background: var(--aiae-d-bg);
+  background-image: none;
+  color: var(--aiae-d-text);
+  border-top: 0;
+  margin-top: 0;
+  padding-top: clamp(48px, 7vh, 90px);
+  padding-bottom: 0;
+  overflow: hidden;
+}
+.aiae-body .aiae-dfooter .footer__content-top {
+  padding: 0 var(--aiae-gutter);
+  margin-bottom: clamp(40px, 6vh, 72px);
+  max-width: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(28px, 5vw, 72px);
+  flex-wrap: wrap;
+}
+.aiae-body .aiae-dfooter .footer__blocks-wrapper.grid {
+  flex: 1 1 520px;
+  display: flex;
+  justify-content: flex-start;
+  gap: clamp(28px, 5vw, 72px);
+  flex-wrap: wrap;
+  margin: 0;
+  row-gap: 32px;
+}
+.aiae-body .aiae-dfooter .footer-block.grid__item {
+  flex: 0 1 auto;
+  max-width: 38ch;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  text-align: left;
+  align-items: flex-start;
+}
+.aiae-body .aiae-dfooter .footer-block--newsletter {
+  flex: 0 1 320px;
+  min-width: 260px;
+  margin: 0;
+  text-align: left;
+  align-items: flex-start;
+}
+
+/* Block headings + links */
+.aiae-body .aiae-dfooter .footer-block__heading {
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-d-faint);
+  margin: 0 0 14px;
+}
+.aiae-body .aiae-dfooter .footer-block__details-content {
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--aiae-d-muted);
+  margin-bottom: 0;
+}
+.aiae-body .aiae-dfooter .footer-block__details-content li {
+  margin-bottom: 11px;
+}
+.aiae-body .aiae-dfooter .footer-block__details-content .list-menu__item--link,
+.aiae-body .aiae-dfooter .footer-block__details-content a,
+.aiae-body .aiae-dfooter .copyright__content a,
+.aiae-body .aiae-dfooter .policies li a {
+  color: var(--aiae-d-muted);
+  text-decoration: none;
+  padding: 0;
+  background-image: linear-gradient(var(--aiae-accent), var(--aiae-accent));
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: left bottom;
+  padding-bottom: 3px;
+  transition:
+    color 0.25s ease,
+    background-size 0.35s var(--aiae-ease);
+}
+.aiae-body .aiae-dfooter .footer-block__details-content .list-menu__item--link:hover,
+.aiae-body .aiae-dfooter .footer-block__details-content a:hover,
+.aiae-body .aiae-dfooter .copyright__content a:hover,
+.aiae-body .aiae-dfooter .policies li a:hover {
+  color: var(--aiae-d-text);
+  background-size: 100% 1px;
+  text-decoration: none;
+}
+.aiae-body .aiae-dfooter .footer-block__brand-info .rte,
+.aiae-body .aiae-dfooter .footer-block__brand-info p {
+  font-family: var(--aiae-font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--aiae-d-muted);
+}
+
+/* Newsletter */
+.aiae-body .aiae-dfooter .footer-block__newsletter {
+  border: 0;
+  text-align: left;
+  margin: 0;
+}
+.aiae-body .aiae-dfooter .newsletter-form {
+  align-items: stretch;
+  max-width: 340px;
+  margin: 0;
+}
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field {
+  border-bottom: 1px solid var(--aiae-d-line);
+  transition: border-color 0.25s ease;
+}
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field:focus-within {
+  border-color: var(--aiae-accent);
+}
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field:before,
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field:after {
+  content: none;
+}
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field__input {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: var(--aiae-d-text);
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 10px 46px 10px 0;
+  min-height: 0;
+}
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field__input::placeholder {
+  color: var(--aiae-d-faint);
+  opacity: 1;
+}
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field__input:focus,
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field__input:focus-visible {
+  box-shadow: none;
+  outline: none;
+}
+.aiae-body .aiae-dfooter .newsletter-form__field-wrapper .field__label {
+  display: none;
+}
+.aiae-body .aiae-dfooter .newsletter-form__button,
+.aiae-body .aiae-dfooter .newsletter-form__button:focus,
+.aiae-body .aiae-dfooter .newsletter-form__button:focus-visible {
+  background: transparent;
+  box-shadow: none;
+  color: var(--aiae-accent);
+  width: 40px;
+  transition: transform 0.35s var(--aiae-ease);
+}
+.aiae-body .aiae-dfooter .newsletter-form__button:hover {
+  transform: translateX(4px);
+}
+.aiae-body .aiae-dfooter .newsletter-form__message {
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--aiae-d-muted);
+}
+
+/* Social + follow on shop */
+.aiae-body .aiae-dfooter .footer__list-social .list-social__link {
+  color: var(--aiae-d-muted);
+  transition: color 0.25s ease;
+}
+.aiae-body .aiae-dfooter .footer__list-social .list-social__link:hover {
+  color: var(--aiae-accent);
+}
+.aiae-body .aiae-dfooter .footer__follow-on-shop {
+  margin-top: 16px;
+}
+
+/* Bottom row — localization, payment, copyright */
+.aiae-body .aiae-dfooter .footer__content-bottom {
+  border-top: 1px solid var(--aiae-d-line);
+  padding-top: 0;
+}
+.aiae-body .aiae-dfooter .footer__content-bottom-wrapper {
+  max-width: none;
+  padding: 14px var(--aiae-gutter);
+  align-items: center;
+}
+.aiae-body .aiae-dfooter .footer__localization h2,
+.aiae-body .aiae-dfooter .footer__copyright,
+.aiae-body .aiae-dfooter .copyright__content,
+.aiae-body .aiae-dfooter .policies li {
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--aiae-d-faint);
+}
+.aiae-body .aiae-dfooter .footer__copyright {
+  text-align: left;
+}
+.aiae-body .aiae-dfooter .localization-form__select .localization-form__currency,
+.aiae-body .aiae-dfooter .localization-form__select {
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--aiae-d-muted);
+}
+.aiae-body .aiae-dfooter .localization-form__select:before,
+.aiae-body .aiae-dfooter .localization-form__select:after {
+  border-color: var(--aiae-d-line);
+  box-shadow: none;
+}
+.aiae-body .aiae-dfooter .list-payment__item {
+  opacity: 0.55;
+  transition: opacity 0.25s ease;
+}
+.aiae-body .aiae-dfooter .list-payment__item:hover {
+  opacity: 1;
+}
+.aiae-body .aiae-dfooter .policies li::before {
+  color: var(--aiae-d-faint);
+}
+
+/* Wordmark strip inherits .aiae-footer__word styling */
+.aiae-body .aiae-dfooter .aiae-footer__wordwrap {
+  margin-top: clamp(24px, 4vh, 48px);
+}
+
+@media screen and (max-width: 749px) {
+  .aiae-body .aiae-dfooter .footer__content-top {
+    padding-bottom: 0;
+  }
+  .aiae-body .aiae-dfooter .footer__content-bottom-wrapper {
+    justify-content: center;
+  }
+  .aiae-body .aiae-dfooter .footer__copyright {
+    text-align: center;
+  }
+}
+
+/* Text blocks keep body type; only menu lists stay mono */
+.aiae-body .aiae-dfooter .footer-block__details-content.rte,
+.aiae-body .aiae-dfooter .footer-block__details-content.rte p {
+  font-family: var(--aiae-font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  color: var(--aiae-d-muted);
+}
+.aiae-body .aiae-dfooter .footer-block__details-content.rte p:has(> a:only-child) {
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  margin: 0 0 11px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Cookie consent — Shopify customer-privacy banner + prefs
+   Markup is injected by Shopify at runtime, so selectors are
+   id-scoped to outweigh the style block Shopify writes.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Banner: dark void bar docked to the bottom edge ── */
+#shopify-pc__banner.shopify-pc__banner__dialog {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  min-width: 0;
+  padding: clamp(18px, 2.4vw, 26px) var(--aiae-gutter);
+  background: var(--aiae-d-bg);
+  border: 0;
+  border-top: 2px solid var(--aiae-accent);
+  border-radius: 0;
+  box-shadow: 0 -18px 40px rgba(13, 13, 13, 0.32);
+  font-family: var(--aiae-font-body);
+}
+#shopify-pc__banner .shopify-pc__banner__wrapper {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: clamp(20px, 4vw, 56px);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+#shopify-pc__banner .shopify-pc__banner__body {
+  width: auto;
+  flex: 1 1 auto;
+  margin-bottom: 0;
+}
+#shopify-pc__banner .shopify-pc__banner__body h2 {
+  margin: 0 0 9px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+#shopify-pc__banner .shopify-pc__banner__body p {
+  max-width: 68ch;
+  font-family: var(--aiae-font-body);
+  font-size: 13px;
+  line-height: 1.66;
+  color: var(--aiae-d-muted);
+}
+#shopify-pc__banner .shopify-pc__banner__body a {
+  color: var(--aiae-d-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 0.25s ease;
+}
+#shopify-pc__banner .shopify-pc__banner__body a:hover {
+  color: var(--aiae-accent);
+}
+
+/* ── Buttons ── */
+#shopify-pc__banner .shopify-pc__banner__btns {
+  width: auto;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+}
+#shopify-pc__banner.shopify-pc__banner__dialog button {
+  margin: 0;
+  padding: 14px 22px;
+  flex-basis: auto;
+  border-radius: 0;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s var(--aiae-ease);
+}
+#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept {
+  background: var(--aiae-accent);
+  border: 1px solid var(--aiae-accent);
+  color: var(--aiae-ink);
+}
+#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept:hover {
+  background: var(--aiae-d-text);
+  border-color: var(--aiae-d-text);
+  transform: translateY(-2px);
+}
+#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-decline {
+  background: transparent;
+  border: 1px solid var(--aiae-d-line);
+  color: var(--aiae-d-text);
+}
+#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-decline:hover {
+  border-color: var(--aiae-accent);
+  color: var(--aiae-accent);
+  transform: translateY(-2px);
+}
+#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs {
+  padding-left: 0;
+  padding-right: 8px;
+  background: transparent;
+  border: 0;
+  color: var(--aiae-d-faint);
+  text-decoration: none;
+}
+#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs span {
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+}
+#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs:hover {
+  color: var(--aiae-d-text);
+}
+
+/* Focus: accent ring, never the default sky blue */
+#shopify-pc__banner.shopify-pc__banner__dialog button:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--aiae-d-bg),
+    0 0 0 4px var(--aiae-accent);
+}
+#shopify-pc__banner .shopify-pc__banner__body p a:focus-visible,
+#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs:focus-visible span {
+  outline: 2px solid var(--aiae-accent);
+  outline-offset: 3px;
+}
+
+@media screen and (max-width: 989px) {
+  #shopify-pc__banner .shopify-pc__banner__wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  #shopify-pc__banner .shopify-pc__banner__btns {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+@media screen and (max-width: 480px) {
+  #shopify-pc__banner .shopify-pc__banner__btns {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs {
+    padding: 6px 0 0;
+    text-align: center;
+  }
+}
+
+/* ── Preferences modal: paper sheet, void header ── */
+#shopify-pc__prefs__overlay {
+  background: rgba(13, 13, 13, 0.72) !important;
+}
+#shopify-pc__prefs__dialog {
+  background: var(--aiae-paper) !important;
+  border: 1px solid var(--aiae-line-strong) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 26px 60px rgba(13, 13, 13, 0.4) !important;
+  font-family: var(--aiae-font-body) !important;
+}
+#shopify-pc__prefs__dialog header {
+  background: var(--aiae-d-bg) !important;
+  border-bottom: 2px solid var(--aiae-accent) !important;
+}
+#shopify-pc__prefs__header-title {
+  font-family: var(--aiae-font-display) !important;
+  font-weight: 400 !important;
+  font-size: clamp(20px, 2.2vw, 28px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: uppercase !important;
+  color: var(--aiae-d-text) !important;
+}
+#shopify-pc__prefs__header-close svg path {
+  fill: var(--aiae-d-text);
+}
+#shopify-pc__prefs__header-close:hover svg path {
+  fill: var(--aiae-accent);
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__header-actions button {
+  padding: 12px 18px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  border: 1px solid var(--aiae-d-line) !important;
+  color: var(--aiae-d-text) !important;
+  font-family: var(--aiae-font-mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__header-actions button:hover {
+  border-color: var(--aiae-accent) !important;
+  color: var(--aiae-accent) !important;
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__header-actions button#shopify-pc__prefs__header-save {
+  background: var(--aiae-accent) !important;
+  border-color: var(--aiae-accent) !important;
+  color: var(--aiae-ink) !important;
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__header-actions button#shopify-pc__prefs__header-save:hover {
+  background: var(--aiae-d-text) !important;
+  border-color: var(--aiae-d-text) !important;
+  color: var(--aiae-ink) !important;
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__intro h3 {
+  font-family: var(--aiae-font-mono) !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: var(--aiae-accent) !important;
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__intro p,
+#shopify-pc__prefs__dialog .shopify-pc__prefs__option p {
+  font-family: var(--aiae-font-body) !important;
+  font-size: 13px !important;
+  line-height: 1.66 !important;
+  color: var(--aiae-muted) !important;
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__option {
+  background: transparent !important;
+  border-top: 1px solid var(--aiae-line) !important;
+  border-radius: 0 !important;
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__option label {
+  font-family: var(--aiae-font-mono) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: var(--aiae-ink) !important;
+}
+
+/* Checkbox glyphs follow the palette: hairline off, accent on */
+#shopify-pc__prefs__dialog .shopify-pc__prefs__option svg path {
+  fill: var(--aiae-line-strong);
+}
+#shopify-pc__prefs__dialog .shopify-pc__prefs__option svg[data-icon-type="checked"] path {
+  fill: var(--aiae-accent);
+}
+#shopify-pc__prefs__dialog #shopify-pc__prefs__essential svg[data-icon-type="checked"] path {
+  fill: var(--aiae-stone);
 }

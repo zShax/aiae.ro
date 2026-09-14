@@ -284,6 +284,55 @@
             "link": "/pages/concept"
           }
         },
+        "legal_1": {
+          "type": "legal_link",
+          "settings": {
+            "label": "Termeni și condiții",
+            "link": "/pages/termeni-si-conditii"
+          }
+        },
+        "legal_2": {
+          "type": "legal_link",
+          "settings": {
+            "label": "Politica de retur",
+            "link": "/pages/politica-de-retur"
+          }
+        },
+        "legal_3": {
+          "type": "legal_link",
+          "settings": {
+            "label": "Livrare",
+            "link": "/pages/politica-de-livrare"
+          }
+        },
+        "legal_4": {
+          "type": "legal_link",
+          "settings": {
+            "label": "Confidențialitate",
+            "link": "/pages/politica-de-confidentialitate"
+          }
+        },
+        "legal_5": {
+          "type": "legal_link",
+          "settings": {
+            "label": "Cookies",
+            "link": "/pages/politica-de-cookies"
+          }
+        },
+        "legal_6": {
+          "type": "legal_link",
+          "settings": {
+            "label": "ANPC",
+            "link": "https://anpc.ro/"
+          }
+        },
+        "legal_7": {
+          "type": "legal_link",
+          "settings": {
+            "label": "ANPC — SAL",
+            "link": "https://anpc.ro/ce-este-sal/"
+          }
+        },
         "social_1": {
           "type": "social_link",
           "settings": {
@@ -310,6 +359,13 @@
         "shop_1",
         "shop_2",
         "shop_3",
+        "legal_1",
+        "legal_2",
+        "legal_3",
+        "legal_4",
+        "legal_5",
+        "legal_6",
+        "legal_7",
         "social_1",
         "social_2",
         "social_3"
@@ -318,6 +374,14 @@
         "brand_tagline": "AIAE.RO — ASTA E.",
         "brand_description": "Brand românesc de streetwear. Tricouri, hanorace și șepci personalizate, printate la comandă de partenerii noștri de producție. Fără reaprovizionare, fără scuze. Aia e.",
         "wordmark": "AIAE",
+        "legal_heading": "Legal",
+        "company_heading": "Date de identificare",
+        "company_name": "",
+        "company_cui": "",
+        "company_regcom": "",
+        "company_address": "",
+        "company_email": "",
+        "company_phone": "",
         "copyright": "© 2026 AIAE.RO — TOATE DREPTURILE, DEGEABA",
         "made_in": "PRINT ON DEMAND"
       }

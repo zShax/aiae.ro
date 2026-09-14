@@ -1,40 +1,75 @@
 {
   "sections": {
-    "cart-items": {
-      "type": "main-cart-items",
+    "cart": {
+      "type": "aiae-cart",
       "settings": {
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "section_number": "00",
+        "eyebrow": "COȘUL TĂU — ÎNAINTE DE PRINT",
+        "title": "COȘ",
+        "description": "Fiecare piesă se printează după ce pleacă comanda. Verifică mărimile și culorile acum — după print nu se mai schimbă.",
+        "ticker_text": "PRINT ON DEMAND|SE PRINTEAZĂ DUPĂ COMANDĂ|VERIFICĂ MĂRIMEA|AIA E. ASTA E.",
+        "open_label": "COȘ DESCHIS",
+        "close_label": "URMEAZĂ PLATA",
+        "show_note": true,
+        "empty_link_1": "/collections/degeaba-club",
+        "empty_link_2": "/collections/filozofia-ta"
       }
     },
-    "cart-footer": {
-      "type": "main-cart-footer",
+    "rail_degeaba": {
+      "type": "aiae-collection-rail",
       "settings": {
-        "color_scheme": "scheme-1",
-        "padding_top": 20,
-        "padding_bottom": 40
-      },
-      "blocks": {
-        "subtotal": {
-          "type": "subtotal",
-          "settings": {
-          }
-        },
-        "buttons": {
-          "type": "buttons",
-          "settings": {
-          }
-        }
-      },
-      "block_order": [
-        "subtotal",
-        "buttons"
-      ]
+        "collection": "degeaba-club",
+        "products_to_show": 8,
+        "tone": "paper",
+        "section_number": "01",
+        "eyebrow": "MAI ADAUGĂ O PIESĂ",
+        "title": "DEGEABA CLUB 2026",
+        "description": "Lotul gata făcut. Aceleași materiale grele, aceleași printuri — doar că nu mai alegi tu designul.",
+        "link_label": "VEZI TOATĂ COLECȚIA",
+        "link": "/collections/degeaba-club",
+        "more_label": "TOATE",
+        "sold_out_label": "EPUIZAT",
+        "scroll_hint": "← TRAGE LATERAL →"
+      }
+    },
+    "rail_personalizate": {
+      "type": "aiae-collection-rail",
+      "settings": {
+        "collection": "filozofia-ta",
+        "products_to_show": 8,
+        "tone": "void",
+        "section_number": "02",
+        "eyebrow": "SAU FĂ-ȚI-O PE A TA",
+        "title": "PERSONALIZATE",
+        "description": "Pornești de la o piesă, pui ce vrei pe ea și o printăm doar pentru tine.",
+        "link_label": "VEZI TOATE CONCEPTELE",
+        "link": "/collections/filozofia-ta",
+        "more_label": "TOATE",
+        "sold_out_label": "EPUIZAT",
+        "scroll_hint": "← TRAGE LATERAL →"
+      }
+    },
+    "rail_street_cats": {
+      "type": "aiae-collection-rail",
+      "settings": {
+        "collection": "concept-street-cats",
+        "products_to_show": 8,
+        "tone": "paper",
+        "section_number": "03",
+        "eyebrow": "CONCEPT",
+        "title": "STREET CATS",
+        "link_label": "VEZI COLECȚIA",
+        "link": "/collections/concept-street-cats",
+        "more_label": "TOATE",
+        "sold_out_label": "EPUIZAT",
+        "scroll_hint": "← TRAGE LATERAL →"
+      }
     }
   },
   "order": [
-    "cart-items",
-    "cart-footer"
+    "cart",
+    "rail_degeaba",
+    "rail_personalizate",
+    "rail_street_cats"
   ]
 }

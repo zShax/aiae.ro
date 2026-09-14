@@ -5,7 +5,9 @@
     <span>AIAE.RO</span>
     <span>EST. 2026 — RO</span>
   </div>
-  <div style="position:relative; z-index:1; font-family:'Anton',sans-serif; line-height:0.82; text-transform:uppercase; letter-spacing:-0.01em; font-size:clamp(56px,13vw,200px); color:#F2EFE7;">AIA<br>E<span style="color:var(--aiae-accent);">.</span></div>
+  <div class="aiae-loader__mark" style="position:relative; z-index:1; display:flex; align-items:center; justify-content:center; color:#F2EFE7;">
+    <span class="aiae-loader__logo" style="display:block; width:min(44vw,360px);">{{ 'aiae-logo.svg' | inline_asset_content }}</span>
+  </div>
   <div style="position:relative; z-index:1;">
     <div style="height:2px; width:100%; background:#6e6a60; overflow:hidden; margin-bottom:14px;">
       <div style="height:100%; width:0%; background:var(--aiae-accent); animation:aiae-bar 1.35s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;"></div>

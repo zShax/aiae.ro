@@ -13,10 +13,31 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "brand": {
+          "type": "text",
+          "settings": {
+            "heading": "AIAE.RO — ASTA E.",
+            "subtext": "<p>Brand românesc de streetwear. Tricouri, hanorace și șepci personalizate, printate la comandă de partenerii noștri de producție. Fără reaprovizionare, fără scuze. Aia e.</p>"
+          }
+        },
+        "shop": {
+          "type": "text",
+          "settings": {
+            "heading": "Magazin",
+            "subtext": "<p><a href=\"/collections/degeaba-club\">Degeaba Club</a></p><p><a href=\"/pages/custom\">Print on Demand</a></p><p><a href=\"/collections/concepts\">Concepte</a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "brand",
+        "shop"
+      ],
       "settings": {
+        "aiae_wordmark": "AIAE",
         "color_scheme": "scheme-1",
         "newsletter_enable": true,
-        "newsletter_heading": "Subscribe to our emails",
+        "newsletter_heading": "Newsletter",
         "enable_follow_on_shop": true,
         "show_social": true,
         "enable_country_selector": true,

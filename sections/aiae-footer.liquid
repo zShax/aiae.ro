@@ -13,6 +13,31 @@
           {%- endif -%}
         {%- endfor -%}
       </div>
+      {%- assign legal_count = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'legal_link' -%}
+          {%- assign legal_count = legal_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if legal_count > 0 -%}
+        <div class="aiae-footer__col" data-aiae-reveal style="--aiae-reveal-delay: 0.16s;">
+          <span class="aiae-footer__colhead">{{ section.settings.legal_heading }}</span>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'legal_link' -%}
+              <a
+                href="{{ block.settings.link }}"
+                class="aiae-flink"
+                {% if block.settings.link contains '://' %}
+                  target="_blank" rel="noopener"
+                {% endif %}
+                {{ block.shopify_attributes }}
+              >
+                {{- block.settings.label -}}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
       <div class="aiae-footer__col" data-aiae-reveal style="--aiae-reveal-delay: 0.2s;">
         <span class="aiae-footer__colhead">Social</span>
         {%- for block in section.blocks -%}
@@ -22,13 +47,89 @@
         {%- endfor -%}
       </div>
     </div>
+
+    {%- if section.settings.newsletter_enable -%}
+      <div class="aiae-footer__news" data-aiae-reveal style="--aiae-reveal-delay: 0.28s;">
+        <span class="aiae-footer__colhead">{{ section.settings.newsletter_heading }}</span>
+        <p class="aiae-footer__newsnote">{{ section.settings.newsletter_note }}</p>
+        {%- form 'customer', id: 'AiaeFooterNewsletter', class: 'aiae-news' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="aiae-news__row">
+            <label class="visually-hidden" for="AiaeNewsletter--{{ section.id }}">
+              {{- section.settings.newsletter_placeholder -}}
+            </label>
+            <input
+              id="AiaeNewsletter--{{ section.id }}"
+              class="aiae-news__input"
+              type="email"
+              name="contact[email]"
+              value="{{ form.email }}"
+              placeholder="{{ section.settings.newsletter_placeholder }}"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              aria-required="true"
+              required
+              {% if form.errors %}
+                aria-invalid="true"
+                aria-describedby="AiaeNewsletter-error"
+              {% endif %}
+            >
+            <button type="submit" class="aiae-news__btn" name="commit">
+              <span>{{ section.settings.newsletter_button_label }}</span>
+              <i aria-hidden="true">&rarr;</i>
+            </button>
+          </div>
+          {%- if form.errors -%}
+            <small class="aiae-news__msg aiae-news__msg--err" id="AiaeNewsletter-error">
+              {{- form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email -}}
+            </small>
+          {%- endif -%}
+          {%- if form.posted_successfully? -%}
+            <small class="aiae-news__msg aiae-news__msg--ok" tabindex="-1">
+              {{- section.settings.newsletter_success -}}
+            </small>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    {%- endif -%}
   </div>
 
   <div class="aiae-footer__wordwrap aiae-noscroll" data-aiae-reveal="rise">
     <div id="aiae-footer-word" class="aiae-footer__word">
-      <span>{{ section.settings.wordmark }}</span>
+      <span class="aiae-footer__logo">{{ 'aiae-logo.svg' | inline_asset_content }}</span>
     </div>
   </div>
+
+  {%- comment -%}
+    Merchant identification. Required on every page by Legea 365/2002 art. 5
+    and OUG 34/2014. Each field renders only once filled in the theme editor.
+  {%- endcomment -%}
+  {%- assign legal_parts = '' | split: '' -%}
+  {%- if section.settings.company_name != blank -%}
+    {%- assign legal_parts = legal_parts | push: section.settings.company_name -%}
+  {%- endif -%}
+  {%- if section.settings.company_cui != blank -%}
+    {%- assign legal_parts = legal_parts | push: section.settings.company_cui -%}
+  {%- endif -%}
+  {%- if section.settings.company_regcom != blank -%}
+    {%- assign legal_parts = legal_parts | push: section.settings.company_regcom -%}
+  {%- endif -%}
+  {%- if section.settings.company_address != blank -%}
+    {%- assign legal_parts = legal_parts | push: section.settings.company_address -%}
+  {%- endif -%}
+  {%- if section.settings.company_email != blank -%}
+    {%- assign legal_parts = legal_parts | push: section.settings.company_email -%}
+  {%- endif -%}
+  {%- if section.settings.company_phone != blank -%}
+    {%- assign legal_parts = legal_parts | push: section.settings.company_phone -%}
+  {%- endif -%}
+  {%- if legal_parts.size > 0 -%}
+    <div class="aiae-footer__legal" data-aiae-reveal="fade">
+      <span class="aiae-footer__legalhead">{{ section.settings.company_heading }}</span>
+      <p class="aiae-footer__legalline">{{ legal_parts | join: ' · ' }}</p>
+    </div>
+  {%- endif -%}
 
   <div class="aiae-footer__bottom" data-aiae-reveal="fade" style="--aiae-reveal-delay: 0.15s;">
     <span>{{ section.settings.copyright }}</span>
@@ -53,10 +154,104 @@
       "default": "Brand românesc de streetwear. Tricouri, hanorace și șepci personalizate, printate la comandă de partenerii noștri de producție. Fără reaprovizionare, fără scuze. Aia e."
     },
     {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter_enable",
+      "label": "Show newsletter signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_note",
+      "label": "Newsletter note",
+      "default": "Loturi noi, concepte noi, zero spam. Doar când avem ceva de zis."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Email placeholder",
+      "default": "adresa@email.ro"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button_label",
+      "label": "Button label",
+      "default": "ABONEAZĂ-TE"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_success",
+      "label": "Success message",
+      "default": "Gata. Ești pe listă."
+    },
+    {
+      "type": "header",
+      "content": "Wordmark"
+    },
+    {
       "type": "text",
       "id": "wordmark",
-      "label": "Wordmark text",
+      "label": "Wordmark",
+      "info": "Any value shows the AIA.E logo strip; leave blank to hide.",
       "default": "AIAE"
+    },
+    {
+      "type": "header",
+      "content": "Legal"
+    },
+    {
+      "type": "text",
+      "id": "legal_heading",
+      "label": "Legal column heading",
+      "default": "Legal"
+    },
+    {
+      "type": "text",
+      "id": "company_heading",
+      "label": "Identification heading",
+      "default": "Date de identificare"
+    },
+    {
+      "type": "text",
+      "id": "company_name",
+      "label": "Denumire legală",
+      "info": "Ex: AIA E GARMENT LAB S.R.L. Required by Legea 365/2002 art. 5."
+    },
+    {
+      "type": "text",
+      "id": "company_cui",
+      "label": "CUI / CIF",
+      "info": "Ex: CUI RO12345678"
+    },
+    {
+      "type": "text",
+      "id": "company_regcom",
+      "label": "Nr. Registrul Comerțului",
+      "info": "Ex: J02/123/2026"
+    },
+    {
+      "type": "text",
+      "id": "company_address",
+      "label": "Sediu social"
+    },
+    {
+      "type": "text",
+      "id": "company_email",
+      "label": "Email de contact"
+    },
+    {
+      "type": "text",
+      "id": "company_phone",
+      "label": "Telefon"
     },
     {
       "type": "text",
@@ -90,6 +285,24 @@
       ]
     },
     {
+      "type": "legal_link",
+      "name": "Legal Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Link label",
+          "default": "Termeni și condiții"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL",
+          "info": "External links (https://…) open in a new tab."
+        }
+      ]
+    },
+    {
       "type": "social_link",
       "name": "Social Link",
       "settings": [
@@ -114,6 +327,13 @@
         { "type": "shop_link", "settings": { "label": "Degeaba Club", "link": "/collections/degeaba-club" } },
         { "type": "shop_link", "settings": { "label": "Print on Demand", "link": "/pages/custom" } },
         { "type": "shop_link", "settings": { "label": "Concepte", "link": "/pages/concept" } },
+        { "type": "legal_link", "settings": { "label": "Termeni și condiții", "link": "/pages/termeni-si-conditii" } },
+        { "type": "legal_link", "settings": { "label": "Politica de retur", "link": "/pages/politica-de-retur" } },
+        { "type": "legal_link", "settings": { "label": "Livrare", "link": "/pages/politica-de-livrare" } },
+        { "type": "legal_link", "settings": { "label": "Confidențialitate", "link": "/pages/politica-de-confidentialitate" } },
+        { "type": "legal_link", "settings": { "label": "Cookies", "link": "/pages/politica-de-cookies" } },
+        { "type": "legal_link", "settings": { "label": "ANPC", "link": "https://anpc.ro/" } },
+        { "type": "legal_link", "settings": { "label": "ANPC — SAL", "link": "https://anpc.ro/ce-este-sal/" } },
         { "type": "social_link", "settings": { "label": "Instagram", "link": "https://instagram.com" } },
         { "type": "social_link", "settings": { "label": "TikTok", "link": "https://tiktok.com" } },
         { "type": "social_link", "settings": { "label": "Newsletter", "link": "/pages/newsletter" } }

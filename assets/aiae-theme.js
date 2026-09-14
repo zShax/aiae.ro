@@ -47,7 +47,69 @@
     initPod(reduceMotion);
     initCarousels(reduceMotion);
     initCardFlips(reduceMotion);
+    initLotSeal();
     initReveal(reduceMotion, loader);
+  }
+
+  // ─── Lot seal: correct the server-rendered countdown ───────
+  // The plates are painted by Liquid so they are never blank, but Shopify
+  // serves that markup from cache — by the time a visitor sees it the figure
+  // can be days old. This recomputes from the visitor's own clock and then
+  // ticks on the second.
+  function initLotSeal() {
+    const seals = Array.prototype.slice.call(document.querySelectorAll('[data-aiae-seal]'));
+    if (!seals.length) return;
+
+    function paint(seal) {
+      const deadline = parseInt(seal.dataset.deadline, 10);
+      if (!deadline) return true;
+
+      const remaining = deadline - Math.floor(Date.now() / 1000);
+      if (remaining <= 0) {
+        // Closed while the page was open, or served from a cache older than
+        // the deadline. Swap the clock for the closing stamp.
+        const clock = seal.querySelector('.aiae-seal__clock');
+        if (clock && !seal.classList.contains('aiae-seal--closed')) {
+          const line = document.createElement('p');
+          line.className = 'aiae-seal__closed-line';
+          line.textContent = seal.dataset.closedLabel || '';
+          clock.replaceChildren(line);
+          seal.classList.add('aiae-seal--closed');
+        }
+        return true;
+      }
+
+      // Days are read as a number and run to three digits, so they stay
+      // unpadded; the clock units are padded to two so a plate never changes
+      // width mid-tick.
+      const parts = {
+        days: String(Math.floor(remaining / 86400)),
+        hours: pad(Math.floor((remaining % 86400) / 3600)),
+        minutes: pad(Math.floor((remaining % 3600) / 60)),
+        seconds: pad(remaining % 60)
+      };
+      Object.keys(parts).forEach(function(unit) {
+        const el = seal.querySelector('[data-seal-' + unit + ']');
+        if (el && el.textContent !== parts[unit]) el.textContent = parts[unit];
+      });
+      return false;
+    }
+
+    function pad(n) {
+      return n < 10 ? '0' + n : String(n);
+    }
+
+    function tick() {
+      // Every seal done means nothing left to schedule.
+      const live = seals.filter(function(seal) { return !paint(seal); });
+      if (!live.length) return;
+      // Re-aim at the next whole second every time rather than setInterval,
+      // which drifts and stacks up missed ticks after a background tab or a
+      // sleeping laptop wakes.
+      setTimeout(tick, 1000 - (Date.now() % 1000) + 20);
+    }
+
+    tick();
   }
 
   // ─── Collection cards: automatic flip-through of the shots ─────
