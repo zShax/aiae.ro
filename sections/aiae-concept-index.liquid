@@ -1,0 +1,426 @@
+{%- comment -%}
+  AIAE CONCEPT INDEX
+  ------------------
+  The whole /collections/concepts page: a bordered masthead, then one
+  self-contained bordered row per sub-collection — its own title, its own
+  description, its own rail of pieces.
+
+  Which sub-collections show up:
+    · if the section has Concept Row blocks, exactly those collections;
+    · otherwise every published collection whose handle contains the handle
+      filter (default "concept-"), minus the collection being viewed.
+
+  Row order:
+    · the aiae.order collection metafield (a whole number) wins — the lowest
+      number sits at the top;
+    · collections without it keep their default order, below the numbered
+      ones. Ties inside either group keep their default order too.
+
+  The sort runs over an array of "OOOOIIII~handle" strings — four digits of
+  order, four digits of the original position as the tie-breaker — because
+  Liquid's `sort` filter cannot reach into a metafield.
+{%- endcomment -%}
+
+{%- liquid
+  assign order_ns = section.settings.metafield_namespace | default: 'aiae'
+  assign order_mf = section.settings.metafield_key | default: 'order'
+  assign handle_filter = section.settings.handle_filter | strip | downcase
+
+  comment
+    STEP 1 — the candidate handles, in their default order.
+  endcomment
+  assign candidates = ''
+  if section.blocks.size > 0
+    for block in section.blocks
+      assign picked = collections[block.settings.collection]
+      if picked != blank and picked.handle != collection.handle
+        assign candidates = candidates | append: picked.handle | append: ','
+      endif
+    endfor
+  else
+    for c in collections
+      if c.handle == collection.handle
+        continue
+      endif
+      if handle_filter != blank
+        unless c.handle contains handle_filter
+          continue
+        endunless
+      endif
+      if section.settings.hide_empty and c.products_count == 0
+        continue
+      endif
+      assign candidates = candidates | append: c.handle | append: ','
+    endfor
+  endif
+  assign candidates = candidates | split: ','
+
+  comment
+    STEP 2 — key each candidate by order metafield, then sort the keys.
+  endcomment
+  assign keyed = ''
+  assign total_pieces = 0
+  for handle in candidates
+    assign c = collections[handle]
+    assign raw_order = c.metafields[order_ns][order_mf]
+    assign raw_order = raw_order.value | default: raw_order
+
+    if raw_order == blank
+      assign order_part = '9999'
+    else
+      assign order_num = raw_order | plus: 0 | at_least: 0 | at_most: 9998
+      assign order_part = order_num | plus: 10000 | append: '' | slice: 1, 4
+    endif
+
+    assign tie_part = forloop.index | plus: 10000 | append: '' | slice: 1, 4
+    assign keyed = keyed | append: order_part | append: tie_part | append: '~' | append: handle | append: ','
+    assign total_pieces = total_pieces | plus: c.products_count
+  endfor
+  assign rows = keyed | split: ',' | sort
+
+  assign concept_word = 'CONCEPTE'
+  if rows.size == 1
+    assign concept_word = 'CONCEPT'
+  endif
+  assign piece_word = 'PIESE'
+  if total_pieces == 1
+    assign piece_word = 'PIESĂ'
+  endif
+-%}
+
+<section class="aiae-cx" id="concept-index">
+
+  {%- if section.settings.show_masthead -%}
+    <div class="aiae-cx__mast">
+      <div class="aiae-cx__mastmain" data-aiae-reveal>
+        <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
+        <h1 class="aiae-display aiae-cx__masttitle">
+          {{- section.settings.title | default: collection.title | newline_to_br -}}
+        </h1>
+      </div>
+
+      <div class="aiae-cx__mastaside" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">
+        {%- assign mast_desc = section.settings.description | default: collection.description -%}
+        {%- if mast_desc != blank -%}
+          <div class="aiae-cx__mastdesc rte">{{ mast_desc }}</div>
+        {%- endif -%}
+        <span class="aiae-cx__tally">
+          <b>{{ rows.size }}</b><span>{{ concept_word }}</span>
+          <i class="aiae-cx__tallyrule"></i>
+          <b>{{ total_pieces }}</b><span>{{ piece_word }}</span>
+        </span>
+      </div>
+    </div>
+
+    {%- comment -%} The index — one bordered chip per row, jumping down the page {%- endcomment -%}
+    {%- if section.settings.show_index and rows.size > 1 -%}
+      <nav class="aiae-cx__index" aria-label="{{ section.settings.index_label | escape }}" data-aiae-reveal style="--aiae-reveal-delay: 0.2s;">
+        <span class="aiae-cx__indexlabel">{{ section.settings.index_label }}</span>
+        {%- for row in rows -%}
+          {%- assign handle = row | split: '~' | last -%}
+          {%- assign c = collections[handle] -%}
+          <a class="aiae-cx__indexlink" href="#concept-{{ handle }}">
+            <b>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</b>
+            <span>{{ c.title }}</span>
+          </a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if rows.size == 0 -%}
+    <p class="aiae-cx__empty">{{ section.settings.empty_text }}</p>
+  {%- endif -%}
+
+  {%- for row in rows -%}
+    {%- liquid
+      assign handle = row | split: '~' | last
+      assign c = collections[handle]
+      assign row_number = forloop.index | prepend: '0' | slice: -2, 2
+      assign row_mod = forloop.index | modulo: 2
+
+      assign code_prefix = c.metafields[order_ns].code_prefix
+      if code_prefix == blank
+        assign code_prefix = c.title | strip_html | upcase | replace: 'CONCEPT ', '' | slice: 0, 3 | strip
+      endif
+      assign code_prefix = code_prefix | default: 'CPT'
+    -%}
+
+    <article class="aiae-cx__row{% if row_mod == 0 %} aiae-cx__row--inv{% endif %}"
+             id="concept-{{ handle }}"
+             data-aiae-reveal>
+
+      <header class="aiae-cx__head">
+        <span class="aiae-cx__num" aria-hidden="true">{{ row_number }}</span>
+
+        <div class="aiae-cx__headmain">
+          <h2 class="aiae-cx__title">
+            <a href="{{ c.url }}">{{ c.title }}</a>
+          </h2>
+          {%- if c.description != blank -%}
+            <div class="aiae-cx__desc rte">{{ c.description }}</div>
+          {%- endif -%}
+        </div>
+
+        <div class="aiae-cx__headside">
+          <span class="aiae-cx__count">{{ c.products_count }} {% if c.products_count == 1 %}PIESĂ{% else %}PIESE{% endif %}</span>
+          {%- if section.settings.show_collection_link -%}
+            <a href="{{ c.url }}" class="aiae-cx__link">
+              <span>{{ section.settings.collection_link_label }}</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          {%- endif -%}
+        </div>
+      </header>
+
+      <div class="aiae-cx__body">
+        <div class="aiae-con__scroller" data-aiae-carousel>
+          <button type="button" class="aiae-con__arrow aiae-con__arrow--prev" data-aiae-carousel-prev aria-label="Derulează înapoi" hidden>&larr;</button>
+          <button type="button" class="aiae-con__arrow aiae-con__arrow--next" data-aiae-carousel-next aria-label="Derulează înainte" hidden>&rarr;</button>
+
+          <div class="aiae-con__track aiae-noscroll" data-aiae-carousel-track>
+            {%- for product in c.products limit: section.settings.products_to_show -%}
+              {%- liquid
+                assign card_code = product.metafields.aiae.code
+                if card_code == blank
+                  assign card_n = forloop.index | prepend: '0' | slice: -2, 2
+                  assign card_code = code_prefix | append: ' ' | append: card_n
+                endif
+                assign card_sub = product.metafields.aiae.detail | default: product.type
+                if card_sub == blank
+                  assign card_sub = product.description | strip_html | strip | truncate: 60
+                endif
+              -%}
+              <div class="aiae-cc">
+                <a href="{{ product.url }}">
+                  <div class="aiae-cc__media"{% if product.images.size > 1 %} data-aiae-flip{% endif %}>
+                    {%- if product.images.size > 0 -%}
+                      {%- for image in product.images limit: 4 -%}
+                        <img class="aiae-card__shot{% if forloop.first %} is-active{% endif %}"
+                             src="{{ image | image_url: width: 660 }}"
+                             alt="{% if forloop.first %}{{ image.alt | default: product.title | escape }}{% endif %}"
+                             width="660"
+                             height="{{ 660 | divided_by: image.aspect_ratio | round }}"
+                             loading="lazy"
+                             {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+                      {%- endfor -%}
+                      <span class="aiae-cc__num aiae-cc__num--over">{{ card_code }}</span>
+                    {%- else -%}
+                      <span class="aiae-cc__tag">[ {{ card_code }} ]</span>
+                    {%- endif -%}
+                    {%- if product.available == false -%}
+                      <span class="aiae-cc__flag">SOLD OUT</span>
+                    {%- endif -%}
+                    {%- if product.images.size > 1 -%}
+                      <span class="aiae-card__ticks" aria-hidden="true">
+                        {%- for image in product.images limit: 4 -%}
+                          <i class="aiae-card__tick{% if forloop.first %} is-active{% endif %}"></i>
+                        {%- endfor -%}
+                      </span>
+                    {%- endif -%}
+                  </div>
+                  <div class="aiae-cc__body">
+                    <div class="aiae-cc__row">
+                      <h3 class="aiae-cc__title">{{ product.title }}</h3>
+                      <span class="aiae-cc__price">{{ product.price | money }}</span>
+                    </div>
+                    {%- if card_sub != blank -%}
+                      <p class="aiae-cc__sub">{{ card_sub }}</p>
+                    {%- endif -%}
+                  </div>
+                </a>
+              </div>
+            {%- endfor -%}
+
+            {%- comment -%} Tail card — closes the rail and pushes into the collection {%- endcomment -%}
+            {%- if c.products_count > section.settings.products_to_show -%}
+              <a class="aiae-cx__more" href="{{ c.url }}">
+                <span class="aiae-cx__morenum">+{{ c.products_count | minus: section.settings.products_to_show }}</span>
+                <span class="aiae-cx__moretext">{{ section.settings.more_label }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </article>
+  {%- endfor -%}
+
+  {%- if section.settings.redirect_label != blank -%}
+    <div class="aiae-cx__out" data-aiae-reveal>
+      <i class="aiae-cx__outrule"></i>
+      <a href="{{ section.settings.redirect_link | default: '/' }}" class="aiae-cx__outlink">
+        <span>{{ section.settings.redirect_label }}</span>
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+      <i class="aiae-cx__outrule"></i>
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Concept Index",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Masthead"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_masthead",
+      "label": "Show masthead",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "section_number",
+      "label": "Section number",
+      "default": "01"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "CONCEPTE — IDEI DE PERSONALIZARE"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "Leave blank to use the collection title. Use a newline for a line break.",
+      "default": "CE S-AR\nPUTEA FACE"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "info": "Leave blank to use the collection description."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_index",
+      "label": "Show jump index",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "index_label",
+      "label": "Jump index label",
+      "default": "CUPRINS"
+    },
+    {
+      "type": "header",
+      "content": "Which collections"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add Concept Row blocks to pick collections by hand. With no blocks, every published collection whose handle contains the filter below is used."
+    },
+    {
+      "type": "text",
+      "id": "handle_filter",
+      "label": "Handle filter",
+      "info": "Only collections whose handle contains this text are shown. Leave blank for all of them.",
+      "default": "concept-"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_empty",
+      "label": "Hide collections with no products",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Row order"
+    },
+    {
+      "type": "paragraph",
+      "content": "Rows are ordered by a whole-number collection metafield — lowest first. Collections without it keep their default order, below the numbered ones."
+    },
+    {
+      "type": "text",
+      "id": "metafield_namespace",
+      "label": "Metafield namespace",
+      "default": "aiae"
+    },
+    {
+      "type": "text",
+      "id": "metafield_key",
+      "label": "Metafield key",
+      "default": "order"
+    },
+    {
+      "type": "header",
+      "content": "Rows"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products per row",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_link",
+      "label": "Show link to collection",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "collection_link_label",
+      "label": "Collection link label",
+      "default": "VEZI COLECȚIA"
+    },
+    {
+      "type": "text",
+      "id": "more_label",
+      "label": "Tail card label",
+      "default": "ÎNCĂ PIESE ÎN COLECȚIE"
+    },
+    {
+      "type": "header",
+      "content": "Closing"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty state text",
+      "default": "Niciun concept de arătat încă."
+    },
+    {
+      "type": "text",
+      "id": "redirect_label",
+      "label": "Closing link label",
+      "default": "PERSONALIZEAZĂ-ȚI PROPRIA PIESĂ"
+    },
+    {
+      "type": "url",
+      "id": "redirect_link",
+      "label": "Closing link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "concept_row",
+      "name": "Concept Row",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "AIAE Concept Index"
+    }
+  ]
+}
+{% endschema %}

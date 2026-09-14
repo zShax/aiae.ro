@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "concept-index": {
+      "type": "aiae-concept-index",
+      "settings": {
+        "show_masthead": true,
+        "section_number": "01",
+        "eyebrow": "CONCEPTE — IDEI DE PERSONALIZARE",
+        "title": "CE S-AR\nPUTEA FACE",
+        "show_index": true,
+        "index_label": "CUPRINS",
+        "handle_filter": "concept-",
+        "hide_empty": true,
+        "metafield_namespace": "aiae",
+        "metafield_key": "order",
+        "products_to_show": 6,
+        "show_collection_link": true,
+        "collection_link_label": "VEZI COLECȚIA",
+        "more_label": "ÎNCĂ PIESE ÎN COLECȚIE",
+        "empty_text": "Niciun concept de arătat încă.",
+        "redirect_label": "PERSONALIZEAZĂ-ȚI PROPRIA PIESĂ",
+        "redirect_link": "/#custom"
+      }
+    }
+  },
+  "order": [
+    "concept-index"
+  ]
+}

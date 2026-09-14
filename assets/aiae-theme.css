@@ -3663,3 +3663,420 @@ img.aiae-card__shot.is-active {
   }
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   CONCEPT INDEX — the /collections/concepts sheet
+   Every row is a closed 2px box: a bordered number cell, a bordered
+   head band, a bordered rail. Nothing floats free on the paper.
+   ═══════════════════════════════════════════════════════════ */
+.aiae-cx {
+  padding: clamp(24px, 4vh, 44px) var(--aiae-gutter) clamp(56px, 8vh, 110px);
+  background: var(--aiae-paper);
+}
+
+/* The active shot in a stacked-image card raises itself to z-index 1, so the
+   chips laid over the media need to clear it the way .aiae-card__lot and
+   .aiae-card__ticks already do — otherwise the photo swallows them as soon as
+   a piece has more than one shot. Applies to the concept carousels too. */
+.aiae-cc__num,
+.aiae-cc__flag {
+  z-index: 2;
+}
+
+/* ── Masthead ──────────────────────────────────────────── */
+.aiae-cx__mast {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 64px);
+  align-items: end;
+  padding-bottom: clamp(20px, 3vh, 34px);
+  border-bottom: 3px solid var(--aiae-ink);
+}
+.aiae-cx__masttitle {
+  margin: 10px 0 0;
+  font-size: clamp(44px, 8vw, 128px);
+  line-height: 0.88;
+}
+.aiae-cx__mastaside {
+  padding-left: clamp(16px, 2vw, 28px);
+  border-left: 2px solid var(--aiae-ink);
+}
+.aiae-cx__mastdesc {
+  margin: 0 0 16px;
+  max-width: 46ch;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--aiae-muted);
+}
+.aiae-cx__mastdesc > :first-child {
+  margin-top: 0;
+}
+.aiae-cx__mastdesc > :last-child {
+  margin-bottom: 0;
+}
+/* The tally reads like a stamp: bordered, mono, rule between the halves */
+.aiae-cx__tally {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 2px solid var(--aiae-ink);
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+}
+.aiae-cx__tally b {
+  font-weight: 700;
+}
+.aiae-cx__tally span {
+  color: var(--aiae-muted);
+}
+.aiae-cx__tallyrule {
+  width: 0;
+  height: 14px;
+  border-left: 2px solid var(--aiae-ink);
+  margin: 0 2px;
+}
+
+/* ── Jump index ────────────────────────────────────────── */
+.aiae-cx__index {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 0;
+  border-bottom: 2px solid var(--aiae-ink);
+}
+.aiae-cx__indexlabel {
+  margin-right: 4px;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--aiae-faint);
+}
+.aiae-cx__indexlink {
+  display: inline-flex;
+  align-items: stretch;
+  border: 2px solid var(--aiae-ink);
+  text-decoration: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+.aiae-cx__indexlink b {
+  padding: 5px 7px;
+  background: var(--aiae-ink);
+  color: var(--aiae-paper);
+  font-weight: 700;
+}
+.aiae-cx__indexlink span {
+  padding: 5px 10px;
+  color: var(--aiae-ink);
+}
+.aiae-cx__indexlink:hover {
+  background: var(--aiae-ink);
+}
+.aiae-cx__indexlink:hover span {
+  color: var(--aiae-paper);
+}
+
+/* ── Rows ──────────────────────────────────────────────── */
+.aiae-cx__row {
+  margin-top: clamp(32px, 5vh, 56px);
+  border: 3px solid var(--aiae-ink);
+  background: var(--aiae-paper);
+  scroll-margin-top: calc(var(--aiae-nav-h) + 20px);
+}
+.aiae-cx__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  border-bottom: 3px solid var(--aiae-ink);
+}
+/* The number cell is the anchor of the box — solid ink, its own rule */
+.aiae-cx__num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: clamp(64px, 8vw, 104px);
+  padding: 0 14px;
+  border-right: 3px solid var(--aiae-ink);
+  background: var(--aiae-ink);
+  color: var(--aiae-paper);
+  font-family: var(--aiae-font-display);
+  font-size: clamp(30px, 4.4vw, 58px);
+  line-height: 1;
+}
+.aiae-cx__headmain {
+  padding: clamp(16px, 2.4vw, 26px) clamp(16px, 2.4vw, 28px);
+  min-width: 0;
+}
+.aiae-cx__title {
+  margin: 0;
+  font-family: var(--aiae-font-display);
+  font-size: clamp(26px, 3.6vw, 50px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+.aiae-cx__title a {
+  color: var(--aiae-ink);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 2px;
+  transition: background-size 0.4s var(--aiae-ease);
+}
+.aiae-cx__title a:hover {
+  background-size: 100% 2px;
+}
+.aiae-cx__desc {
+  margin: 10px 0 0;
+  max-width: 62ch;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--aiae-muted);
+}
+.aiae-cx__desc > :first-child {
+  margin-top: 0;
+}
+.aiae-cx__desc > :last-child {
+  margin-bottom: 0;
+}
+.aiae-cx__headside {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  border-left: 3px solid var(--aiae-ink);
+}
+.aiae-cx__count {
+  padding: 10px 16px;
+  border-bottom: 2px solid var(--aiae-ink);
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--aiae-muted);
+}
+.aiae-cx__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  color: var(--aiae-ink);
+  text-decoration: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+.aiae-cx__link:hover {
+  background: var(--aiae-ink);
+  color: var(--aiae-paper);
+}
+/* The rail sits on the second paper tone so the bordered cards read as
+   objects laid on the sheet rather than holes cut out of it */
+.aiae-cx__body {
+  padding: clamp(18px, 2.4vw, 26px);
+  background: var(--aiae-paper-2);
+}
+/* The arrows bleed over the row border, so they pull back inside here */
+.aiae-cx__body .aiae-con__arrow--prev {
+  left: -10px;
+}
+.aiae-cx__body .aiae-con__arrow--next {
+  right: -10px;
+}
+.aiae-cx__body .aiae-con__arrow {
+  background: var(--aiae-paper-2);
+}
+
+/* Alternating rows flip to ink. Only the head band inverts — the rail keeps
+   its paper cards so the shirts stay readable down the whole page. */
+.aiae-cx__row--inv .aiae-cx__head {
+  background: var(--aiae-ink);
+}
+.aiae-cx__row--inv .aiae-cx__num {
+  background: var(--aiae-paper);
+  color: var(--aiae-ink);
+  border-right-color: var(--aiae-paper);
+}
+.aiae-cx__row--inv .aiae-cx__title a {
+  color: var(--aiae-d-text);
+}
+.aiae-cx__row--inv .aiae-cx__desc {
+  color: var(--aiae-d-muted);
+}
+.aiae-cx__row--inv .aiae-cx__headside {
+  border-left-color: var(--aiae-paper);
+}
+.aiae-cx__row--inv .aiae-cx__count {
+  border-bottom-color: var(--aiae-paper);
+  color: var(--aiae-d-muted);
+}
+.aiae-cx__row--inv .aiae-cx__link {
+  color: var(--aiae-d-text);
+}
+.aiae-cx__row--inv .aiae-cx__link:hover {
+  background: var(--aiae-paper);
+  color: var(--aiae-ink);
+}
+
+/* ── Tail card ─────────────────────────────────────────── */
+.aiae-cx__more {
+  scroll-snap-align: start;
+  flex: 0 0 clamp(160px, 18vw, 210px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px 18px;
+  border: 2px dashed var(--aiae-line-strong);
+  color: var(--aiae-muted);
+  text-decoration: none;
+  text-align: center;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease,
+    background 0.3s ease;
+}
+.aiae-cx__more:hover {
+  border-color: var(--aiae-ink);
+  background: var(--aiae-paper);
+  color: var(--aiae-ink);
+}
+.aiae-cx__morenum {
+  font-family: var(--aiae-font-display);
+  font-size: clamp(30px, 3.6vw, 46px);
+  line-height: 1;
+  color: var(--aiae-ink);
+}
+.aiae-cx__moretext {
+  font-family: var(--aiae-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+/* ── Empty state / closing rule ────────────────────────── */
+.aiae-cx__empty {
+  margin: clamp(32px, 5vh, 56px) 0 0;
+  padding: 28px;
+  border: 2px dashed var(--aiae-line-strong);
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: var(--aiae-muted);
+}
+.aiae-cx__out {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: clamp(40px, 6vh, 72px);
+}
+.aiae-cx__outrule {
+  flex: 1;
+  height: 0;
+  border-top: 3px solid var(--aiae-ink);
+}
+.aiae-cx__outlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  padding: 12px 18px;
+  border: 3px solid var(--aiae-ink);
+  color: var(--aiae-ink);
+  text-decoration: none;
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+.aiae-cx__outlink:hover {
+  background: var(--aiae-ink);
+  color: var(--aiae-paper);
+}
+
+/* ── Narrow ────────────────────────────────────────────── */
+@media (max-width: 899px) {
+  .aiae-cx__mast {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  .aiae-cx__mastaside {
+    padding-left: 0;
+    padding-top: 16px;
+    border-left: 0;
+    border-top: 2px solid var(--aiae-ink);
+  }
+  /* The number stops being a full-height cell and becomes a corner stamp
+     above the title, so the head can stack without a 3-column squeeze */
+  .aiae-cx__head {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .aiae-cx__headmain {
+    padding: 14px 16px;
+  }
+  .aiae-cx__headside {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    border-left: 0;
+    border-top: 2px solid var(--aiae-ink);
+  }
+  .aiae-cx__count {
+    flex: 0 0 auto;
+    border-bottom: 0;
+    border-right: 2px solid var(--aiae-ink);
+  }
+  .aiae-cx__link {
+    flex: 1;
+  }
+  .aiae-cx__row--inv .aiae-cx__headside {
+    border-top-color: var(--aiae-paper);
+  }
+  .aiae-cx__row--inv .aiae-cx__count {
+    border-right-color: var(--aiae-paper);
+  }
+}
+@media (max-width: 599px) {
+  .aiae-cx__index {
+    gap: 6px;
+  }
+  .aiae-cx__body {
+    padding: 14px;
+  }
+  .aiae-cx__out {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .aiae-cx__outrule {
+    display: none;
+  }
+  .aiae-cx__outlink {
+    justify-content: center;
+  }
+}
