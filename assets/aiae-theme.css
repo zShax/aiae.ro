@@ -24,6 +24,7 @@
 
   /* Brand */
   --aiae-accent: #d94f1e;
+  --aiae-accent-deep: #b23d13;
   --aiae-stone: #5a564f;
 
   /* Rhythm */
@@ -295,7 +296,8 @@ body.aiae-body::after {
   display: inline-flex;
   gap: 8px;
   align-items: center;
-  color: var(--aiae-accent);
+  background: var(--aiae-accent);
+  color: var(--pod-text);
   border: 1px solid var(--aiae-accent);
   padding: 6px 11px;
   text-decoration: none;
@@ -309,9 +311,9 @@ body.aiae-body::after {
     border-color 0.25s ease;
 }
 .aiae-nav__cart:hover {
-  background: var(--aiae-accent);
-  color: var(--aiae-ink);
-  border-color: var(--aiae-accent);
+  background: var(--aiae-accent-deep);
+  color: var(--aiae-paper);
+  border-color: var(--aiae-accent-deep);
 }
 .aiae-nav__cart svg {
   display: block;
@@ -2028,8 +2030,8 @@ img.aiae-card__shot.is-active {
   gap: 8px;
   flex: 0 0 auto;
   padding: 7px 12px;
-  border: 2px solid var(--aiae-ink);
-  color: var(--aiae-muted);
+  border: 2px solid var(--aiae-accent);
+  color: var(--aiae-accent);
   text-decoration: none;
   font-family: var(--aiae-font-mono);
   font-size: 10px;
@@ -2041,8 +2043,8 @@ img.aiae-card__shot.is-active {
     border-color 0.35s ease;
 }
 .aiae-con__rowlink:hover {
-  background: var(--aiae-ink);
-  border-color: var(--aiae-ink);
+  background: var(--aiae-accent);
+  border-color: var(--aiae-accent);
   color: var(--aiae-paper);
 }
 /* The scroller wraps the track so the arrows can hover over the cards.
