@@ -334,6 +334,15 @@
             {%- endfor -%}
           </ul>
         {%- endif -%}
+        {%- comment -%}
+          Retragerea consimțământului trebuie să fie la fel de accesibilă ca acordarea
+          lui, deci triggerul stă în afara comutătorului pentru lista de politici.
+        {%- endcomment -%}
+        <small class="copyright__content">
+          <button type="button" class="aiae-ckc-trigger" data-aiae-cookie-prefs>
+            Setări cookie-uri
+          </button>
+        </small>
       </div>
     </div>
   </div>

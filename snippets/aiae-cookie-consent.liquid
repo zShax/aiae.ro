@@ -1,0 +1,151 @@
+{%- comment -%}
+  Consent cookie-uri — banner + panou de setări.
+
+  Textul este al magazinului (RO), nu cel generic livrat de Shopify: bannerul
+  nativ afișează limba magazinului, iar singura limbă publicată aici este
+  engleza. Consimțământul este transmis mai departe prin Customer Privacy API
+  (assets/aiae-cookie-consent.js), deci pixelii Shopify și aplicațiile îl
+  respectă la fel ca pe cel nativ.
+
+  Bannerul nativ este ascuns din CSS; dezactivează-l și din
+  Admin → Settings → Customer privacy → Cookie banner ca să nu se încarce deloc.
+{%- endcomment -%}
+
+{%- assign cookie_policy_url = '/pages/politica-de-cookies' -%}
+{%- assign privacy_policy_url = '/pages/politica-de-confidentialitate' -%}
+
+<div
+  class="aiae-ckc"
+  data-aiae-cookie-consent
+  data-cookie-policy="{{ cookie_policy_url }}"
+  hidden
+>
+  <section
+    class="aiae-ckc__banner"
+    data-aiae-ckc-banner
+    role="region"
+    aria-label="Consimțământ pentru cookie-uri"
+    hidden
+  >
+    <div class="aiae-ckc__banner-inner">
+      <div class="aiae-ckc__banner-body">
+        <h2 class="aiae-ckc__eyebrow">Cookie-uri</h2>
+        <p>
+          Folosim cookie-uri strict necesare pentru ca magazinul să funcționeze — coș, finalizarea
+          comenzii, cont, securitate. Cu acordul tău folosim și cookie-uri de analiză și de marketing,
+          ale Shopify și ale partenerilor noștri, ca să înțelegem cum este folosit site-ul și să
+          măsurăm campaniile. Poți accepta, refuza sau alege pe categorii, iar opțiunea o poți
+          schimba oricând din „Setări cookie-uri” în subsolul paginii. Detalii în
+          <a href="{{ cookie_policy_url }}">Politica de cookies</a> și
+          <a href="{{ privacy_policy_url }}">Politica de confidențialitate</a>.
+        </p>
+      </div>
+      <div class="aiae-ckc__banner-btns">
+        <button type="button" class="aiae-ckc__btn aiae-ckc__btn--accept" data-aiae-ckc-accept>
+          Accept toate
+        </button>
+        <button type="button" class="aiae-ckc__btn aiae-ckc__btn--decline" data-aiae-ckc-decline>
+          Refuz toate
+        </button>
+        <button type="button" class="aiae-ckc__btn aiae-ckc__btn--prefs" data-aiae-ckc-open>
+          <span>Setări</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="aiae-ckc__overlay" data-aiae-ckc-overlay hidden>
+    <div
+      class="aiae-ckc__dialog"
+      data-aiae-ckc-dialog
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="aiae-ckc-title"
+      tabindex="-1"
+    >
+      <header class="aiae-ckc__dialog-head">
+        <h2 class="aiae-ckc__dialog-title" id="aiae-ckc-title">Setări cookie-uri</h2>
+        <button
+          type="button"
+          class="aiae-ckc__close"
+          data-aiae-ckc-close
+          aria-label="Închide setările de cookie-uri"
+        >
+          &times;
+        </button>
+      </header>
+
+      <div class="aiae-ckc__dialog-body">
+        <div class="aiae-ckc__intro">
+          <h3 class="aiae-ckc__eyebrow">Alege pe categorii</h3>
+          <p>
+            Refuzul cookie-urilor opționale nu îți limitează accesul la magazin și nu afectează
+            comanda. Poți reveni oricând asupra alegerii. Lista completă a cookie-urilor, cu scopul
+            și durata fiecăruia, este în <a href="{{ cookie_policy_url }}">Politica de cookies</a>.
+          </p>
+        </div>
+
+        <div class="aiae-ckc__option">
+          <label class="aiae-ckc__option-label">
+            <input type="checkbox" checked disabled>
+            <span>Strict necesare</span>
+            <em>Mereu active</em>
+          </label>
+          <p>
+            Fac magazinul să funcționeze: rețin coșul, sesiunea de checkout, contul, setările de
+            securitate și preîntâmpină frauda. Fără ele nu poți plasa o comandă, de aceea nu pot fi
+            dezactivate.
+          </p>
+        </div>
+
+        <div class="aiae-ckc__option">
+          <label class="aiae-ckc__option-label">
+            <input type="checkbox" data-aiae-ckc-category="analytics">
+            <span>Analiză</span>
+          </label>
+          <p>
+            Ne arată, în formă agregată, cum este folosit site-ul — ce pagini și produse sunt
+            vizitate, unde se blochează parcursul de cumpărare — ca să îl putem îmbunătăți.
+          </p>
+        </div>
+
+        <div class="aiae-ckc__option">
+          <label class="aiae-ckc__option-label">
+            <input type="checkbox" data-aiae-ckc-category="marketing">
+            <span>Marketing</span>
+          </label>
+          <p>
+            Permit măsurarea campaniilor și afișarea de reclame relevante pe alte site-uri sau în
+            rețelele sociale, prin partenerii noștri de publicitate. Tot aici intră partajarea
+            datelor cu acești parteneri în scop publicitar.
+          </p>
+        </div>
+
+        <div class="aiae-ckc__option">
+          <label class="aiae-ckc__option-label">
+            <input type="checkbox" data-aiae-ckc-category="preferences">
+            <span>Preferințe</span>
+          </label>
+          <p>
+            Rețin alegerile tale — regiune, monedă, produse văzute recent — ca să nu le reintroduci
+            la fiecare vizită.
+          </p>
+        </div>
+      </div>
+
+      <footer class="aiae-ckc__dialog-foot">
+        <button type="button" class="aiae-ckc__btn aiae-ckc__btn--decline" data-aiae-ckc-decline>
+          Refuz toate
+        </button>
+        <button type="button" class="aiae-ckc__btn aiae-ckc__btn--decline" data-aiae-ckc-accept>
+          Accept toate
+        </button>
+        <button type="button" class="aiae-ckc__btn aiae-ckc__btn--accept" data-aiae-ckc-save>
+          Salvează setările
+        </button>
+      </footer>
+    </div>
+  </div>
+</div>
+
+<script src="{{ 'aiae-cookie-consent.js' | asset_url }}" defer></script>

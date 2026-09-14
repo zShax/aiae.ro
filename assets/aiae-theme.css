@@ -6269,41 +6269,46 @@ a.aiae-support__value:hover {
   letter-spacing: 0.06em;
   margin: 0 0 11px;
 }
-
 /* ═══════════════════════════════════════════════════════════
-   Cookie consent — Shopify customer-privacy banner + prefs
-   Markup is injected by Shopify at runtime, so selectors are
-   id-scoped to outweigh the style block Shopify writes.
+   Cookie consent — bannerul propriu (snippets/aiae-cookie-consent.liquid)
+
+   Bannerul nativ Shopify e ascuns: textul lui urmează limba magazinului
+   (engleză) și nu poate fi editat din temă. Interfața de mai jos îl
+   înlocuiește vizual, iar consimțământul merge tot prin Customer Privacy API.
+   Dezactivează-l și din Admin → Settings → Customer privacy ca să nu se încarce.
    ═══════════════════════════════════════════════════════════ */
+#shopify-pc__banner,
+#shopify-pc__prefs__overlay,
+#shopify-pc__prefs__dialog {
+  display: none !important;
+}
 
 /* ── Banner: dark void bar docked to the bottom edge ── */
-#shopify-pc__banner.shopify-pc__banner__dialog {
+.aiae-ckc__banner {
+  position: fixed;
+  /* Above the sticky nav (8500) but under the intro loader (9600). */
+  z-index: 9400;
   left: 0;
   right: 0;
   bottom: 0;
-  width: 100%;
-  min-width: 0;
   padding: clamp(18px, 2.4vw, 26px) var(--aiae-gutter);
   background: var(--aiae-d-bg);
-  border: 0;
   border-top: 2px solid var(--aiae-accent);
-  border-radius: 0;
   box-shadow: 0 -18px 40px rgba(13, 13, 13, 0.32);
   font-family: var(--aiae-font-body);
 }
-#shopify-pc__banner .shopify-pc__banner__wrapper {
+.aiae-ckc__banner-inner {
+  display: flex;
   flex-direction: row;
   align-items: flex-end;
   gap: clamp(20px, 4vw, 56px);
   max-width: 1440px;
   margin: 0 auto;
 }
-#shopify-pc__banner .shopify-pc__banner__body {
-  width: auto;
+.aiae-ckc__banner-body {
   flex: 1 1 auto;
-  margin-bottom: 0;
 }
-#shopify-pc__banner .shopify-pc__banner__body h2 {
+.aiae-ckc__eyebrow {
   margin: 0 0 9px;
   font-family: var(--aiae-font-mono);
   font-size: 10px;
@@ -6312,36 +6317,36 @@ a.aiae-support__value:hover {
   text-transform: uppercase;
   color: var(--aiae-accent);
 }
-#shopify-pc__banner .shopify-pc__banner__body p {
+.aiae-ckc__banner-body p {
   max-width: 68ch;
-  font-family: var(--aiae-font-body);
+  margin: 0;
   font-size: 13px;
   line-height: 1.66;
   color: var(--aiae-d-muted);
 }
-#shopify-pc__banner .shopify-pc__banner__body a {
+.aiae-ckc__banner-body a {
   color: var(--aiae-d-text);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
   transition: color 0.25s ease;
 }
-#shopify-pc__banner .shopify-pc__banner__body a:hover {
+.aiae-ckc__banner-body a:hover {
   color: var(--aiae-accent);
 }
 
 /* ── Buttons ── */
-#shopify-pc__banner .shopify-pc__banner__btns {
-  width: auto;
+.aiae-ckc__banner-btns {
+  display: flex;
   flex: none;
   align-items: center;
   gap: 10px;
 }
-#shopify-pc__banner.shopify-pc__banner__dialog button {
+.aiae-ckc__btn {
   margin: 0;
   padding: 14px 22px;
-  flex-basis: auto;
   border-radius: 0;
+  cursor: pointer;
   font-family: var(--aiae-font-mono);
   font-size: 11px;
   letter-spacing: 0.16em;
@@ -6354,171 +6359,254 @@ a.aiae-support__value:hover {
     border-color 0.3s ease,
     transform 0.3s var(--aiae-ease);
 }
-#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept {
+.aiae-ckc__btn--accept {
   background: var(--aiae-accent);
   border: 1px solid var(--aiae-accent);
   color: var(--aiae-ink);
 }
-#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-accept:hover {
+.aiae-ckc__btn--accept:hover {
   background: var(--aiae-d-text);
   border-color: var(--aiae-d-text);
   transform: translateY(-2px);
 }
-#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-decline {
+.aiae-ckc__btn--decline {
   background: transparent;
   border: 1px solid var(--aiae-d-line);
   color: var(--aiae-d-text);
 }
-#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-decline:hover {
+.aiae-ckc__btn--decline:hover {
   border-color: var(--aiae-accent);
   color: var(--aiae-accent);
   transform: translateY(-2px);
 }
-#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs {
+.aiae-ckc__btn--prefs {
   padding-left: 0;
   padding-right: 8px;
   background: transparent;
   border: 0;
   color: var(--aiae-d-faint);
-  text-decoration: none;
 }
-#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs span {
+.aiae-ckc__btn--prefs span {
   border-bottom: 1px solid currentColor;
   padding-bottom: 3px;
 }
-#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs:hover {
+.aiae-ckc__btn--prefs:hover {
   color: var(--aiae-d-text);
 }
 
 /* Focus: accent ring, never the default sky blue */
-#shopify-pc__banner.shopify-pc__banner__dialog button:focus-visible {
+.aiae-ckc__banner .aiae-ckc__btn:focus-visible {
+  outline: none;
   box-shadow:
     0 0 0 2px var(--aiae-d-bg),
     0 0 0 4px var(--aiae-accent);
 }
-#shopify-pc__banner .shopify-pc__banner__body p a:focus-visible,
-#shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs:focus-visible span {
+.aiae-ckc__banner-body a:focus-visible,
+.aiae-ckc__btn--prefs:focus-visible span {
   outline: 2px solid var(--aiae-accent);
   outline-offset: 3px;
 }
 
 @media screen and (max-width: 989px) {
-  #shopify-pc__banner .shopify-pc__banner__wrapper {
+  .aiae-ckc__banner-inner {
     flex-direction: column;
     align-items: stretch;
     gap: 18px;
   }
-  #shopify-pc__banner .shopify-pc__banner__btns {
+  .aiae-ckc__banner-btns {
     width: 100%;
     justify-content: flex-start;
     flex-wrap: wrap;
   }
 }
 @media screen and (max-width: 480px) {
-  #shopify-pc__banner .shopify-pc__banner__btns {
+  .aiae-ckc__banner-btns {
     flex-direction: column;
     align-items: stretch;
   }
-  #shopify-pc__banner.shopify-pc__banner__dialog button.shopify-pc__banner__btn-manage-prefs {
+  .aiae-ckc__btn--prefs {
     padding: 6px 0 0;
     text-align: center;
   }
 }
 
 /* ── Preferences modal: paper sheet, void header ── */
-#shopify-pc__prefs__overlay {
-  background: rgba(13, 13, 13, 0.72) !important;
+body.aiae-ckc-open {
+  overflow: hidden;
 }
-#shopify-pc__prefs__dialog {
-  background: var(--aiae-paper) !important;
-  border: 1px solid var(--aiae-line-strong) !important;
-  border-radius: 0 !important;
-  box-shadow: 0 26px 60px rgba(13, 13, 13, 0.4) !important;
-  font-family: var(--aiae-font-body) !important;
+/* `display` on these layout rules would otherwise outrank [hidden]. */
+.aiae-ckc[hidden],
+.aiae-ckc__banner[hidden],
+.aiae-ckc__overlay[hidden] {
+  display: none;
 }
-#shopify-pc__prefs__dialog header {
-  background: var(--aiae-d-bg) !important;
-  border-bottom: 2px solid var(--aiae-accent) !important;
+.aiae-ckc__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--aiae-gutter);
+  background: rgba(13, 13, 13, 0.72);
 }
-#shopify-pc__prefs__header-title {
-  font-family: var(--aiae-font-display) !important;
-  font-weight: 400 !important;
-  font-size: clamp(20px, 2.2vw, 28px) !important;
-  line-height: 1 !important;
-  letter-spacing: -0.01em !important;
-  text-transform: uppercase !important;
-  color: var(--aiae-d-text) !important;
+.aiae-ckc__dialog {
+  width: min(660px, 100%);
+  max-height: min(82vh, 760px);
+  display: flex;
+  flex-direction: column;
+  background: var(--aiae-paper);
+  border: 1px solid var(--aiae-line-strong);
+  box-shadow: 0 26px 60px rgba(13, 13, 13, 0.4);
+  font-family: var(--aiae-font-body);
 }
-#shopify-pc__prefs__header-close svg path {
-  fill: var(--aiae-d-text);
+.aiae-ckc__dialog:focus {
+  outline: none;
 }
-#shopify-pc__prefs__header-close:hover svg path {
-  fill: var(--aiae-accent);
+.aiae-ckc__dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px clamp(18px, 3vw, 28px);
+  background: var(--aiae-d-bg);
+  border-bottom: 2px solid var(--aiae-accent);
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__header-actions button {
-  padding: 12px 18px !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  border: 1px solid var(--aiae-d-line) !important;
-  color: var(--aiae-d-text) !important;
-  font-family: var(--aiae-font-mono) !important;
-  font-size: 11px !important;
-  letter-spacing: 0.16em !important;
-  text-transform: uppercase !important;
-  transition:
-    background 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease;
+.aiae-ckc__dialog-title {
+  margin: 0;
+  font-family: var(--aiae-font-display);
+  font-weight: 400;
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--aiae-d-text);
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__header-actions button:hover {
-  border-color: var(--aiae-accent) !important;
-  color: var(--aiae-accent) !important;
+.aiae-ckc__close {
+  padding: 0 4px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--aiae-d-text);
+  transition: color 0.25s ease;
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__header-actions button#shopify-pc__prefs__header-save {
-  background: var(--aiae-accent) !important;
-  border-color: var(--aiae-accent) !important;
-  color: var(--aiae-ink) !important;
+.aiae-ckc__close:hover,
+.aiae-ckc__close:focus-visible {
+  color: var(--aiae-accent);
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__header-actions button#shopify-pc__prefs__header-save:hover {
-  background: var(--aiae-d-text) !important;
-  border-color: var(--aiae-d-text) !important;
-  color: var(--aiae-ink) !important;
+.aiae-ckc__dialog-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: clamp(18px, 3vw, 28px);
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__intro h3 {
-  font-family: var(--aiae-font-mono) !important;
-  font-size: 10px !important;
-  font-weight: 400 !important;
-  letter-spacing: 0.22em !important;
-  text-transform: uppercase !important;
-  color: var(--aiae-accent) !important;
+.aiae-ckc__intro p,
+.aiae-ckc__option p {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.66;
+  color: var(--aiae-muted);
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__intro p,
-#shopify-pc__prefs__dialog .shopify-pc__prefs__option p {
-  font-family: var(--aiae-font-body) !important;
-  font-size: 13px !important;
-  line-height: 1.66 !important;
-  color: var(--aiae-muted) !important;
+.aiae-ckc__intro a {
+  color: var(--aiae-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__option {
-  background: transparent !important;
-  border-top: 1px solid var(--aiae-line) !important;
-  border-radius: 0 !important;
+.aiae-ckc__option {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--aiae-line);
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__option label {
-  font-family: var(--aiae-font-mono) !important;
-  font-size: 12px !important;
-  letter-spacing: 0.16em !important;
-  text-transform: uppercase !important;
-  color: var(--aiae-ink) !important;
+.aiae-ckc__option-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aiae-ink);
+}
+.aiae-ckc__option-label input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex: none;
+  accent-color: var(--aiae-accent);
+  cursor: pointer;
+}
+.aiae-ckc__option-label input:disabled {
+  accent-color: var(--aiae-stone);
+  cursor: default;
+}
+.aiae-ckc__option-label em {
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--aiae-faint);
+}
+.aiae-ckc__dialog-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: clamp(16px, 2.4vw, 22px) clamp(18px, 3vw, 28px);
+  border-top: 1px solid var(--aiae-line);
+  background: var(--aiae-paper-2);
+}
+.aiae-ckc__dialog-foot .aiae-ckc__btn--decline {
+  border-color: var(--aiae-line-strong);
+  color: var(--aiae-ink);
+}
+.aiae-ckc__dialog-foot .aiae-ckc__btn:focus-visible {
+  outline: 2px solid var(--aiae-accent);
+  outline-offset: 3px;
 }
 
-/* Checkbox glyphs follow the palette: hairline off, accent on */
-#shopify-pc__prefs__dialog .shopify-pc__prefs__option svg path {
-  fill: var(--aiae-line-strong);
+@media screen and (max-width: 480px) {
+  .aiae-ckc__dialog-foot {
+    flex-direction: column-reverse;
+  }
+  .aiae-ckc__dialog-foot .aiae-ckc__btn {
+    width: 100%;
+  }
 }
-#shopify-pc__prefs__dialog .shopify-pc__prefs__option svg[data-icon-type="checked"] path {
-  fill: var(--aiae-accent);
+
+/* Reopen trigger in the footers */
+.aiae-ckc-trigger {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  text-align: left;
 }
-#shopify-pc__prefs__dialog #shopify-pc__prefs__essential svg[data-icon-type="checked"] path {
-  fill: var(--aiae-stone);
+
+/* ═══════════════════════════════════════════════════════════
+   RTE BLOCKQUOTES — page content
+
+   Dawn sets `.rte blockquote { display: inline-flex }`, which is
+   fine for a one-line pull quote but lays a multi-paragraph quote
+   out as side-by-side columns. The withdrawal form on the return
+   policy page is one such quote, and it pushed the page into
+   horizontal scroll. Two classes deep so this wins over base.css,
+   which loads after this file.
+   ═══════════════════════════════════════════════════════════ */
+.aiae-body .rte blockquote {
+  display: block;
+  border-left: 2px solid var(--aiae-line-strong);
+  padding: clamp(16px, 2.5vw, 24px) clamp(16px, 2.5vw, 28px);
+  background: var(--aiae-paper-2);
+  font-style: normal;
+  /* Runs of dotted fill characters are one unbreakable "word". */
+  overflow-wrap: anywhere;
+}
+.aiae-body .rte blockquote > * {
+  margin: 0;
+}
+.aiae-body .rte blockquote > * + * {
+  margin-top: 0.85em;
 }
