@@ -1,0 +1,26 @@
+{%- comment -%}
+  Banner oficial ANPC — Soluționarea Alternativă a Litigiilor.
+  Obligatoriu pentru comercianții online (OG 38/2015, Legea 365/2002).
+  Randat sub lista de linkuri legale din ambele footere — vezi
+  sections/aiae-footer.liquid și sections/footer.liquid la orice modificare.
+
+  Accepts: class — clasă suplimentară pe ancoră (opțional).
+{%- endcomment -%}
+<a
+  class="anpc-sal{% if class %} {{ class }}{% endif %}"
+  href="https://reclamatiisal.anpc.ro/"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <img
+    src="{{ 'anpc-sal.jpg' | asset_img_url: '640x' }}"
+    srcset="{{ 'anpc-sal.jpg' | asset_img_url: '320x' }} 320w, {{ 'anpc-sal.jpg' | asset_img_url: '640x' }} 640w, {{ 'anpc-sal.jpg' | asset_img_url: '960x' }} 960w"
+    sizes="320px"
+    width="2058"
+    height="512"
+    alt="ANPC — Soluționarea Alternativă a Litigiilor"
+    loading="lazy"
+    decoding="async"
+    class="anpc-sal__img"
+  >
+</a>

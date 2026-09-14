@@ -100,6 +100,9 @@
                           </li>
                         {%- endfor -%}
                       </ul>
+                      {%- if block.settings.menu.handle == 'legal' -%}
+                        {%- render 'anpc-sal-badge' -%}
+                      {%- endif -%}
                     {%- endif -%}
                   {%- when 'brand_information' -%}
                     <div class="footer-block__brand-info">

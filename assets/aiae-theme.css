@@ -2835,6 +2835,11 @@ a.aiae-support__value:hover {
   .aiae-footer__top {
     flex-direction: column;
   }
+  /* Stacked, flex-basis is a height — let the newsletter size to content */
+  .aiae-footer__news {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -6609,4 +6614,32 @@ body.aiae-ckc-open {
 }
 .aiae-body .rte blockquote > * + * {
   margin-top: 0.85em;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BANNER ANPC — SAL (snippets/anpc-sal-badge.liquid)
+   Stă sub linkurile legale în ambele footere.
+   ═══════════════════════════════════════════════════════════ */
+.anpc-sal {
+  display: block;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 320px;
+  line-height: 0;
+  border-radius: 25px;
+  overflow: hidden;
+  background: #ffffff;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.anpc-sal:hover,
+.anpc-sal:focus-visible {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+.anpc-sal__img {
+  display: block;
+  width: 100%;
+  height: auto;
 }

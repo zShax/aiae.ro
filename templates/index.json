@@ -326,13 +326,6 @@
             "link": "https://anpc.ro/"
           }
         },
-        "legal_7": {
-          "type": "legal_link",
-          "settings": {
-            "label": "ANPC — SAL",
-            "link": "https://anpc.ro/ce-este-sal/"
-          }
-        },
         "social_1": {
           "type": "social_link",
           "settings": {
@@ -365,7 +358,6 @@
         "legal_4",
         "legal_5",
         "legal_6",
-        "legal_7",
         "social_1",
         "social_2",
         "social_3"
