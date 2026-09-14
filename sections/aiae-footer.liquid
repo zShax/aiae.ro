@@ -95,6 +95,16 @@
     {%- endif -%}
   </div>
 
+  {%- render 'aiae-support',
+    heading: section.settings.support_heading,
+    note: section.settings.support_note,
+    email: section.settings.support_email,
+    phone: section.settings.support_phone,
+    hours: section.settings.support_hours,
+    link_label: section.settings.support_link_label,
+    link_url: section.settings.support_link
+  -%}
+
   <div class="aiae-footer__wordwrap aiae-noscroll" data-aiae-reveal="rise">
     <div id="aiae-footer-word" class="aiae-footer__word">
       <span class="aiae-footer__logo">{{ 'aiae-logo.svg' | inline_asset_content }}</span>
@@ -105,29 +115,28 @@
     Merchant identification. Required on every page by Legea 365/2002 art. 5
     and OUG 34/2014. Each field renders only once filled in the theme editor.
   {%- endcomment -%}
-  {%- assign legal_parts = '' | split: '' -%}
-  {%- if section.settings.company_name != blank -%}
-    {%- assign legal_parts = legal_parts | push: section.settings.company_name -%}
-  {%- endif -%}
-  {%- if section.settings.company_cui != blank -%}
-    {%- assign legal_parts = legal_parts | push: section.settings.company_cui -%}
-  {%- endif -%}
-  {%- if section.settings.company_regcom != blank -%}
-    {%- assign legal_parts = legal_parts | push: section.settings.company_regcom -%}
-  {%- endif -%}
-  {%- if section.settings.company_address != blank -%}
-    {%- assign legal_parts = legal_parts | push: section.settings.company_address -%}
-  {%- endif -%}
-  {%- if section.settings.company_email != blank -%}
-    {%- assign legal_parts = legal_parts | push: section.settings.company_email -%}
-  {%- endif -%}
-  {%- if section.settings.company_phone != blank -%}
-    {%- assign legal_parts = legal_parts | push: section.settings.company_phone -%}
-  {%- endif -%}
-  {%- if legal_parts.size > 0 -%}
+  {%- capture legal_raw -%}
+    {{ section.settings.company_name }}|{{ section.settings.company_cui }}|
+    {{- section.settings.company_regcom }}|{{ section.settings.company_address }}|
+    {{- section.settings.company_email }}|{{ section.settings.company_phone }}
+  {%- endcapture -%}
+  {%- assign legal_parts = legal_raw | split: '|' -%}
+  {%- capture legal_line -%}
+    {%- assign shown = 0 -%}
+    {%- for part in legal_parts -%}
+      {%- assign part = part | strip -%}
+      {%- if part != blank -%}
+        {%- if shown > 0 %} · {% endif -%}
+        {{ part }}
+        {%- assign shown = shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- assign legal_line = legal_line | strip -%}
+  {%- if legal_line != blank -%}
     <div class="aiae-footer__legal" data-aiae-reveal="fade">
       <span class="aiae-footer__legalhead">{{ section.settings.company_heading }}</span>
-      <p class="aiae-footer__legalline">{{ legal_parts | join: ' · ' }}</p>
+      <p class="aiae-footer__legalline">{{ legal_line }}</p>
     </div>
   {%- endif -%}
 
@@ -192,6 +201,50 @@
       "id": "newsletter_success",
       "label": "Success message",
       "default": "Gata. Ești pe listă."
+    },
+    {
+      "type": "header",
+      "content": "Suport & contact"
+    },
+    {
+      "type": "text",
+      "id": "support_heading",
+      "label": "Support heading",
+      "default": "Suport & contact"
+    },
+    {
+      "type": "textarea",
+      "id": "support_note",
+      "label": "Support note",
+      "default": "Orice întrebare despre comandă, mărimi, livrare sau retur — scrie-ne și îți răspundem în maximum o zi lucrătoare."
+    },
+    {
+      "type": "text",
+      "id": "support_email",
+      "label": "Support email",
+      "default": "contact@aiae.ro"
+    },
+    {
+      "type": "text",
+      "id": "support_phone",
+      "label": "Support phone"
+    },
+    {
+      "type": "text",
+      "id": "support_hours",
+      "label": "Support hours",
+      "default": "Luni – Vineri, 09:00 – 17:00"
+    },
+    {
+      "type": "text",
+      "id": "support_link_label",
+      "label": "Support link label",
+      "default": "Politica de retur"
+    },
+    {
+      "type": "url",
+      "id": "support_link",
+      "label": "Support link URL"
     },
     {
       "type": "header",

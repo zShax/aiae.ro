@@ -27,13 +27,36 @@
             "heading": "Magazin",
             "subtext": "<p><a href=\"/collections/degeaba-club\">Degeaba Club</a></p><p><a href=\"/pages/custom\">Print on Demand</a></p><p><a href=\"/collections/concepts\">Concepte</a></p>"
           }
+        },
+        "legal": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Legal",
+            "menu": "legal"
+          }
+        },
+        "company": {
+          "type": "text",
+          "settings": {
+            "heading": "Date de identificare",
+            "subtext": "<p>TELA CREATRIX S.R.L. · CUI 51011128 · Nr. Reg. Com. J2024047640003 · EUID ROONRC.J2024047640003 · Capital social 100 lei · Sediu social: Str. Ion Rusu Șirianu nr. 2, Arad, jud. Arad, 310035, România · <a href=\"mailto:contact@aiae.ro\">contact@aiae.ro</a></p>"
+          }
         }
       },
       "block_order": [
         "brand",
-        "shop"
+        "shop",
+        "legal",
+        "company"
       ],
       "settings": {
+        "support_heading": "Suport & contact",
+        "support_note": "Orice întrebare despre comandă, mărimi, livrare sau retur — scrie-ne și îți răspundem în maximum o zi lucrătoare.",
+        "support_email": "contact@aiae.ro",
+        "support_phone": "",
+        "support_hours": "Luni – Vineri, 09:00 – 17:00",
+        "support_link_label": "Politica de retur",
+        "support_link": "/pages/politica-de-retur",
         "aiae_wordmark": "AIAE",
         "color_scheme": "scheme-1",
         "newsletter_enable": true,

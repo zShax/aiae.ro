@@ -1,0 +1,45 @@
+{%- comment -%}
+  Dedicated support band, shared by both footers:
+  - sections/aiae-footer.liquid (homepage)
+  - sections/footer.liquid      (every other page)
+
+  Accepts: heading, note, email, phone, hours, link_label, link_url.
+  Each item renders only when its setting is filled in.
+{%- endcomment -%}
+
+{%- if heading != blank or email != blank or phone != blank or hours != blank -%}
+  <section class="aiae-support" aria-labelledby="AiaeSupportHeading">
+    <div class="aiae-support__intro">
+      <h2 class="aiae-support__head" id="AiaeSupportHeading">
+        {{- heading | default: 'Suport & contact' -}}
+      </h2>
+      {%- if note != blank -%}
+        <p class="aiae-support__note">{{ note }}</p>
+      {%- endif -%}
+      {%- if link_label != blank and link_url != blank -%}
+        <a class="aiae-flink aiae-support__link" href="{{ link_url }}">{{ link_label }}</a>
+      {%- endif -%}
+    </div>
+
+    <ul class="aiae-support__items list-unstyled" role="list">
+      {%- if email != blank -%}
+        <li class="aiae-support__item">
+          <span class="aiae-support__label">Email</span>
+          <a class="aiae-support__value" href="mailto:{{ email }}">{{ email }}</a>
+        </li>
+      {%- endif -%}
+      {%- if phone != blank -%}
+        <li class="aiae-support__item">
+          <span class="aiae-support__label">Telefon</span>
+          <a class="aiae-support__value" href="tel:{{ phone | remove: ' ' | remove: '-' }}">{{ phone }}</a>
+        </li>
+      {%- endif -%}
+      {%- if hours != blank -%}
+        <li class="aiae-support__item">
+          <span class="aiae-support__label">Program</span>
+          <span class="aiae-support__value aiae-support__value--static">{{ hours }}</span>
+        </li>
+      {%- endif -%}
+    </ul>
+  </section>
+{%- endif -%}

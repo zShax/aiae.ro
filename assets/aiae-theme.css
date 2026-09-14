@@ -259,12 +259,12 @@ body.aiae-body::after {
   border-bottom-color: var(--aiae-line);
 }
 .aiae-nav__brand {
-  font-family: var(--aiae-font-mono);
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.06em;
+  display: block;
+  width: clamp(56px, 7vw, 76px);
   color: var(--aiae-ink);
   text-decoration: none;
+  font-size: 0;
+  line-height: 0;
 }
 .aiae-nav__links {
   display: flex;
@@ -2455,6 +2455,97 @@ img.aiae-card__shot.is-active {
   font-size: 0;
   line-height: 0;
   color: var(--aiae-d-text);
+}
+
+/* ── Support band — the one place contact details are loud ── */
+.aiae-support {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: clamp(24px, 5vw, 72px);
+  flex-wrap: wrap;
+  padding: clamp(28px, 4vh, 44px) var(--aiae-gutter);
+  border-top: 1px solid var(--aiae-d-line);
+  border-bottom: 1px solid var(--aiae-d-line);
+}
+.aiae-support__intro {
+  max-width: 44ch;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.aiae-support__head {
+  margin: 0;
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--aiae-accent);
+}
+.aiae-support__note {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--aiae-d-muted);
+}
+.aiae-support__link {
+  font-family: var(--aiae-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.aiae-support__items {
+  display: flex;
+  gap: clamp(24px, 4vw, 64px);
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+}
+.aiae-support__item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.aiae-support__label {
+  font-family: var(--aiae-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--aiae-d-faint);
+}
+.aiae-support__value {
+  font-family: var(--aiae-font-mono);
+  font-size: clamp(15px, 1.5vw, 19px);
+  letter-spacing: 0.02em;
+  color: var(--aiae-d-text);
+  text-decoration: none;
+  width: fit-content;
+  background-image: linear-gradient(var(--aiae-accent), var(--aiae-accent));
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  background-position: left bottom;
+  padding-bottom: 3px;
+  transition:
+    color 0.25s ease,
+    background-size 0.35s var(--aiae-ease);
+}
+a.aiae-support__value:hover {
+  color: var(--aiae-accent);
+  background-size: 100% 1px;
+}
+.aiae-support__value--static {
+  color: var(--aiae-d-muted);
+  background-image: none;
+}
+
+@media (max-width: 749px) {
+  .aiae-support {
+    flex-direction: column;
+    gap: 22px;
+  }
+  .aiae-support__items {
+    gap: 18px 32px;
+  }
 }
 
 /* Merchant identification strip — legally required, visually quiet. */
@@ -6136,6 +6227,14 @@ img.aiae-card__shot.is-active {
 }
 .aiae-body .aiae-dfooter .policies li::before {
   color: var(--aiae-d-faint);
+}
+
+/* Support band sits between the block grid and the wordmark */
+.aiae-body .aiae-dfooter .aiae-support {
+  margin-top: clamp(24px, 4vh, 48px);
+}
+.aiae-body .aiae-dfooter .aiae-support + .aiae-footer__wordwrap {
+  margin-top: clamp(24px, 4vh, 48px);
 }
 
 /* Wordmark strip inherits .aiae-footer__word styling */

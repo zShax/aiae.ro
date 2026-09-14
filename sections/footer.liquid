@@ -250,6 +250,16 @@
     {%- endunless -%}
   {%- endif -%}
 
+  {%- render 'aiae-support',
+    heading: section.settings.support_heading,
+    note: section.settings.support_note,
+    email: section.settings.support_email,
+    phone: section.settings.support_phone,
+    hours: section.settings.support_hours,
+    link_label: section.settings.support_link_label,
+    link_url: section.settings.support_link
+  -%}
+
   {%- if section.settings.aiae_wordmark != blank -%}
     <div class="aiae-footer__wordwrap aiae-noscroll">
       <div id="aiae-footer-word" class="aiae-footer__word">
@@ -437,6 +447,50 @@
       "id": "aiae_newsletter_placeholder",
       "label": "Newsletter email placeholder",
       "default": "adresa@email.ro"
+    },
+    {
+      "type": "header",
+      "content": "Suport & contact"
+    },
+    {
+      "type": "text",
+      "id": "support_heading",
+      "label": "Support heading",
+      "default": "Suport & contact"
+    },
+    {
+      "type": "textarea",
+      "id": "support_note",
+      "label": "Support note",
+      "default": "Orice întrebare despre comandă, mărimi, livrare sau retur — scrie-ne și îți răspundem în maximum o zi lucrătoare."
+    },
+    {
+      "type": "text",
+      "id": "support_email",
+      "label": "Support email",
+      "default": "contact@aiae.ro"
+    },
+    {
+      "type": "text",
+      "id": "support_phone",
+      "label": "Support phone"
+    },
+    {
+      "type": "text",
+      "id": "support_hours",
+      "label": "Support hours",
+      "default": "Luni – Vineri, 09:00 – 17:00"
+    },
+    {
+      "type": "text",
+      "id": "support_link_label",
+      "label": "Support link label",
+      "default": "Politica de retur"
+    },
+    {
+      "type": "url",
+      "id": "support_link",
+      "label": "Support link URL"
     },
     {
       "type": "text",

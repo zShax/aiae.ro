@@ -1,5 +1,5 @@
 <nav id="aiae-nav" class="aiae-nav" data-aiae-reveal="down">
-  <a href="{{ routes.root_url }}" class="aiae-nav__brand">{{ section.settings.brand_name }}</a>
+  <a href="{{ routes.root_url }}" class="aiae-nav__brand" aria-label="{{ section.settings.brand_name | escape }}">{{ 'aiae-logo.svg' | inline_asset_content }}</a>
   <div class="aiae-nav__links">
     {%- for block in section.blocks -%}
       {%- if block.type == 'nav_link' -%}
