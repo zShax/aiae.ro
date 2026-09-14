@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "concept-index": {
@@ -6,7 +15,8 @@
         "show_masthead": true,
         "section_number": "01",
         "eyebrow": "CONCEPTE — IDEI DE PERSONALIZARE",
-        "title": "CE S-AR\nPUTEA FACE",
+        "title": "CE S-ARPUTEA FACE",
+        "description": "",
         "show_index": true,
         "index_label": "CUPRINS",
         "handle_filter": "concept-",
