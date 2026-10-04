@@ -58,9 +58,9 @@
                 {%- assign card_sub = product.description | strip_html | strip | truncate: 60 -%}
               {%- endif -%}
 
-              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;">
+              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;{%- if block.settings.card_bg != blank %} --aiae-cc-bg: {{ block.settings.card_bg }};{% endif %}{%- if block.settings.card_fg != blank %} --aiae-cc-fg: {{ block.settings.card_fg }};{% endif %}">
                 <a href="{{ product.url }}">
-                  <div class="aiae-cc__media" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+                  <div class="aiae-cc__media">
                     {%- if product.featured_image -%}
                       <img src="{{ product.featured_image | image_url: width: 660 }}"
                            alt="{{ product.featured_image.alt | default: product.title | escape }}"
@@ -93,8 +93,8 @@
             {%- comment -%} Placeholder cards while no concept collection is assigned {%- endcomment -%}
             {%- assign placeholder_count = block.settings.products_to_show | default: 5 | at_most: 5 -%}
             {%- for i in (1..placeholder_count) -%}
-              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;">
-                <div class="aiae-cc__media aiae-cc__media--ph" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;{%- if block.settings.card_bg != blank %} --aiae-cc-bg: {{ block.settings.card_bg }};{% endif %}{%- if block.settings.card_fg != blank %} --aiae-cc-fg: {{ block.settings.card_fg }};{% endif %}">
+                <div class="aiae-cc__media aiae-cc__media--ph">
                   <span class="aiae-cc__tag">[ {{ code_prefix }} 0{{ forloop.index }} ]</span>
                   <span class="aiae-cc__num">{{ code_prefix }} 0{{ forloop.index }}</span>
                 </div>
@@ -211,13 +211,14 @@
         {
           "type": "color",
           "id": "card_bg",
-          "label": "Card media background",
+          "label": "Card background",
           "default": "#E7E3D8"
         },
         {
           "type": "color",
           "id": "card_fg",
-          "label": "Card media foreground",
+          "label": "Card text color",
+          "info": "Applied to the card title, price and code tags. Pick a readable color when the card background is dark.",
           "default": "#0D0D0D"
         }
       ]
