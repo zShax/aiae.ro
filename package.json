@@ -1,0 +1,7 @@
+{
+  "name": "aiae-ro",
+  "private": true,
+  "scripts": {
+    "dev": "shopify theme dev"
+  }
+}
