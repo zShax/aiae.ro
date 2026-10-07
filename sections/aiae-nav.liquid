@@ -1,3 +1,14 @@
+{%- if section.settings.announcement != blank -%}
+  {%- comment -%} Fixed strip above the nav; aiae-theme.css offsets the nav and page by --aiae-announce-h {%- endcomment -%}
+  <div class="aiae-announce" role="region" aria-label="Anunț">
+    {%- if section.settings.announcement_link != blank -%}
+      <a href="{{ section.settings.announcement_link }}" class="aiae-announce__text">{{ section.settings.announcement }}</a>
+    {%- else -%}
+      <p class="aiae-announce__text">{{ section.settings.announcement }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
 <nav id="aiae-nav" class="aiae-nav" data-aiae-reveal="down">
   <a href="{{ routes.root_url }}" class="aiae-nav__brand">{{ section.settings.brand_name }}</a>
   <div class="aiae-nav__links">
@@ -47,6 +58,21 @@
       "id": "cart_label",
       "label": "Cart label",
       "default": "COȘ"
+    },
+    {
+      "type": "header",
+      "content": "Announcement bar"
+    },
+    {
+      "type": "text",
+      "id": "announcement",
+      "label": "Announcement text",
+      "info": "Shown in a strip above the nav on every page. Leave empty to hide."
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement link"
     },
     {
       "type": "header",

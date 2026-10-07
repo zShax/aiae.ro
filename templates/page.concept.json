@@ -1,0 +1,80 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "aiae_concept_carousels": {
+      "type": "aiae-concept-carousels",
+      "blocks": {
+        "unt_row": {
+          "type": "carousel_row",
+          "settings": {
+            "collection": "concept-street-cats",
+            "products_to_show": 5,
+            "title": "",
+            "note": "",
+            "show_collection_link": true,
+            "collection_link_label": "VEZI COLECTIA",
+            "code_prefix": "UNT",
+            "show_price": true,
+            "show_sold_out": true,
+            "card_bg": "#f2efe7",
+            "card_fg": "#0d0d0d"
+          }
+        },
+        "buc_row": {
+          "type": "carousel_row",
+          "settings": {
+            "collection": "concept-faith",
+            "products_to_show": 5,
+            "title": "",
+            "note": "",
+            "show_collection_link": true,
+            "collection_link_label": "VEZI COLECTIA",
+            "code_prefix": "BUC",
+            "show_price": true,
+            "show_sold_out": true,
+            "card_bg": "#1c1c1c",
+            "card_fg": "#1C1C1C"
+          }
+        },
+        "carousel_row_J4N8zQ": {
+          "type": "carousel_row",
+          "settings": {
+            "collection": "concept-ingredients",
+            "products_to_show": 5,
+            "title": "",
+            "note": "",
+            "show_collection_link": true,
+            "collection_link_label": "VEZI COLECȚIA",
+            "code_prefix": "",
+            "show_price": true,
+            "show_sold_out": true,
+            "card_bg": "#e7e3d8",
+            "card_fg": "#0d0d0d"
+          }
+        }
+      },
+      "block_order": [
+        "unt_row",
+        "buc_row",
+        "carousel_row_J4N8zQ"
+      ],
+      "settings": {
+        "section_number": "01",
+        "eyebrow": "CONCEPTE — POTENȚIAL DE CUSTOMIZARE",
+        "title": "CE S-AR PUTEA FACE",
+        "heading_tag": "h1"
+      }
+    }
+  },
+  "order": [
+    "aiae_concept_carousels"
+  ]
+}

@@ -8,9 +8,10 @@
     <div class="aiae-section__aside" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">
       <p class="aiae-section__desc">{{ section.settings.description }}</p>
       {%- if section.settings.redirect_label != blank -%}
-        <a href="{{ section.settings.redirect_link | default: '#custom' }}" class="aiae-section__redirect">
+        {%- assign redirect_link = section.settings.redirect_link | default: '#custom' -%}
+        <a href="{{ redirect_link }}" class="aiae-section__redirect">
           <span>{{ section.settings.redirect_label }}</span>
-          <span aria-hidden="true">↑</span>
+          <span aria-hidden="true">{% if redirect_link contains '#' %}↑{% else %}→{% endif %}</span>
         </a>
       {%- endif -%}
     </div>

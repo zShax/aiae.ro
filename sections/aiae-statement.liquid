@@ -1,0 +1,90 @@
+{%- liquid
+  assign title_html = section.settings.title | escape | newline_to_br
+  if section.settings.accent_dots
+    assign title_html = title_html | replace: '.', '<span class="aiae-dot">.</span>'
+  endif
+-%}
+
+<section
+  id="{{ section.settings.anchor | default: section.id | handleize }}"
+  class="aiae-section aiae-section--{{ section.settings.tone }} aiae-statement aiae-statement--{{ section.settings.layout }}">
+
+  <div class="aiae-statement__head" data-aiae-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="aiae-eyebrow">
+        {%- if section.settings.section_number != blank -%}({{ section.settings.section_number }}) {% endif -%}
+        {{ section.settings.eyebrow }}
+      </div>
+    {%- endif -%}
+    <h2 class="aiae-display aiae-statement__title">{{ title_html }}</h2>
+  </div>
+
+  {%- if section.settings.body != blank or section.settings.button_label != blank -%}
+    <div class="aiae-statement__aside" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">
+      {%- if section.settings.body != blank -%}
+        <div class="aiae-statement__body">{{ section.settings.body }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link }}" class="aiae-section__redirect">
+          <span>{{ section.settings.button_label }}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Statement",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tone",
+      "options": [
+        { "value": "paper", "label": "Paper" },
+        { "value": "cream", "label": "Cream" },
+        { "value": "void", "label": "Dark" }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "split", "label": "Title left, text right" },
+        { "value": "full", "label": "Full width, stacked" }
+      ],
+      "default": "split"
+    },
+    { "type": "text", "id": "anchor", "label": "Anchor ID", "info": "Optional, for in-page links like #manifest." },
+    { "type": "text", "id": "section_number", "label": "Section number" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text" },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Heading (H2)",
+      "default": "Aia e."
+    },
+    {
+      "type": "checkbox",
+      "id": "accent_dots",
+      "label": "Accent the full stops in the heading",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body"
+    },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [
+    { "name": "AIAE Statement" }
+  ]
+}
+{% endschema %}

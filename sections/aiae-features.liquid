@@ -1,0 +1,72 @@
+{%- assign title_html = section.settings.title | escape | replace: '.', '<span class="aiae-dot">.</span>' -%}
+
+<section id="{{ section.settings.anchor | default: section.id | handleize }}" class="aiae-section aiae-section--{{ section.settings.tone }} aiae-features">
+
+  <div class="aiae-section__head">
+    <div data-aiae-reveal>
+      {%- if section.settings.eyebrow != blank -%}
+        <div class="aiae-eyebrow">
+          {%- if section.settings.section_number != blank -%}({{ section.settings.section_number }}) {% endif -%}
+          {{ section.settings.eyebrow }}
+        </div>
+      {%- endif -%}
+      <h2 class="aiae-display aiae-features__title">{{ title_html }}</h2>
+    </div>
+  </div>
+
+  <div class="aiae-features__grid">
+    {%- for block in section.blocks -%}
+      <article class="aiae-feature" data-aiae-reveal style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;" {{ block.shopify_attributes }}>
+        <span class="aiae-feature__idx">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+        <h3 class="aiae-feature__title">{{ block.settings.title }}</h3>
+        <div class="aiae-feature__text">{{ block.settings.text }}</div>
+      </article>
+    {%- endfor -%}
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Features",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tone",
+      "options": [
+        { "value": "paper", "label": "Paper" },
+        { "value": "cream", "label": "Cream" },
+        { "value": "void", "label": "Dark" }
+      ],
+      "default": "paper"
+    },
+    { "type": "text", "id": "anchor", "label": "Anchor ID" },
+    { "type": "text", "id": "section_number", "label": "Section number" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text" },
+    { "type": "text", "id": "title", "label": "Heading (H2)", "default": "Ce primești." }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Column",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title (H3)", "default": "Bumbac greu" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Blank-uri heavyweight și garment-dyed.</p>" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "AIAE Features",
+      "blocks": [
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" }
+      ]
+    }
+  ]
+}
+{% endschema %}

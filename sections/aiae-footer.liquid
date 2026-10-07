@@ -21,6 +21,15 @@
           {%- endif -%}
         {%- endfor -%}
       </div>
+      {%- assign legal_menu = section.settings.legal_menu -%}
+      {%- if legal_menu != blank and legal_menu.links.size > 0 -%}
+        <nav class="aiae-footer__col" aria-label="{{ legal_menu.title | escape }}" data-aiae-reveal style="--aiae-reveal-delay: 0.28s;">
+          <span class="aiae-footer__colhead">{{ section.settings.legal_heading | default: legal_menu.title }}</span>
+          {%- for link in legal_menu.links -%}
+            <a href="{{ link.url }}" class="aiae-flink"{% if link.type == 'http_link' %} target="_blank" rel="noopener"{% endif %}>{{ link.title }}</a>
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
     </div>
   </div>
 
@@ -31,7 +40,7 @@
   </div>
 
   <div class="aiae-footer__bottom" data-aiae-reveal="fade" style="--aiae-reveal-delay: 0.15s;">
-    <span>{{ section.settings.copyright }}</span>
+    <span class="aiae-footer__legal">{{ section.settings.copyright }}</span>
     <span class="aiae-footer__madein">{{ section.settings.made_in }}<i></i></span>
   </div>
 </footer>
@@ -59,9 +68,22 @@
       "default": "AIAE"
     },
     {
+      "type": "link_list",
+      "id": "legal_menu",
+      "label": "Legal menu",
+      "info": "Terms, returns, shipping, privacy, cookies, ANPC."
+    },
+    {
       "type": "text",
+      "id": "legal_heading",
+      "label": "Legal column heading",
+      "info": "Falls back to the menu's title.",
+      "default": "Legal"
+    },
+    {
+      "type": "inline_richtext",
       "id": "copyright",
-      "label": "Copyright text",
+      "label": "Legal line",
       "default": "© 2026 AIAE.RO — TOATE DREPTURILE, DEGEABA"
     },
     {

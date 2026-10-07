@@ -15,7 +15,7 @@
                   {{ fallback_image | image_url: width: 2200 }} 2200w,
                   {{ fallback_image | image_url: width: 3000 }} 3000w"
           sizes="100vw"
-          alt="{{ fallback_image.alt | escape | default: shop.name }}"
+          alt="{{ section.settings.image_alt | default: fallback_image.alt | default: shop.name | escape }}"
           width="{{ fallback_image.width }}"
           height="{{ fallback_image.height }}"
           loading="eager"
@@ -46,13 +46,21 @@
     <span>— {{ section.settings.sublabel }}</span>
   </div>
 
-  <h1 class="aiae-hero__headline" data-aiae-reveal="rise" style="--aiae-reveal-delay: 0.2s;">
-    {{- section.settings.headline | replace: '.', '<span class="aiae-dot">.</span>' -}}
+  {%- comment -%} The homepage's only <h1>. Short headlines (the AIA.E wordmark) get the giant cover size {%- endcomment -%}
+  <h1 class="aiae-hero__headline{% if section.settings.headline.size > 12 %} aiae-hero__headline--long{% endif %}" data-aiae-reveal="rise" style="--aiae-reveal-delay: 0.2s;">
+    {{- section.settings.headline | escape | replace: '.', '<span class="aiae-dot">.</span>' | newline_to_br -}}
   </h1>
 
   <div class="aiae-hero__bottom">
     <p class="aiae-hero__tagline" data-aiae-reveal style="--aiae-reveal-delay: 0.36s;">{{ section.settings.tagline }}</p>
-    <a href="{{ section.settings.cta_link }}" class="aiae-hero__cta" data-aiae-reveal style="--aiae-reveal-delay: 0.46s;">{{ section.settings.cta_label }} →</a>
+    <div class="aiae-hero__ctas" data-aiae-reveal style="--aiae-reveal-delay: 0.46s;">
+      {%- if section.settings.cta_label != blank -%}
+        <a href="{{ section.settings.cta_link }}" class="aiae-hero__cta">{{ section.settings.cta_label }} →</a>
+      {%- endif -%}
+      {%- if section.settings.cta2_label != blank -%}
+        <a href="{{ section.settings.cta2_link }}" class="aiae-hero__cta aiae-hero__cta--ghost">{{ section.settings.cta2_label }} →</a>
+      {%- endif -%}
+    </div>
   </div>
 
 </section>
@@ -78,6 +86,12 @@
       "info": "Shown on screens up to 749px wide. Falls back to the desktop image if empty."
     },
     {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "info": "Describes the image for search engines and screen readers. Falls back to the image's own alt text."
+    },
+    {
       "type": "header",
       "content": "Content"
     },
@@ -100,27 +114,38 @@
       "default": "ESTE CEEA CE ESTE"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "headline",
-      "label": "Headline (use . for accent dot)",
+      "label": "Headline (the page's H1)",
+      "info": "Every . becomes an accent dot. Line breaks are kept.",
       "default": "AIA.E"
     },
     {
       "type": "textarea",
       "id": "tagline",
-      "label": "Tagline",
+      "label": "Subheading",
       "default": "Haine pentru oameni care au încetat să se mai prefacă. Design brut, finisaj de lux. Nu schimbă nimic — dar arată bine."
     },
     {
       "type": "text",
       "id": "cta_label",
-      "label": "CTA button label",
+      "label": "Primary button label",
       "default": "VEZI COLECȚIA"
     },
     {
       "type": "url",
       "id": "cta_link",
-      "label": "CTA button link"
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "cta2_label",
+      "label": "Secondary button label"
+    },
+    {
+      "type": "url",
+      "id": "cta2_link",
+      "label": "Secondary button link"
     }
   ],
   "presets": [

@@ -1,0 +1,97 @@
+{%- assign title_html = section.settings.title | escape | replace: '.', '<span class="aiae-dot">.</span>' -%}
+
+<section id="{{ section.settings.anchor | default: 'newsletter' }}" class="aiae-section aiae-section--{{ section.settings.tone }} aiae-nl">
+
+  <div class="aiae-nl__head" data-aiae-reveal>
+    {%- if section.settings.eyebrow != blank -%}
+      <div class="aiae-eyebrow">
+        {%- if section.settings.section_number != blank -%}({{ section.settings.section_number }}) {% endif -%}
+        {{ section.settings.eyebrow }}
+      </div>
+    {%- endif -%}
+    <h2 class="aiae-display aiae-nl__title">{{ title_html }}</h2>
+    {%- if section.settings.body != blank -%}
+      <div class="aiae-nl__body">{{ section.settings.body }}</div>
+    {%- endif -%}
+  </div>
+
+  <div class="aiae-nl__formwrap" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">
+    {%- form 'customer', id: 'AiaeNewsletter', class: 'aiae-nl__form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+
+      {%- if form.posted_successfully? -%}
+        <p class="aiae-nl__msg aiae-nl__msg--ok" role="status">{{ section.settings.success }}</p>
+      {%- else -%}
+        <div class="aiae-nl__row">
+          <label for="AiaeNewsletterEmail-{{ section.id }}" class="visually-hidden">{{ section.settings.placeholder }}</label>
+          <input
+            id="AiaeNewsletterEmail-{{ section.id }}"
+            class="aiae-nl__input"
+            type="email"
+            name="contact[email]"
+            value="{{ form.email }}"
+            placeholder="{{ section.settings.placeholder }}"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+            {% if form.errors %}
+              aria-invalid="true" aria-describedby="AiaeNewsletterError-{{ section.id }}"
+            {% else %}
+              aria-describedby="AiaeNewsletterNote-{{ section.id }}"
+            {% endif %}>
+          <button type="submit" class="aiae-nl__btn">
+            <span>{{ section.settings.button_label }}</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+        {%- if form.errors -%}
+          <p id="AiaeNewsletterError-{{ section.id }}" class="aiae-nl__msg aiae-nl__msg--err" role="alert">
+            {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+          </p>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if section.settings.consent != blank -%}
+        <div id="AiaeNewsletterNote-{{ section.id }}" class="aiae-nl__note">{{ section.settings.consent }}</div>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Newsletter",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tone",
+      "options": [
+        { "value": "paper", "label": "Paper" },
+        { "value": "cream", "label": "Cream" },
+        { "value": "void", "label": "Dark" }
+      ],
+      "default": "cream"
+    },
+    { "type": "text", "id": "anchor", "label": "Anchor ID", "default": "newsletter" },
+    { "type": "text", "id": "section_number", "label": "Section number" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow text", "default": "NEWSLETTER" },
+    { "type": "text", "id": "title", "label": "Heading (H2)", "default": "Lista. Rar și fără entuziasm." },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Scriem doar când apare ceva nou. Nu promitem că o să-ți pese.</p>" },
+    { "type": "text", "id": "placeholder", "label": "Email field placeholder", "default": "Email" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Mă abonez" },
+    { "type": "text", "id": "success", "label": "Success message", "default": "Gata. Ești pe listă." },
+    {
+      "type": "richtext",
+      "id": "consent",
+      "label": "Consent note under the field",
+      "default": "<p>Te poți dezabona oricând. Detalii în Politica de confidențialitate.</p>"
+    }
+  ],
+  "presets": [
+    { "name": "AIAE Newsletter" }
+  ]
+}
+{% endschema %}

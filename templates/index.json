@@ -20,37 +20,42 @@
       "settings": {
         "image_desktop": "shopify://shop_images/Gemini_Generated_Image_q2mn5tq2mn5tq2mn.png",
         "image_mobile": "shopify://shop_images/hero_mobile.gif",
-        "ticker_text": "DEGEABA CLUB 2026 — LOT 200/200|PRINT ON DEMAND — TOATE CULORILE|BUCUREȘTI / TIMIȘOARA|AIA E. ASTA E.",
+        "ticker_text": "DEGEABA CLUB 2026 — NR. SERIE 0226-AE|HAINE PERSONALIZATE — FĂRĂ MINIM DE COMANDĂ|LIVRARE GRATUITĂ DE LA 190 LEI|AIA E.",
         "label": "STREETWEAR POST-IRONIC",
         "sublabel": "ESTE CEEA CE ESTE",
-        "headline": "AIA.E",
-        "tagline": "Haine pentru oameni care au încetat să se mai prefacă. Design brut, finisaj de lux. Nu schimbă nimic — dar arată bine.",
-        "cta_label": "VEZI COLECȚIA",
-        "cta_link": "/collections/all"
+        "headline": "Streetwear românesc.\nFără entuziasm.",
+        "tagline": "Haine grele, printuri care se uzează frumos și un singur principiu: nimic nu se schimbă. Măcar ești îmbrăcat.",
+        "cta_label": "Vezi DEGEABA CLUB",
+        "cta_link": "/collections/degeaba-club",
+        "image_alt": "Hanorac AIAE Fractured Starburst, streetwear românesc din bumbac greu",
+        "cta2_label": "Scrie-ți tricoul",
+        "cta2_link": "/collections/filozofia-ta"
       }
     },
-    "aiae_about": {
-      "type": "aiae-about",
+    "aiae_intro": {
+      "type": "aiae-statement",
       "settings": {
+        "tone": "paper",
+        "layout": "split",
+        "anchor": "despre",
         "section_number": "01",
-        "eyebrow": "DESPRE NOI — DIRECT DE LA FONDATORI",
-        "title": "DE LA NOI\nPENTRU TINE",
-        "letterhead": "AIAE.RO — GARMENT LAB",
-        "letter_date": "BUCUREȘTI / TIMIȘOARA",
-        "salutation": "Salut,",
-        "lead": "Am făcut aiae.ro pentru că ne-am săturat de haine care arată la fel pe toată lumea.",
-        "body": "<p>Lucrăm în serii mici, cu materiale grele și finisaje pe care le purtăm noi înainte să ajungă la tine. Dacă o piesă nu trece testul ăsta, nu ajunge în magazin.</p><p>Restul e treaba ta: alege produsul, pune-ți cuvintele, culorile și ideile pe el. Noi ne ocupăm de calitate — tu de mesaj.</p>",
-        "signature_mark": "A.E",
-        "signature_name": "Fondatorii AIAE",
-        "signature_role": "EST. 2026 — FABRICAT ÎN RO",
-        "mission_label": "MISIUNEA",
-        "mission_title": "CALITATE, APOI LIBERTATE",
-        "mission_text": "Produse pe care merită să pui ceva personal: materiale bune, printuri care rezistă, făcute la comandă pentru o singură persoană — tine.",
-        "vision_label": "VIZIUNEA",
-        "vision_title": "NIMIC LA INDIGO",
-        "vision_text": "O garderobă în care fiecare piesă spune ceva al tău. Fără uniforme, fără copii, fără haine care ar putea fi ale altcuiva.",
-        "cta_label": "PERSONALIZEAZĂ O PIESĂ",
-        "cta_link": "/pages/custom"
+        "eyebrow": "DESPRE — CE ÎNSEAMNĂ NUMELE",
+        "title": "Aia e.",
+        "accent_dots": true,
+        "body": "<p>În română, „aia e” înseamnă că lucrurile sunt cum sunt și nu are rost să ne agităm. Am făcut din asta un brand de haine. Tricouri, hanorace și șepci din bumbac greu, cu estetică de afiș vechi, xerox și beton. Fără hype, fără numărătoare inversă, fără promisiuni.</p>"
+      }
+    },
+    "aiae_collection_grid": {
+      "type": "aiae-collection-grid",
+      "settings": {
+        "section_number": "02",
+        "eyebrow": "MAGAZINUL — COLECȚIA OFICIALĂ",
+        "title": "DEGEABA CLUB 2026",
+        "description": "Prima și singura colecție oficială. NR. SERIE 0226-AE.",
+        "redirect_label": "Toată colecția",
+        "redirect_link": "/collections/degeaba-club",
+        "collection": "degeaba-club",
+        "products_to_show": 6
       }
     },
     "aiae_print_on_demand": {
@@ -69,10 +74,10 @@
         "tab_1"
       ],
       "settings": {
-        "section_number": "02",
-        "eyebrow": "COLECȚII PERSONALIZATE — ALEGE ȘI FĂ-O A TA",
-        "title": "FĂ-ȚI-O SINGUR",
-        "accent_word": "SINGUR",
+        "section_number": "03",
+        "eyebrow": "HAINE PERSONALIZATE — TEXTUL TĂU",
+        "title": "Filozofia ta. Pe bumbac greu.",
+        "accent_word": "bumbac greu",
         "module_label": "MODUL PERSONALIZER",
         "status_label": "LIVE — TOATE CULORILE",
         "tabs_label": "COLECȚII",
@@ -86,83 +91,72 @@
         "print_note": "PRINT SCHIMBABIL",
         "color_note": "CULOARE PRODUS",
         "empty_hint": "Alege o colecție cu produse personalizabile în setările secțiunii.",
-        "button_label": "PERSONALIZEAZĂ — PRINT & CULOARE"
+        "button_label": "PERSONALIZEAZĂ — PRINT & CULOARE",
+        "intro": "<p>Tricouri, hanorace, bluze și șepci personalizate cu textul, numele sau designul tău. Blank-urile le alegem noi. Mesajul e treaba ta. Fără minim de comandă — o bucată e o comandă.</p>",
+        "note": "N-ai inspirație? <a href=\"/pages/concept\">Vezi capsulele concept.</a>",
+        "cta_label": "Personalizează",
+        "cta_link": "/collections/filozofia-ta"
       }
     },
-    "aiae_collection_grid": {
-      "type": "aiae-collection-grid",
-      "settings": {
-        "section_number": "03",
-        "eyebrow": "MAGAZINUL — PIESE GATA FĂCUTE",
-        "title": "GATA\nFĂCUTE",
-        "description": "Piesele astea țin magazinul pe picioare — aceleași materiale, aceleași standarde. Dar sunt ale noastre, nu ale tale. Dacă vrei ceva care chiar te reprezintă, ia-o pe cea personalizată.",
-        "redirect_label": "MAI BINE ALEGE DIN COLECȚIILE PERSONALIZATE",
-        "redirect_link": "#custom",
-        "collection": "degeaba-club",
-        "products_to_show": 6
-      }
-    },
-    "aiae_concept_carousels": {
-      "type": "aiae-concept-carousels",
+    "aiae_features": {
+      "type": "aiae-features",
       "blocks": {
-        "unt_row": {
-          "type": "carousel_row",
+        "feature_1": {
+          "type": "feature",
           "settings": {
-            "collection": "concept-street-cats",
-            "products_to_show": 5,
-            "title": "",
-            "note": "",
-            "show_collection_link": true,
-            "collection_link_label": "VEZI COLECTIA",
-            "code_prefix": "UNT",
-            "show_price": true,
-            "show_sold_out": true,
-            "card_bg": "#f2efe7",
-            "card_fg": "#0d0d0d"
+            "title": "Bumbac greu",
+            "text": "<p>Blank-uri heavyweight și garment-dyed. Cad greu, țin forma, arată purtate din prima zi.</p>"
           }
         },
-        "buc_row": {
-          "type": "carousel_row",
+        "feature_2": {
+          "type": "feature",
           "settings": {
-            "collection": "concept-faith",
-            "products_to_show": 5,
-            "title": "",
-            "note": "",
-            "show_collection_link": true,
-            "collection_link_label": "VEZI COLECTIA",
-            "code_prefix": "BUC",
-            "show_price": true,
-            "show_sold_out": true,
-            "card_bg": "#1c1c1c",
-            "card_fg": "#1C1C1C"
+            "title": "Print care rezistă",
+            "text": "<p>Textură de serigrafie și broderie densă. Printul îți va supraviețui ție.</p>"
           }
         },
-        "carousel_row_J4N8zQ": {
-          "type": "carousel_row",
+        "feature_3": {
+          "type": "feature",
           "settings": {
-            "collection": "concept-ingredients",
-            "products_to_show": 5,
-            "title": "",
-            "note": "",
-            "show_collection_link": true,
-            "collection_link_label": "VEZI COLECȚIA",
-            "code_prefix": "",
-            "show_price": true,
-            "show_sold_out": true,
-            "card_bg": "#e7e3d8",
-            "card_fg": "#0d0d0d"
+            "title": "Făcut la comandă",
+            "text": "<p>Fiecare bucată e produsă după ce comanzi. Fără stoc, fără surplus aruncat.</p>"
+          }
+        },
+        "feature_4": {
+          "type": "feature",
+          "settings": {
+            "title": "Livrare",
+            "text": "<p>5–14 zile lucrătoare în România. Gratuit de la 190 lei.</p>"
           }
         }
       },
       "block_order": [
-        "unt_row",
-        "buc_row",
-        "carousel_row_J4N8zQ"
+        "feature_1",
+        "feature_2",
+        "feature_3",
+        "feature_4"
       ],
       "settings": {
-        "section_number": "03",
-        "eyebrow": "CONCEPTE — POTENȚIAL DE CUSTOMIZARE",
-        "title": "CE S-AR PUTEA FACE"
+        "tone": "cream",
+        "anchor": "ce-primesti",
+        "section_number": "04",
+        "eyebrow": "STANDARDUL — FĂRĂ SURPRIZE",
+        "title": "Ce primești."
+      }
+    },
+    "aiae_manifesto": {
+      "type": "aiae-statement",
+      "settings": {
+        "tone": "void",
+        "layout": "full",
+        "anchor": "manifest",
+        "section_number": "05",
+        "eyebrow": "MANIFEST",
+        "title": "Afară nimic nu se schimbă.",
+        "accent_dots": true,
+        "body": "<p>Noi ne-am luat hanoracul. Greu, cald, indiferent. Stilul rămâne. Restul e problema ta.</p>",
+        "button_label": "Hanoracul",
+        "button_link": "/products/hanorac-fractured-starburst"
       }
     },
     "aiae_faq": {
@@ -171,54 +165,54 @@
         "faq_1": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Ce înseamnă, mai exact, „produs personalizat”?",
+            "heading": "Cât durează livrarea?",
             "icon": "none",
-            "row_content": "<p>Alegi piesa, apoi îi pui textul, culoarea și grafica ta. Fiecare comandă e produsă separat, pentru o singură persoană. Nu ținem stoc din ea și nu o mai face nimeni altcineva.</p>",
+            "row_content": "<p>5–14 zile lucrătoare în România, fiindcă fiecare produs se face după comandă. Livrarea costă 20 lei și e gratuită de la 190 lei.</p>",
             "page": ""
           }
         },
         "faq_2": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Din ce sunt făcute produsele?",
+            "heading": "Pot returna produsele?",
             "icon": "none",
-            "row_content": "<p>Bumbac greu, tricotaje dense și printuri care nu crapă după trei spălări. Testăm fiecare piesă pe noi înainte s-o punem la vânzare — dacă nu am purta-o, nu ajunge în magazin.</p>",
+            "row_content": "<p>Produsele din colecție, da: ai 14 zile de la primire. Cele personalizate nu se returnează, dar dacă ajung defecte sau greșit executate, le înlocuim sau îți dăm banii înapoi.</p>",
             "page": ""
           }
         },
         "faq_3": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Cât durează până ajunge la mine?",
+            "heading": "Cum aleg mărimea?",
             "icon": "none",
-            "row_content": "<p>Producem la comandă, deci durează puțin mai mult decât la un magazin cu stoc: în general 2–5 zile lucrătoare pentru producție, plus timpul curierului.</p>",
+            "row_content": "<p>Fiecare produs are tabelul de mărimi în centimetri pe pagina lui. Croiala diferă între modele, așa că verifică-l înainte de comandă.</p>",
             "page": ""
           }
         },
         "faq_4": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Pot returna o piesă personalizată?",
+            "heading": "Cum funcționează personalizarea?",
             "icon": "none",
-            "row_content": "<p>Piesele personalizate sunt făcute doar pentru tine, așa că nu pot fi revândute. Dacă am greșit noi ceva sau produsul are un defect, îl refacem sau îți dăm banii înapoi. Scrie-ne și rezolvăm.</p>",
+            "row_content": "<p>Alegi produsul, culoarea și mărimea, apoi scrii textul sau încarci designul în modulul de personalizare. Noi îl printăm sau îl brodăm și ți-l trimitem.</p>",
             "page": ""
           }
         },
         "faq_5": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Cum am grijă de print?",
+            "heading": "Cum spăl produsele?",
             "icon": "none",
-            "row_content": "<p>Spălare la 30°C, pe dos, fără înălbitor, călcat tot pe dos. Atât. Restul rezistă.</p>",
+            "row_content": "<p>Pe dos, cu apă rece. Fără uscător și fără fier de călcat direct pe print. Culorile se uzează frumos. Atât.</p>",
             "page": ""
           }
         },
         "faq_6": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Atunci de ce mai aveți colecții gata făcute?",
+            "heading": "Unde sunt produse?",
             "icon": "none",
-            "row_content": "<p>Pentru că țin magazinul pe picioare și sunt un punct de start bun. Dar dacă vrei o piesă care chiar spune ceva despre tine, mergi pe colecțiile personalizate.</p>",
+            "row_content": "<p>Sunt printate la comandă de parteneri de producție din rețeaua Printify și expediate direct către tine.</p>",
             "page": ""
           }
         }
@@ -232,8 +226,8 @@
         "faq_6"
       ],
       "settings": {
-        "caption": "FAQ — CE NE ÎNTREABĂ LUMEA",
-        "heading": "ÎNTREBĂRI",
+        "caption": "(06) FAQ — CE NE ÎNTREABĂ LUMEA",
+        "heading": "Întrebări. Răspundem, dar nu ne grăbim.",
         "heading_size": "hxl",
         "heading_alignment": "left",
         "layout": "none",
@@ -246,77 +240,31 @@
         "padding_bottom": 0
       }
     },
-    "aiae_footer": {
-      "type": "aiae-footer",
-      "blocks": {
-        "shop_1": {
-          "type": "shop_link",
-          "settings": {
-            "label": "Degeaba Club",
-            "link": "/collections/degeaba-club"
-          }
-        },
-        "shop_2": {
-          "type": "shop_link",
-          "settings": {
-            "label": "Print on Demand",
-            "link": "/pages/custom"
-          }
-        },
-        "shop_3": {
-          "type": "shop_link",
-          "settings": {
-            "label": "Concepte",
-            "link": "/pages/concept"
-          }
-        },
-        "social_1": {
-          "type": "social_link",
-          "settings": {
-            "label": "Instagram",
-            "link": "https://instagram.com"
-          }
-        },
-        "social_2": {
-          "type": "social_link",
-          "settings": {
-            "label": "TikTok",
-            "link": "https://tiktok.com"
-          }
-        },
-        "social_3": {
-          "type": "social_link",
-          "settings": {
-            "label": "Newsletter",
-            "link": "/pages/newsletter"
-          }
-        }
-      },
-      "block_order": [
-        "shop_1",
-        "shop_2",
-        "shop_3",
-        "social_1",
-        "social_2",
-        "social_3"
-      ],
+    "aiae_newsletter": {
+      "type": "aiae-newsletter",
       "settings": {
-        "brand_tagline": "AIAE.RO — ASTA E.",
-        "brand_description": "Brand de streetwear din România. Produs la comandă, în loturi. Fără reaprovizionare, fără scuze. Aia e.",
-        "wordmark": "AIAE",
-        "copyright": "© 2026 AIAE.RO — TOATE DREPTURILE, DEGEABA",
-        "made_in": "FABRICAT ÎN RO"
+        "tone": "cream",
+        "anchor": "newsletter",
+        "section_number": "07",
+        "eyebrow": "NEWSLETTER",
+        "title": "Lista. Rar și fără entuziasm.",
+        "body": "<p>Scriem doar când apare ceva nou. Nu promitem că o să-ți pese.</p>",
+        "placeholder": "Email",
+        "button_label": "Mă abonez",
+        "success": "Gata. Ești pe listă.",
+        "consent": "<p>Te poți dezabona oricând. Detalii în <a href=\"/pages/politica-de-confidentialitate\" title=\"Politica de confidențialitate\">Politica de confidențialitate</a>.</p>"
       }
     }
   },
   "order": [
     "aiae_loader",
     "aiae_hero",
-    "aiae_about",
-    "aiae_print_on_demand",
+    "aiae_intro",
     "aiae_collection_grid",
-    "aiae_concept_carousels",
+    "aiae_print_on_demand",
+    "aiae_features",
+    "aiae_manifesto",
     "aiae_faq",
-    "aiae_footer"
+    "aiae_newsletter"
   ]
 }

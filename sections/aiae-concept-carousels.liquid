@@ -2,7 +2,8 @@
 
   <div class="aiae-con__head">
     <div class="aiae-eyebrow" data-aiae-reveal>({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
-    <h2 class="aiae-display aiae-con__title" data-aiae-reveal style="--aiae-reveal-delay: 0.12s;">{{ section.settings.title }}</h2>
+    {%- assign heading_tag = section.settings.heading_tag | default: 'h2' -%}
+    <{{ heading_tag }} class="aiae-display aiae-con__title" data-aiae-reveal style="--aiae-reveal-delay: 0.12s;">{{ section.settings.title }}</{{ heading_tag }}>
   </div>
 
   {%- for block in section.blocks -%}
@@ -124,6 +125,17 @@
       "id": "section_number",
       "label": "Section number",
       "default": "03"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "Title heading level",
+      "info": "Use H1 when this is the main section of its own page; keep H2 on the homepage.",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" }
+      ],
+      "default": "h2"
     },
     {
       "type": "text",
