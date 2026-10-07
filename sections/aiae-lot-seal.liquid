@@ -1,0 +1,211 @@
+{%- comment -%}
+  LOT SEAL — the closing date of a limited collection, stamped.
+
+  The theme already talks about collections as lots that open and close, so a
+  collection with an end date is a lot with a seal on it rather than a new
+  idea. The countdown is rendered server-side first and corrected by JS on
+  load: Shopify caches the page, so the Liquid figure can be minutes or days
+  stale, but it means the plate never paints empty and never reflows.
+
+  Hours, minutes and seconds are zero-padded: unpadded, the plate changes
+  width every time a unit crosses 10 or 100, and with a second hand running
+  that would be a visible twitch once a second.
+{%- endcomment -%}
+
+{%- liquid
+  assign deadline = section.settings.deadline | default: '2027-01-01'
+  assign deadline_ts = deadline | date: '%s' | times: 1
+  assign now_ts = 'now' | date: '%s' | times: 1
+  assign remaining = deadline_ts | minus: now_ts
+
+  assign is_closed = false
+  if remaining <= 0
+    assign is_closed = true
+    assign remaining = 0
+  endif
+
+  assign days = remaining | divided_by: 86400
+  assign after_days = remaining | modulo: 86400
+  assign hours = after_days | divided_by: 3600
+  assign after_hours = after_days | modulo: 3600
+  assign minutes = after_hours | divided_by: 60
+  assign seconds = after_hours | modulo: 60
+
+  comment
+    Liquid has no zero-pad filter; prepending a 0 and taking the last two
+    characters is the standard stand-in. Days stay unpadded — they run to
+    three digits and are the one figure that is read as a number, not a clock.
+  endcomment
+  assign hours = hours | prepend: '0' | slice: -2, 2
+  assign minutes = minutes | prepend: '0' | slice: -2, 2
+  assign seconds = seconds | prepend: '0' | slice: -2, 2
+
+  assign tape_items = section.settings.tape_text | split: '|'
+-%}
+
+<section
+  class="aiae-seal{% if is_closed %} aiae-seal--closed{% endif %}"
+  data-aiae-seal
+  data-deadline="{{ deadline_ts }}"
+  data-closed-label="{{ section.settings.closed_label | escape }}"
+>
+  {%- if tape_items.size > 0 -%}
+    <div class="aiae-seal__tape aiae-noscroll" aria-hidden="true">
+      <div class="aiae-marquee-inner">
+        {%- comment -%} Twice through, for a seamless loop {%- endcomment -%}
+        {%- for pass in (1..2) -%}
+          {%- for item in tape_items -%}
+            <span>{{ item | strip }}</span>
+            <span class="aiae-tick-dot">●</span>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="aiae-seal__inner">
+    <div class="aiae-seal__head" data-aiae-reveal>
+      <div class="aiae-eyebrow aiae-seal__eyebrow">
+        <i class="aiae-seal__tick" aria-hidden="true"></i>
+        {{ section.settings.eyebrow }}
+      </div>
+      {%- if section.settings.note != blank -%}
+        <p class="aiae-seal__note">{{ section.settings.note }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="aiae-seal__clock" data-aiae-reveal="fade">
+      {%- if is_closed -%}
+        <p class="aiae-seal__closed-line">{{ section.settings.closed_label }}</p>
+      {%- else -%}
+        <p class="aiae-seal__lede">{{ section.settings.countdown_label }}</p>
+        <div class="aiae-seal__plates">
+          <span class="aiae-seal__plate">
+            <b data-seal-days>{{ days }}</b>
+            <em>{{ section.settings.days_label }}</em>
+          </span>
+          <span class="aiae-seal__plate">
+            <b data-seal-hours>{{ hours }}</b>
+            <em>{{ section.settings.hours_label }}</em>
+          </span>
+          <span class="aiae-seal__plate">
+            <b data-seal-minutes>{{ minutes }}</b>
+            <em>{{ section.settings.minutes_label }}</em>
+          </span>
+          <span class="aiae-seal__plate">
+            <b data-seal-seconds>{{ seconds }}</b>
+            <em>{{ section.settings.seconds_label }}</em>
+          </span>
+        </div>
+        {%- comment -%}
+          The plates are a glanceable summary; this is the actual sentence a
+          screen reader gets, and it is also the fallback if JS never runs.
+        {%- endcomment -%}
+        <p class="aiae-seal__stamp">
+          {{ section.settings.closes_prefix }}
+          <time datetime="{{ deadline | date: '%Y-%m-%d' }}">
+            {{- deadline | date: section.settings.date_format -}}
+          </time>
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "AIAE Lot Seal",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "deadline",
+      "label": "Closing date",
+      "info": "YYYY-MM-DD. The lot counts down to midnight at the start of this day.",
+      "default": "2027-01-01"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "EDIȚIE LIMITATĂ — LOT SIGILAT"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Note",
+      "default": "Se face o dată. Când lotul se închide, nu se retipărește — nici în altă culoare, nici în altă mărime."
+    },
+    {
+      "type": "header",
+      "content": "Numărătoare inversă"
+    },
+    {
+      "type": "text",
+      "id": "countdown_label",
+      "label": "Countdown label",
+      "default": "LOTUL SE ÎNCHIDE ÎN"
+    },
+    {
+      "type": "text",
+      "id": "days_label",
+      "label": "Days label",
+      "default": "ZILE"
+    },
+    {
+      "type": "text",
+      "id": "hours_label",
+      "label": "Hours label",
+      "default": "ORE"
+    },
+    {
+      "type": "text",
+      "id": "minutes_label",
+      "label": "Minutes label",
+      "default": "MIN"
+    },
+    {
+      "type": "text",
+      "id": "seconds_label",
+      "label": "Seconds label",
+      "default": "SEC"
+    },
+    {
+      "type": "text",
+      "id": "closes_prefix",
+      "label": "Date line prefix",
+      "default": "ULTIMA ZI —"
+    },
+    {
+      "type": "text",
+      "id": "date_format",
+      "label": "Date format",
+      "info": "Liquid date format, e.g. %d.%m.%Y",
+      "default": "%d.%m.%Y"
+    },
+    {
+      "type": "text",
+      "id": "closed_label",
+      "label": "Closed label",
+      "info": "Shown once the closing date has passed.",
+      "default": "LOT ÎNCHIS — ASTA E."
+    },
+    {
+      "type": "header",
+      "content": "Bandă"
+    },
+    {
+      "type": "text",
+      "id": "tape_text",
+      "label": "Tape text",
+      "info": "Separate items with |. Leave blank to hide the tape.",
+      "default": "EDIȚIE LIMITATĂ|SE ÎNCHIDE ÎN 2027|NU SE RETIPĂREȘTE|DEGEABA CLUB"
+    }
+  ],
+  "presets": [
+    {
+      "name": "AIAE Lot Seal"
+    }
+  ]
+}
+{% endschema %}

@@ -17,9 +17,13 @@
 
     // Nav scroll
     const nav = document.getElementById('aiae-nav');
+    // The hero ticker is the header's second row — it shares the nav's state.
+    const ticker = document.querySelector('.aiae-hero__ticker');
     function onScroll() {
       const y = window.scrollY || window.pageYOffset;
-      if (nav) nav.classList.toggle('is-scrolled', y > 40);
+      const scrolled = y > 40;
+      if (nav) nav.classList.toggle('is-scrolled', scrolled);
+      if (ticker) ticker.classList.toggle('is-scrolled', scrolled);
       if (!reduceMotion) {
         const word = document.getElementById('aiae-footer-word');
         if (word) {
@@ -41,7 +45,213 @@
 
     initMenu();
     initPod(reduceMotion);
+    initCarousels(reduceMotion);
+    initCardFlips(reduceMotion);
+    initLotSeal();
     initReveal(reduceMotion, loader);
+  }
+
+  // ─── Lot seal: correct the server-rendered countdown ───────
+  // The plates are painted by Liquid so they are never blank, but Shopify
+  // serves that markup from cache — by the time a visitor sees it the figure
+  // can be days old. This recomputes from the visitor's own clock and then
+  // ticks on the second.
+  function initLotSeal() {
+    const seals = Array.prototype.slice.call(document.querySelectorAll('[data-aiae-seal]'));
+    if (!seals.length) return;
+
+    function paint(seal) {
+      const deadline = parseInt(seal.dataset.deadline, 10);
+      if (!deadline) return true;
+
+      const remaining = deadline - Math.floor(Date.now() / 1000);
+      if (remaining <= 0) {
+        // Closed while the page was open, or served from a cache older than
+        // the deadline. Swap the clock for the closing stamp.
+        const clock = seal.querySelector('.aiae-seal__clock');
+        if (clock && !seal.classList.contains('aiae-seal--closed')) {
+          const line = document.createElement('p');
+          line.className = 'aiae-seal__closed-line';
+          line.textContent = seal.dataset.closedLabel || '';
+          clock.replaceChildren(line);
+          seal.classList.add('aiae-seal--closed');
+        }
+        return true;
+      }
+
+      // Days are read as a number and run to three digits, so they stay
+      // unpadded; the clock units are padded to two so a plate never changes
+      // width mid-tick.
+      const parts = {
+        days: String(Math.floor(remaining / 86400)),
+        hours: pad(Math.floor((remaining % 86400) / 3600)),
+        minutes: pad(Math.floor((remaining % 3600) / 60)),
+        seconds: pad(remaining % 60)
+      };
+      Object.keys(parts).forEach(function(unit) {
+        const el = seal.querySelector('[data-seal-' + unit + ']');
+        if (el && el.textContent !== parts[unit]) el.textContent = parts[unit];
+      });
+      return false;
+    }
+
+    function pad(n) {
+      return n < 10 ? '0' + n : String(n);
+    }
+
+    function tick() {
+      // Every seal done means nothing left to schedule.
+      const live = seals.filter(function(seal) { return !paint(seal); });
+      if (!live.length) return;
+      // Re-aim at the next whole second every time rather than setInterval,
+      // which drifts and stacks up missed ticks after a background tab or a
+      // sleeping laptop wakes.
+      setTimeout(tick, 1000 - (Date.now() % 1000) + 20);
+    }
+
+    tick();
+  }
+
+  // ─── Collection cards: automatic flip-through of the shots ─────
+  // Front / back / sides rotate by themselves on every device — the card
+  // is a link, so there is no tap or hover affordance to hang this on.
+  // Cards are staggered and only run while on screen.
+  function initCardFlips(reduceMotion) {
+    setupCardFlips(document, reduceMotion);
+
+    document.addEventListener('shopify:section:load', function(e) {
+      setupCardFlips(e.target, reduceMotion);
+    });
+  }
+
+  function setupCardFlips(scope, reduceMotion) {
+    if (reduceMotion) return;
+
+    const STEP = 2600;
+    const items = Array.prototype.slice.call(scope.querySelectorAll('[data-aiae-flip]'))
+      .filter(function(el) { return el.dataset.aiaeFlipReady !== 'true'; })
+      .map(function(el, i) {
+        el.dataset.aiaeFlipReady = 'true';
+        return {
+          shots: Array.prototype.slice.call(el.querySelectorAll('.aiae-card__shot')),
+          ticks: Array.prototype.slice.call(el.querySelectorAll('.aiae-card__tick')),
+          idx: 0,
+          timer: null,
+          inView: false,
+          // Neighbouring cards flip out of step rather than in unison
+          phase: (i % 4) * 620
+        };
+      })
+      .filter(function(it) { return it.shots.length > 1; });
+
+    if (!items.length) return;
+
+    function paint(it) {
+      it.shots.forEach(function(img, k) { img.classList.toggle('is-active', k === it.idx); });
+      it.ticks.forEach(function(t, k) { t.classList.toggle('is-active', k === it.idx); });
+    }
+    function stop(it) {
+      if (it.timer) { clearTimeout(it.timer); it.timer = null; }
+    }
+    function schedule(it, delay) {
+      stop(it);
+      if (!it.inView || document.hidden) return;
+      it.timer = setTimeout(function() {
+        it.idx = (it.idx + 1) % it.shots.length;
+        paint(it);
+        schedule(it, STEP);
+      }, delay);
+    }
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          const it = entry.target.aiaeFlip;
+          if (!it) return;
+          it.inView = entry.isIntersecting;
+          if (it.inView) schedule(it, STEP + it.phase); else stop(it);
+        });
+      }, { threshold: 0.2 });
+      items.forEach(function(it) {
+        it.shots[0].parentNode.aiaeFlip = it;
+        io.observe(it.shots[0].parentNode);
+      });
+    } else {
+      items.forEach(function(it) { it.inView = true; schedule(it, STEP + it.phase); });
+    }
+
+    document.addEventListener('visibilitychange', function() {
+      items.forEach(function(it) {
+        // Phase kept on resume, or every card would come back in lockstep
+        if (document.hidden) stop(it); else schedule(it, STEP + it.phase);
+      });
+    });
+  }
+
+  // ─── Concept carousels: hovering prev/next arrows ──────
+  // Desktop has no visible scrollbar on these tracks, so the arrows are
+  // the only affordance. Each click lands on a real card edge, which is
+  // the snap the CSS proximity scroller would otherwise only approximate.
+  function initCarousels(reduceMotion) {
+    Array.prototype.slice.call(document.querySelectorAll('[data-aiae-carousel]'))
+      .forEach(function(root) { setupCarousel(root, reduceMotion); });
+
+    document.addEventListener('shopify:section:load', function(e) {
+      Array.prototype.slice.call(e.target.querySelectorAll('[data-aiae-carousel]'))
+        .forEach(function(root) { setupCarousel(root, reduceMotion); });
+    });
+  }
+
+  function setupCarousel(root, reduceMotion) {
+    if (root.dataset.aiaeCarouselReady === 'true') return;
+    const track = root.querySelector('[data-aiae-carousel-track]');
+    const prev = root.querySelector('[data-aiae-carousel-prev]');
+    const next = root.querySelector('[data-aiae-carousel-next]');
+    if (!track || !prev || !next) return;
+    root.dataset.aiaeCarouselReady = 'true';
+
+    const behavior = reduceMotion ? 'auto' : 'smooth';
+
+    function cards() {
+      return Array.prototype.slice.call(track.children);
+    }
+
+    // 1px of slack absorbs sub-pixel scroll positions so the card the
+    // viewport is already parked on is never picked as "the next one".
+    function step(dir) {
+      const list = cards();
+      if (!list.length) return;
+      const left = track.scrollLeft;
+      let target = null;
+      if (dir > 0) {
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].offsetLeft > left + 1) { target = list[i]; break; }
+        }
+        if (!target) target = list[list.length - 1];
+      } else {
+        for (let i = list.length - 1; i >= 0; i--) {
+          if (list[i].offsetLeft < left - 1) { target = list[i]; break; }
+        }
+        if (!target) target = list[0];
+      }
+      track.scrollTo({ left: target.offsetLeft, behavior: behavior });
+    }
+
+    function sync() {
+      const max = track.scrollWidth - track.clientWidth;
+      const overflows = max > 2;
+      prev.hidden = !overflows || track.scrollLeft <= 2;
+      next.hidden = !overflows || track.scrollLeft >= max - 2;
+    }
+
+    prev.addEventListener('click', function() { step(-1); });
+    next.addEventListener('click', function() { step(1); });
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    if (window.ResizeObserver) new ResizeObserver(sync).observe(track);
+    // Lazy-loaded card images change scrollWidth after first paint.
+    window.addEventListener('load', sync);
+    sync();
   }
 
   // ─── Scroll-entrance reveals ───────────────────────────
@@ -75,7 +285,18 @@
     }, { rootMargin: '0px 0px -10% 0px', threshold: 0.06 });
 
     function observeAll(els) {
-      els.forEach(function(el) { io.observe(el); });
+      els.forEach(function(el) {
+        // The -10% bottom inset keeps below-the-fold reveals from firing too
+        // early, but it also swallows anything already parked at the bottom of
+        // the first screen (the hero CTA). Those reveal straight away.
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('is-revealed');
+          settle(el);
+          return;
+        }
+        io.observe(el);
+      });
     }
 
     // Hold the first reveals until the intro loader curtain lifts
@@ -141,6 +362,7 @@
     const codeEl = pod.querySelector('[data-pod-code]');
     const descEl = pod.querySelector('[data-pod-desc]');
     const counterEl = pod.querySelector('[data-pod-counter]');
+    const numEl = pod.querySelector('[data-pod-num]');
     const btn = pod.querySelector('[data-pod-btn]');
     const prev = pod.querySelector('[data-pod-prev]');
     const next = pod.querySelector('[data-pod-next]');
@@ -151,13 +373,36 @@
 
     function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
+    // The oversized numeral is a marker for the change of piece, not a
+    // backdrop: it comes up as the strip moves and fades out behind it.
+    let numTimer = null;
+    function flashNum() {
+      if (!numEl) return;
+      numEl.classList.add('is-flash');
+      if (numTimer) clearTimeout(numTimer);
+      numTimer = setTimeout(function() { numEl.classList.remove('is-flash'); }, 850);
+    }
+
     function paint(i) {
       const d = g.cards[i].dataset;
       if (nameEl) nameEl.textContent = d.name || '';
       if (codeEl) codeEl.textContent = d.code || '';
       if (descEl) descEl.textContent = d.desc || '';
       if (counterEl) counterEl.textContent = pad(i + 1) + ' / ' + pad(g.cards.length);
+      if (numEl) { numEl.textContent = pad(i + 1); flashNum(); }
       if (btn) btn.setAttribute('href', (d.url && d.url.length) ? d.url : '#');
+    }
+
+    // How far apart the cards sit and how small the ghosts get is a CSS
+    // decision (it changes with the breakpoint), so read it back from there.
+    function geom() {
+      const cs = getComputedStyle(pod);
+      const step = parseFloat(cs.getPropertyValue('--pod-step'));
+      const ghost = parseFloat(cs.getPropertyValue('--pod-ghost'));
+      return {
+        step: isNaN(step) ? 104 : step,
+        ghost: isNaN(ghost) ? 0.82 : ghost
+      };
     }
 
     // Position every card on a circular strip around the active one.
@@ -166,14 +411,15 @@
     function layout(instant) {
       const total = g.cards.length;
       const half = Math.floor(total / 2);
+      const gm = geom();
       g.cards.forEach(function(card, k) {
         const off = ((k - idx) % total + total + half) % total - half;
         const dist = Math.abs(off);
         const snap = instant || (g.lastOff[k] !== undefined && Math.abs(off - g.lastOff[k]) > 1);
         g.lastOff[k] = off;
         if (snap) card.classList.add('is-snap');
-        const scale = dist === 0 ? 1 : (dist === 1 ? 0.86 : 0.76);
-        card.style.transform = 'translate(-50%, -50%) translateX(' + (off * 104) + '%) scale(' + scale + ')';
+        const scale = dist === 0 ? 1 : (dist === 1 ? gm.ghost : gm.ghost * 0.9);
+        card.style.transform = 'translate(-50%, -50%) translateX(' + (off * gm.step) + '%) scale(' + scale + ')';
         card.style.zIndex = String(3 - Math.min(dist, 2));
         card.classList.toggle('is-active', dist === 0);
         card.classList.toggle('is-ghost', dist === 1);
@@ -323,6 +569,13 @@
         setTimeout(function() { wheelLock = false; }, 450);
       }, { passive: false });
     }
+
+    // The strip geometry is breakpoint-dependent — re-lay it out after a resize
+    let resizeTimer = null;
+    window.addEventListener('resize', function() {
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() { layout(true); }, 150);
+    });
 
     setActive(0, true);
     startAuto();

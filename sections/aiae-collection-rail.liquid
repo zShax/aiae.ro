@@ -1,0 +1,120 @@
+{%- liquid
+  assign coll = collections[section.settings.collection]
+  assign limit = section.settings.products_to_show | default: 8
+
+  assign has_products = false
+  if coll != blank and coll.products_count > 0
+    assign has_products = true
+  endif
+
+  assign heading = section.settings.title
+  if heading == blank and coll != blank
+    assign heading = coll.title
+  endif
+-%}
+
+{%- comment -%}
+  A single collection read as one horizontal row — the shelf treatment used
+  under the cart and anywhere a lot would be too heavy. Renders nothing at
+  all when its collection is empty or unset, so an unfinished row never
+  leaves a hole in the page.
+{%- endcomment -%}
+{%- if has_products -%}
+  <section class="aiae-section aiae-rail{% if section.settings.tone == 'void' %} aiae-section--void{% endif %}">
+
+    <div class="aiae-rail__head" data-aiae-reveal>
+      <div>
+        <div class="aiae-eyebrow">
+          {%- if section.settings.section_number != blank -%}({{ section.settings.section_number }}) {% endif -%}
+          {{- section.settings.eyebrow -}}
+        </div>
+        <h2 class="aiae-rail__title">{{ heading }}</h2>
+        {%- if section.settings.description != blank -%}
+          <p class="aiae-section__desc aiae-rail__desc">{{ section.settings.description }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.link_label != blank -%}
+        <a href="{{ section.settings.link | default: coll.url }}" class="aiae-section__redirect aiae-rail__link">
+          <span>{{ section.settings.link_label }}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="aiae-rail__track" data-aiae-reveal="fade" role="list">
+      {%- for product in coll.products limit: limit -%}
+        <div class="aiae-card aiae-rail__card" role="listitem">
+          <a href="{{ product.url }}">
+            <div class="aiae-card__media">
+              {%- if product.featured_image -%}
+                <img class="aiae-card__shot is-active"
+                     src="{{ product.featured_image | image_url: width: 500 }}"
+                     alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                     width="500"
+                     height="{{ 500 | divided_by: product.featured_image.aspect_ratio | round }}"
+                     loading="lazy">
+              {%- else -%}
+                <span class="aiae-card__code">[ {{ product.title | upcase }} ]</span>
+              {%- endif -%}
+              {%- if product.metafields.aiae.lot != blank -%}
+                <span class="aiae-card__lot">{{ product.metafields.aiae.lot }}</span>
+              {%- endif -%}
+              {%- unless product.available -%}
+                <span class="aiae-rail__sold">{{ section.settings.sold_out_label }}</span>
+              {%- endunless -%}
+            </div>
+            <div class="aiae-card__body">
+              <div class="aiae-card__row">
+                <h3 class="aiae-card__title">{{ product.title }}</h3>
+                <span class="aiae-card__price">{{ product.price | money }}</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      {%- endfor -%}
+
+      {%- if section.settings.link_label != blank and coll.products_count > limit -%}
+        <a href="{{ section.settings.link | default: coll.url }}" class="aiae-rail__more" role="listitem">
+          <span>{{ section.settings.more_label }}</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <p class="aiae-rail__hint" aria-hidden="true">{{ section.settings.scroll_hint }}</p>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "AIAE Collection Rail",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "products_to_show", "min": 3, "max": 16, "step": 1, "default": 8, "label": "Products to show" },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Tone",
+      "options": [
+        { "value": "paper", "label": "Paper (light)" },
+        { "value": "void", "label": "Void (dark)" }
+      ],
+      "default": "paper"
+    },
+    { "type": "header", "content": "Text" },
+    { "type": "text", "id": "section_number", "label": "Section number", "info": "Leave blank to hide." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MAI ADAUGĂ O PIESĂ" },
+    { "type": "text", "id": "title", "label": "Title", "info": "Defaults to the collection title." },
+    { "type": "textarea", "id": "description", "label": "Description" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "VEZI TOATĂ COLECȚIA" },
+    { "type": "url", "id": "link", "label": "Link", "info": "Defaults to the collection page." },
+    { "type": "text", "id": "more_label", "label": "End-of-rail label", "default": "TOATE" },
+    { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "EPUIZAT" },
+    { "type": "text", "id": "scroll_hint", "label": "Scroll hint", "default": "← TRAGE LATERAL →" }
+  ],
+  "presets": [
+    { "name": "AIAE Collection Rail" }
+  ]
+}
+{% endschema %}

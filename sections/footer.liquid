@@ -27,7 +27,7 @@
   }
 {%- endstyle -%}
 
-<footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+<footer class="footer aiae-dfooter color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   {%- liquid
     assign has_social_icons = true
     if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
@@ -100,6 +100,9 @@
                           </li>
                         {%- endfor -%}
                       </ul>
+                      {%- if block.settings.menu.handle == 'legal' -%}
+                        {%- render 'anpc-sal-badge' -%}
+                      {%- endif -%}
                     {%- endif -%}
                   {%- when 'brand_information' -%}
                     <div class="footer-block__brand-info">
@@ -191,7 +194,7 @@
                       {% elsif form.posted_successfully? %}
                         aria-describedby="ContactFooter-success"
                       {% endif %}
-                      placeholder="{{ 'newsletter.label' | t }}"
+                      placeholder="{% if section.settings.aiae_newsletter_placeholder != blank %}{{ section.settings.aiae_newsletter_placeholder | escape }}{% else %}{{ 'newsletter.label' | t }}{% endif %}"
                       required
                     >
                     <label class="field__label" for="NewsletterForm--{{ section.id }}">
@@ -248,6 +251,24 @@
         </div>
       </div>
     {%- endunless -%}
+  {%- endif -%}
+
+  {%- render 'aiae-support',
+    heading: section.settings.support_heading,
+    note: section.settings.support_note,
+    email: section.settings.support_email,
+    phone: section.settings.support_phone,
+    hours: section.settings.support_hours,
+    link_label: section.settings.support_link_label,
+    link_url: section.settings.support_link
+  -%}
+
+  {%- if section.settings.aiae_wordmark != blank -%}
+    <div class="aiae-footer__wordwrap aiae-noscroll">
+      <div id="aiae-footer-word" class="aiae-footer__word">
+        <span class="aiae-footer__logo">{{ 'aiae-logo.svg' | inline_asset_content }}</span>
+      </div>
+    </div>
   {%- endif -%}
 
   <div
@@ -316,6 +337,15 @@
             {%- endfor -%}
           </ul>
         {%- endif -%}
+        {%- comment -%}
+          Retragerea consimțământului trebuie să fie la fel de accesibilă ca acordarea
+          lui, deci triggerul stă în afara comutătorului pentru lista de politici.
+        {%- endcomment -%}
+        <small class="copyright__content">
+          <button type="button" class="aiae-ckc-trigger" data-aiae-cookie-prefs>
+            Setări cookie-uri
+          </button>
+        </small>
       </div>
     </div>
   </div>
@@ -424,6 +454,63 @@
     }
   ],
   "settings": [
+    {
+      "type": "text",
+      "id": "aiae_newsletter_placeholder",
+      "label": "Newsletter email placeholder",
+      "default": "adresa@email.ro"
+    },
+    {
+      "type": "header",
+      "content": "Suport & contact"
+    },
+    {
+      "type": "text",
+      "id": "support_heading",
+      "label": "Support heading",
+      "default": "Suport & contact"
+    },
+    {
+      "type": "textarea",
+      "id": "support_note",
+      "label": "Support note",
+      "default": "Orice întrebare despre comandă, mărimi, livrare sau retur — scrie-ne și îți răspundem în maximum o zi lucrătoare."
+    },
+    {
+      "type": "text",
+      "id": "support_email",
+      "label": "Support email",
+      "default": "contact@aiae.ro"
+    },
+    {
+      "type": "text",
+      "id": "support_phone",
+      "label": "Support phone"
+    },
+    {
+      "type": "text",
+      "id": "support_hours",
+      "label": "Support hours",
+      "default": "Luni – Vineri, 09:00 – 17:00"
+    },
+    {
+      "type": "text",
+      "id": "support_link_label",
+      "label": "Support link label",
+      "default": "Politica de retur"
+    },
+    {
+      "type": "url",
+      "id": "support_link",
+      "label": "Support link URL"
+    },
+    {
+      "type": "text",
+      "id": "aiae_wordmark",
+      "label": "AIAE wordmark",
+      "info": "Giant AIA.E logo strip above the copyright row. Any value shows it; leave blank to hide.",
+      "default": "AIAE"
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",

@@ -8,9 +8,26 @@
   assign current_variant = product.selected_or_first_available_variant
   assign form_id = 'aiae-product-form-' | append: section.id
   assign media_count = product.media.size
+
+  # Withdrawal-right waiver — switched on per collection (Collection ›
+  # Metafields › aiae.return_waiver). The first enabled collection with
+  # its own text wins; otherwise the section's fallback label is used.
+  assign waiver_enabled = false
+  assign waiver_text = ''
+  for collection in product.collections
+    if collection.metafields.aiae.return_waiver.value == true
+      assign waiver_enabled = true
+      if waiver_text == blank
+        assign waiver_text = collection.metafields.aiae.return_waiver_text.value
+      endif
+    endif
+  endfor
+  if waiver_text == blank
+    assign waiver_text = section.settings.consent_label
+  endif
 -%}
 
-<section class="aiae-prod" data-aiae-product>
+<section class="aiae-prod{% if waiver_enabled %} has-waiver{% endif %}" data-aiae-product>
   <div class="aiae-prod__crumbs" data-aiae-reveal="fade">
     <a href="{{ routes.root_url }}">AIAE.RO</a>
     <span>/</span>
@@ -171,6 +188,21 @@
                 </button>
               </div>
             </div>
+
+            {%- comment -%}
+              Withdrawal-right waiver — the return policy promises that
+              buyers of personalized pieces explicitly accept losing it
+              before ordering. Rendered only for products in a collection
+              that enables it; add-to-cart and the personalize button stay
+              locked until it is ticked.
+            {%- endcomment -%}
+            {%- if waiver_enabled -%}
+              <label class="aiae-prod__consent" data-prod-consent>
+                <input type="checkbox" name="properties[Confirmare nereturnare]" value="Da" required aria-required="true">
+                <span>{{ waiver_text | escape }}</span>
+              </label>
+            {%- endif -%}
+
             <div class="aiae-prod__feedback" data-prod-feedback aria-live="polite"></div>
           </div>
         </div>
@@ -223,8 +255,58 @@
     added: {{ section.settings.added_label | json }},
     soldOut: {{ section.settings.sold_out_label | json }},
     inStock: {{ section.settings.in_stock_label | json }},
-    error: {{ section.settings.error_label | json }}
+    error: {{ section.settings.error_label | json }},
+    consent: {{ section.settings.consent_error | json }}
   };
+
+  /* ── Withdrawal-right waiver ────────────────────────────
+     Only rendered when one of the product's collections enables it.
+     Until the box is ticked, add-to-cart is refused and clicks on the
+     personalize button are swallowed at window capture — ahead of any
+     listener the app binds — and the buyer is pointed at the checkbox.
+     The "remove saved design" state stays usable. The tick travels as
+     a line item property through add-to-cart and, for the personalizer
+     (which adds to cart itself), as a cart attribute — either way it
+     shows on the order in admin. */
+  var consent = root.querySelector('[data-prod-consent]');
+  var consentBox = consent && consent.querySelector('input');
+
+  function needsConsent() {
+    return consentBox && !consentBox.checked;
+  }
+
+  function askConsent() {
+    consent.classList.add('is-invalid');
+    feedback.textContent = labels.consent;
+    consentBox.focus();
+  }
+
+  if (consentBox) {
+    consentBox.addEventListener('change', function() {
+      root.classList.toggle('has-consent', consentBox.checked);
+      if (consentBox.checked) {
+        consent.classList.remove('is-invalid');
+        if (feedback.textContent === labels.consent) feedback.textContent = '';
+      }
+      var attributes = {};
+      attributes['Confirmare nereturnare — ' + {{ product.title | json }}] =
+        consentBox.checked ? 'Da — ' + new Date().toISOString() : '';
+      fetch({{ routes.cart_update_url | json }} + '.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ attributes: attributes })
+      }).catch(function() {});
+    });
+
+    window.addEventListener('click', function(e) {
+      if (!needsConsent() || !root.contains(e.target)) return;
+      var trigger = e.target.closest('.aiae-prod__apps button, .aiae-prod__apps a, .aiae-prod__personalize');
+      if (!trigger || trigger.classList.contains('is-saved')) return;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      askConsent();
+    }, true);
+  }
 
   function money(cents) {
     var value = (cents / 100).toFixed(2);
@@ -378,6 +460,7 @@
   if (form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+      if (needsConsent()) { askConsent(); return; }
       if (atc.disabled) return;
       atc.classList.add('is-busy');
       fetch({{ routes.cart_add_url | json }} + '.js', {
@@ -425,10 +508,13 @@
     { "type": "text", "id": "in_stock_label", "label": "In stock label", "default": "LIVE — DISPONIBIL" },
     { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "Epuizat" },
     { "type": "text", "id": "error_label", "label": "Error message", "default": "Ceva n-a mers. Mai încearcă o dată." },
+    { "type": "header", "content": "Personalized products" },
+    { "type": "text", "id": "consent_label", "label": "Return waiver checkbox", "info": "Fallback text. Turn the checkbox on per collection with the metafield aiae.return_waiver; aiae.return_waiver_text overrides this text.", "default": "Am înțeles că produsul personalizat nu poate fi returnat" },
+    { "type": "text", "id": "consent_error", "label": "Return waiver reminder", "default": "Bifează confirmarea ca să poți comanda produsul." },
     { "type": "header", "content": "Notes" },
     { "type": "text", "id": "note_1", "label": "Note 1", "default": "PRINT SCHIMBABIL" },
     { "type": "text", "id": "note_2", "label": "Note 2", "default": "CULOARE PRODUS" },
-    { "type": "text", "id": "note_3", "label": "Note 3", "default": "PRODUS LA COMANDĂ ÎN RO" }
+    { "type": "text", "id": "note_3", "label": "Note 3", "default": "PRINTAT LA COMANDĂ" }
   ],
   "blocks": [
     { "type": "@app" }

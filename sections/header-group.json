@@ -17,22 +17,22 @@
         "link_1": {
           "type": "nav_link",
           "settings": {
-            "label": "Colecție",
-            "link": "/collections/all"
+            "label": "Personalizate",
+            "link": "shopify://collections/personalizate"
           }
         },
         "link_2": {
           "type": "nav_link",
           "settings": {
-            "label": "Custom",
-            "link": "/pages/custom"
+            "label": "DEGEABA CLUB 2026",
+            "link": "shopify://collections/degeaba-club"
           }
         },
         "link_3": {
           "type": "nav_link",
           "settings": {
-            "label": "Concept",
-            "link": "/pages/concept"
+            "label": "Concepte",
+            "link": "shopify://collections/concepts"
           }
         }
       },

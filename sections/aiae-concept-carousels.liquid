@@ -2,8 +2,7 @@
 
   <div class="aiae-con__head">
     <div class="aiae-eyebrow" data-aiae-reveal>({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
-    {%- assign heading_tag = section.settings.heading_tag | default: 'h2' -%}
-    <{{ heading_tag }} class="aiae-display aiae-con__title" data-aiae-reveal style="--aiae-reveal-delay: 0.12s;">{{ section.settings.title }}</{{ heading_tag }}>
+    <h2 class="aiae-display aiae-con__title" data-aiae-reveal style="--aiae-reveal-delay: 0.12s;">{{ section.settings.title }}</h2>
   </div>
 
   {%- for block in section.blocks -%}
@@ -28,87 +27,106 @@
       {%- endif -%}
       {%- assign code_prefix = code_prefix | default: 'CONCEPT' -%}
 
-      <div class="aiae-con__row" {{ block.shopify_attributes }}>
-        <div class="aiae-con__rowhead" data-aiae-reveal>
+      {%- comment -%} Rows alternate light / inverted down the section {%- endcomment -%}
+      {%- assign row_mod = forloop.index | modulo: 2 -%}
+      <div class="aiae-con__row{% if row_mod == 0 %} aiae-con__row--inv{% endif %}" data-aiae-reveal {{ block.shopify_attributes }}>
+        <div class="aiae-con__rowhead">
           <h3 class="aiae-con__rowtitle">{{ row_title | default: 'CONCEPT' }}</h3>
           <span class="aiae-con__rownote">{{ row_note }}</span>
           <span class="aiae-con__rowline"></span>
           {%- if block.settings.show_collection_link and row_collection.url != blank -%}
             <a href="{{ row_collection.url }}" class="aiae-con__rowlink">
-              <span>{{ block.settings.collection_link_label | default: 'VEZI COLECTIA' }}</span>
+              <span>{{ block.settings.collection_link_label | default: 'VEZI COLECȚIA' }}</span>
               <span aria-hidden="true">&rarr;</span>
             </a>
           {%- endif -%}
         </div>
 
-        <div class="aiae-con__track aiae-noscroll">
-          {%- if row_collection != blank and row_collection.products_count > 0 -%}
-            {%- for product in row_collection.products limit: block.settings.products_to_show -%}
-              {%- assign card_number = product.metafields.aiae.code -%}
-              {%- if card_number == blank -%}
-                {%- if forloop.index < 10 -%}
-                  {%- assign card_number = code_prefix | append: ' 0' | append: forloop.index -%}
-                {%- else -%}
-                  {%- assign card_number = code_prefix | append: ' ' | append: forloop.index -%}
+        <div class="aiae-con__scroller" data-aiae-carousel>
+          <button type="button" class="aiae-con__arrow aiae-con__arrow--prev" data-aiae-carousel-prev aria-label="Derulează înapoi" hidden>&larr;</button>
+          <button type="button" class="aiae-con__arrow aiae-con__arrow--next" data-aiae-carousel-next aria-label="Derulează înainte" hidden>&rarr;</button>
+          <div class="aiae-con__track aiae-noscroll" data-aiae-carousel-track>
+            {%- if row_collection != blank and row_collection.products_count > 0 -%}
+              {%- for product in row_collection.products limit: block.settings.products_to_show -%}
+                {%- assign card_number = product.metafields.aiae.code -%}
+                {%- if card_number == blank -%}
+                  {%- if forloop.index < 10 -%}
+                    {%- assign card_number = code_prefix | append: ' 0' | append: forloop.index -%}
+                  {%- else -%}
+                    {%- assign card_number = code_prefix | append: ' ' | append: forloop.index -%}
+                  {%- endif -%}
                 {%- endif -%}
-              {%- endif -%}
 
-              {%- assign card_sub = product.metafields.aiae.detail -%}
-              {%- if card_sub == blank -%}{%- assign card_sub = product.type -%}{%- endif -%}
-              {%- if card_sub == blank -%}
-                {%- assign card_sub = product.description | strip_html | strip | truncate: 60 -%}
-              {%- endif -%}
+                {%- assign card_sub = product.metafields.aiae.detail -%}
+                {%- if card_sub == blank -%}{%- assign card_sub = product.type -%}{%- endif -%}
+                {%- if card_sub == blank -%}
+                  {%- assign card_sub = product.description | strip_html | strip | truncate: 60 -%}
+                {%- endif -%}
 
-              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;{%- if block.settings.card_bg != blank %} --aiae-cc-bg: {{ block.settings.card_bg }};{% endif %}{%- if block.settings.card_fg != blank %} --aiae-cc-fg: {{ block.settings.card_fg }};{% endif %}">
-                <a href="{{ product.url }}">
-                  <div class="aiae-cc__media">
-                    {%- if product.featured_image -%}
-                      <img src="{{ product.featured_image | image_url: width: 660 }}"
-                           alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                           width="660"
-                           height="{{ 660 | divided_by: product.featured_image.aspect_ratio | round }}"
-                           loading="lazy">
-                    {%- else -%}
-                      <span class="aiae-cc__tag">[ {{ card_number }} ]</span>
-                    {%- endif -%}
-                    <span class="aiae-cc__num{% if product.featured_image %} aiae-cc__num--over{% endif %}">{{ card_number }}</span>
-                    {%- if block.settings.show_sold_out and product.available == false -%}
-                      <span class="aiae-cc__flag">SOLD OUT</span>
-                    {%- endif -%}
+                <div class="aiae-cc">
+                  <a href="{{ product.url }}">
+                    <div class="aiae-cc__media"{% if product.images.size > 1 %} data-aiae-flip{% endif %} style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+                      {%- if product.images.size > 0 -%}
+                        {%- comment -%}
+                          The first four shots of the piece stacked and cross-faded by
+                          aiae-theme.js, exactly like the collection and POD cards. With
+                          no JS (or reduced motion) the first one simply stays up.
+                        {%- endcomment -%}
+                        {%- for image in product.images limit: 4 -%}
+                          <img class="aiae-card__shot{% if forloop.first %} is-active{% endif %}"
+                               src="{{ image | image_url: width: 660 }}"
+                               alt="{% if forloop.first %}{{ image.alt | default: product.title | escape }}{% endif %}"
+                               width="660"
+                               height="{{ 660 | divided_by: image.aspect_ratio | round }}"
+                               loading="lazy"
+                               {% unless forloop.first %}aria-hidden="true"{% endunless %}>
+                        {%- endfor -%}
+                      {%- else -%}
+                        <span class="aiae-cc__tag">[ {{ card_number }} ]</span>
+                      {%- endif -%}
+                      {%- if block.settings.show_sold_out and product.available == false -%}
+                        <span class="aiae-cc__flag">SOLD OUT</span>
+                      {%- endif -%}
+                      {%- if product.images.size > 1 -%}
+                        <span class="aiae-card__ticks" aria-hidden="true">
+                          {%- for image in product.images limit: 4 -%}
+                            <i class="aiae-card__tick{% if forloop.first %} is-active{% endif %}"></i>
+                          {%- endfor -%}
+                        </span>
+                      {%- endif -%}
+                    </div>
+                    <div class="aiae-cc__body">
+                      <div class="aiae-cc__row">
+                        <h4 class="aiae-cc__title">{{ product.title }}</h4>
+                        {%- if block.settings.show_price -%}
+                          <span class="aiae-cc__price">{{ product.price | money }}</span>
+                        {%- endif -%}
+                      </div>
+                      {%- if card_sub != blank -%}
+                        <p class="aiae-cc__sub">{{ card_sub }}</p>
+                      {%- endif -%}
+                    </div>
+                  </a>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- comment -%} Placeholder cards while no concept collection is assigned {%- endcomment -%}
+              {%- assign placeholder_count = block.settings.products_to_show | default: 5 | at_most: 5 -%}
+              {%- for i in (1..placeholder_count) -%}
+                <div class="aiae-cc">
+                  <div class="aiae-cc__media aiae-cc__media--ph" style="background-color:{{ block.settings.card_bg }}; color:{{ block.settings.card_fg }};">
+                    <span class="aiae-cc__tag">[ {{ code_prefix }} 0{{ forloop.index }} ]</span>
                   </div>
                   <div class="aiae-cc__body">
                     <div class="aiae-cc__row">
-                      <h4 class="aiae-cc__title">{{ product.title }}</h4>
-                      {%- if block.settings.show_price -%}
-                        <span class="aiae-cc__price">{{ product.price | money }}</span>
-                      {%- endif -%}
+                      <h4 class="aiae-cc__title">CONCEPT {{ forloop.index }}</h4>
                     </div>
-                    {%- if card_sub != blank -%}
-                      <p class="aiae-cc__sub">{{ card_sub }}</p>
-                    {%- endif -%}
+                    <p class="aiae-cc__sub">Alege o colec&#539;ie din set&#259;rile blocului.</p>
                   </div>
-                </a>
-              </div>
-            {%- endfor -%}
-          {%- else -%}
-            {%- comment -%} Placeholder cards while no concept collection is assigned {%- endcomment -%}
-            {%- assign placeholder_count = block.settings.products_to_show | default: 5 | at_most: 5 -%}
-            {%- for i in (1..placeholder_count) -%}
-              <div class="aiae-cc" data-aiae-reveal="right" style="--aiae-reveal-delay: {{ forloop.index0 | times: 0.08 }}s;{%- if block.settings.card_bg != blank %} --aiae-cc-bg: {{ block.settings.card_bg }};{% endif %}{%- if block.settings.card_fg != blank %} --aiae-cc-fg: {{ block.settings.card_fg }};{% endif %}">
-                <div class="aiae-cc__media aiae-cc__media--ph">
-                  <span class="aiae-cc__tag">[ {{ code_prefix }} 0{{ forloop.index }} ]</span>
-                  <span class="aiae-cc__num">{{ code_prefix }} 0{{ forloop.index }}</span>
                 </div>
-                <div class="aiae-cc__body">
-                  <div class="aiae-cc__row">
-                    <h4 class="aiae-cc__title">CONCEPT {{ forloop.index }}</h4>
-                  </div>
-                  <p class="aiae-cc__sub">Alege o colec&#539;ie din set&#259;rile blocului.</p>
-                </div>
-              </div>
-            {%- endfor -%}
-          {%- endif -%}
-          <div class="aiae-con__spacer"></div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
         </div>
       </div>
     {%- endif -%}
@@ -127,21 +145,10 @@
       "default": "03"
     },
     {
-      "type": "select",
-      "id": "heading_tag",
-      "label": "Title heading level",
-      "info": "Use H1 when this is the main section of its own page; keep H2 on the homepage.",
-      "options": [
-        { "value": "h1", "label": "H1" },
-        { "value": "h2", "label": "H2" }
-      ],
-      "default": "h2"
-    },
-    {
       "type": "text",
       "id": "eyebrow",
       "label": "Eyebrow text",
-      "default": "CONCEPTE — POTENȚIAL DE CUSTOMIZARE"
+      "default": "CONCEPTE — IDEI DE PERSONALIZARE"
     },
     {
       "type": "text",
@@ -223,14 +230,13 @@
         {
           "type": "color",
           "id": "card_bg",
-          "label": "Card background",
-          "default": "#E7E3D8"
+          "label": "Card media background",
+          "default": "#FFFFFF"
         },
         {
           "type": "color",
           "id": "card_fg",
-          "label": "Card text color",
-          "info": "Applied to the card title, price and code tags. Pick a readable color when the card background is dark.",
+          "label": "Card media foreground",
           "default": "#0D0D0D"
         }
       ]
@@ -240,9 +246,9 @@
     {
       "name": "AIAE Concept Carousels",
       "blocks": [
-        { "type": "carousel_row", "settings": { "card_bg": "#F2EFE7", "card_fg": "#0D0D0D" } },
-        { "type": "carousel_row", "settings": { "card_bg": "#1C1C1C", "card_fg": "#BEBAB2" } },
-        { "type": "carousel_row", "settings": { "card_bg": "#23211E", "card_fg": "#BEBAB2" } }
+        { "type": "carousel_row", "settings": { "card_bg": "#FFFFFF", "card_fg": "#0D0D0D" } },
+        { "type": "carousel_row", "settings": { "card_bg": "#FFFFFF", "card_fg": "#0D0D0D" } },
+        { "type": "carousel_row", "settings": { "card_bg": "#FFFFFF", "card_fg": "#0D0D0D" } }
       ]
     }
   ]

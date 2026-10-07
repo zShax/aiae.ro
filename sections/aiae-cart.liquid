@@ -1,0 +1,441 @@
+{%- liquid
+  assign ticker_items = section.settings.ticker_text | split: '|'
+
+  assign piece_word = 'PIESE'
+  if cart.item_count == 1
+    assign piece_word = 'PIESĂ'
+  endif
+-%}
+
+<section id="aiae-cart-{{ section.id }}" class="aiae-section aiae-section--void aiae-lot aiae-cart{% if cart == empty %} aiae-cart--empty{% endif %}">
+
+  {%- comment -%} Same entrance grammar as the lots: accent tape, then a stamped rule. {%- endcomment -%}
+  {%- if ticker_items.size > 0 -%}
+    <div class="aiae-lot__tape aiae-lot__tape--in aiae-noscroll" aria-hidden="true">
+      <div class="aiae-marquee-inner">
+        {%- for pass in (1..2) -%}
+          {%- for item in ticker_items -%}
+            <span>{{ item | strip }}</span>
+            <span class="aiae-tick-dot">●</span>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%}
+    Everything the cart can change lives inside the live region — the
+    quantity JS swaps this block wholesale after each /cart/change.js call,
+    so an emptied cart re-renders into the empty state on its own.
+  {%- endcomment -%}
+  <div class="aiae-cart__live" data-aiae-cart-live>
+
+    <div class="aiae-lot__edge" data-aiae-reveal="fade">
+      <i class="aiae-lot__rule"></i>
+      <span class="aiae-lot__stamp">
+        <i class="aiae-lot__dot"></i>
+        <b>{{ section.settings.section_number }}</b>
+        <span>{{ section.settings.open_label }}</span>
+        <em>{{ cart.item_count }} {{ piece_word }}</em>
+      </span>
+      <i class="aiae-lot__rule"></i>
+    </div>
+
+    <div class="aiae-section__head aiae-lot__head">
+      <div data-aiae-reveal>
+        <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
+        <h1 class="aiae-display aiae-section__title">{{ section.settings.title | newline_to_br }}</h1>
+      </div>
+      <div class="aiae-section__aside" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">
+        <p class="aiae-section__desc">
+          {%- if cart == empty -%}
+            {{ section.settings.empty_description }}
+          {%- else -%}
+            {{ section.settings.description }}
+          {%- endif -%}
+        </p>
+      </div>
+    </div>
+
+    {%- if cart == empty -%}
+
+      <div class="aiae-cart__void" data-aiae-reveal="scale">
+        <span class="aiae-cart__void-mark" aria-hidden="true">00</span>
+        <p class="aiae-cart__void-title">{{ section.settings.empty_title }}</p>
+        <p class="aiae-cart__void-note">{{ section.settings.empty_note }}</p>
+        <div class="aiae-cart__void-links">
+          <a href="{{ section.settings.empty_link_1 | default: routes.all_products_collection_url }}" class="aiae-cart__cta">
+            <span>{{ section.settings.empty_link_1_label }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+          {%- if section.settings.empty_link_2_label != blank -%}
+            <a href="{{ section.settings.empty_link_2 | default: routes.root_url }}" class="aiae-section__redirect">
+              <span>{{ section.settings.empty_link_2_label }}</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if shop.customer_accounts_enabled and customer == null -%}
+        <p class="aiae-cart__login" data-aiae-reveal>
+          <a href="{{ routes.account_login_url }}">{{ section.settings.login_label }}</a>
+        </p>
+      {%- endif -%}
+
+    {%- else -%}
+
+      <form action="{{ routes.cart_url }}" method="post" id="cart" class="aiae-cart__form" novalidate>
+
+        <div class="aiae-cart__body">
+
+          <div class="aiae-cart__list" data-aiae-reveal>
+
+            <div class="aiae-cart__head" aria-hidden="true">
+              <span>{{ section.settings.col_product }}</span>
+              <span>{{ section.settings.col_quantity }}</span>
+              <span>{{ section.settings.col_total }}</span>
+            </div>
+
+            {%- for item in cart.items -%}
+              <div class="aiae-cart__row" data-aiae-cart-row data-key="{{ item.key }}">
+
+                <a href="{{ item.url }}" class="aiae-cart__media" tabindex="-1" aria-hidden="true">
+                  {%- if item.image -%}
+                    <img src="{{ item.image | image_url: width: 300 }}"
+                         alt=""
+                         width="150"
+                         height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                         loading="lazy">
+                  {%- else -%}
+                    <span class="aiae-cart__media-code">[ {{ item.product.title | upcase | truncate: 14, '' }} ]</span>
+                  {%- endif -%}
+                  <span class="aiae-cart__media-index">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                </a>
+
+                <div class="aiae-cart__details">
+                  <a href="{{ item.url }}" class="aiae-cart__title">{{ item.product.title }}</a>
+
+                  {%- if item.product.has_only_default_variant == false or item.properties.size != 0 or item.selling_plan_allocation != null -%}
+                    <dl class="aiae-cart__specs">
+                      {%- unless item.product.has_only_default_variant -%}
+                        {%- for option in item.options_with_values -%}
+                          <div><dt>{{ option.name }}</dt><dd>{{ option.value }}</dd></div>
+                        {%- endfor -%}
+                      {%- endunless -%}
+                      {%- for property in item.properties -%}
+                        {%- assign first_char = property.first | slice: 0 -%}
+                        {%- if property.last != blank and first_char != '_' -%}
+                          <div>
+                            <dt>{{ property.first }}</dt>
+                            <dd>
+                              {%- if property.last contains '/uploads/' -%}
+                                <a href="{{ property.last }}" target="_blank" rel="noopener">{{ property.last | split: '/' | last }}</a>
+                              {%- else -%}
+                                {{ property.last }}
+                              {%- endif -%}
+                            </dd>
+                          </div>
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {%- if item.selling_plan_allocation != null -%}
+                        <div><dt>{{ section.settings.col_plan }}</dt><dd>{{ item.selling_plan_allocation.selling_plan.name }}</dd></div>
+                      {%- endif -%}
+                    </dl>
+                  {%- endif -%}
+
+                  <p class="aiae-cart__unit">
+                    {%- if item.original_price != item.final_price -%}
+                      <s>{{ item.original_price | money }}</s>
+                      <strong>{{ item.final_price | money }}</strong>
+                    {%- else -%}
+                      {{ item.original_price | money }}
+                    {%- endif -%}
+                    <em>/ {{ section.settings.unit_label }}</em>
+                  </p>
+
+                  {%- if item.line_level_discount_allocations.size > 0 -%}
+                    <ul class="aiae-cart__discounts" role="list">
+                      {%- for discount in item.line_level_discount_allocations -%}
+                        <li>{{ discount.discount_application.title }} — −{{ discount.amount | money }}</li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+
+                <div class="aiae-cart__qty">
+                  <div class="aiae-cart__stepper">
+                    <button type="button" class="aiae-cart__step" data-aiae-cart-step="-1" aria-label="{{ section.settings.decrease_label | escape }}">−</button>
+                    <input type="number"
+                           class="aiae-cart__input"
+                           name="updates[{{ item.key }}]"
+                           value="{{ item.quantity }}"
+                           min="0"
+                           inputmode="numeric"
+                           data-aiae-cart-input
+                           aria-label="{{ section.settings.col_quantity | escape }} — {{ item.product.title | escape }}">
+                    <button type="button" class="aiae-cart__step" data-aiae-cart-step="1" aria-label="{{ section.settings.increase_label | escape }}">+</button>
+                  </div>
+                  <button type="button" class="aiae-cart__remove" data-aiae-cart-remove>{{ section.settings.remove_label }}</button>
+                </div>
+
+                <div class="aiae-cart__line">
+                  {%- if item.original_line_price != item.final_line_price -%}
+                    <s>{{ item.original_line_price | money }}</s>
+                    <strong>{{ item.final_line_price | money }}</strong>
+                  {%- else -%}
+                    <strong>{{ item.original_line_price | money }}</strong>
+                  {%- endif -%}
+                </div>
+
+              </div>
+            {%- endfor -%}
+
+            <noscript>
+              <button type="submit" name="update" class="aiae-cart__update">{{ section.settings.update_label }}</button>
+            </noscript>
+          </div>
+
+          <aside class="aiae-cart__summary" data-aiae-reveal style="--aiae-reveal-delay: 0.1s;">
+            <div class="aiae-cart__summary-inner">
+              <p class="aiae-cart__summary-tag">{{ section.settings.summary_label }}</p>
+
+              {%- if section.settings.show_note -%}
+                <label class="aiae-cart__note">
+                  <span>{{ section.settings.note_label }}</span>
+                  <textarea name="note" rows="2" placeholder="{{ section.settings.note_placeholder | escape }}">{{ cart.note }}</textarea>
+                </label>
+              {%- endif -%}
+
+              <dl class="aiae-cart__totals">
+                <div>
+                  <dt>{{ section.settings.subtotal_label }}</dt>
+                  <dd>{{ cart.original_total_price | money }}</dd>
+                </div>
+                {%- for discount in cart.cart_level_discount_applications -%}
+                  <div class="aiae-cart__totals-discount">
+                    <dt>{{ discount.title }}</dt>
+                    <dd>−{{ discount.total_allocated_amount | money }}</dd>
+                  </div>
+                {%- endfor -%}
+                <div class="aiae-cart__totals-grand">
+                  <dt>{{ section.settings.total_label }}</dt>
+                  <dd>{{ cart.total_price | money }}</dd>
+                </div>
+              </dl>
+
+              <p class="aiae-cart__tax">{{ section.settings.tax_note }}</p>
+
+              <button type="submit" name="checkout" class="aiae-cart__checkout">
+                <span>{{ section.settings.checkout_label }}</span>
+                <span class="aiae-cart__checkout-arrow" aria-hidden="true">→</span>
+              </button>
+
+              {%- if additional_checkout_buttons -%}
+                <div class="aiae-cart__express">{{ content_for_additional_checkout_buttons }}</div>
+              {%- endif -%}
+
+              <ul class="aiae-cart__assurances" role="list">
+                {%- if section.settings.assurance_1 != blank -%}<li>{{ section.settings.assurance_1 }}</li>{%- endif -%}
+                {%- if section.settings.assurance_2 != blank -%}<li>{{ section.settings.assurance_2 }}</li>{%- endif -%}
+                {%- if section.settings.assurance_3 != blank -%}<li>{{ section.settings.assurance_3 }}</li>{%- endif -%}
+              </ul>
+            </div>
+          </aside>
+
+        </div>
+      </form>
+
+    {%- endif -%}
+
+    <div class="aiae-lot__edge aiae-lot__edge--out" data-aiae-reveal="fade">
+      <i class="aiae-lot__rule"></i>
+      <span class="aiae-lot__stamp aiae-lot__stamp--out">
+        <b>{{ section.settings.section_number }}</b>
+        <span>{% if cart == empty %}{{ section.settings.empty_close_label }}{% else %}{{ section.settings.close_label }}{% endif %}</span>
+      </span>
+      <i class="aiae-lot__rule"></i>
+    </div>
+
+  </div>
+
+  {%- if ticker_items.size > 0 -%}
+    <div class="aiae-lot__tape aiae-lot__tape--out aiae-noscroll" aria-hidden="true">
+      <div class="aiae-marquee-inner">
+        {%- for pass in (1..2) -%}
+          {%- for item in ticker_items -%}
+            <span>{{ item | strip }}</span>
+            <span class="aiae-tick-dot">●</span>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<script>
+(function() {
+  var sectionId = {{ section.id | json }};
+  var root = document.getElementById('aiae-cart-' + sectionId);
+  if (!root) return;
+
+  var changeUrl = {{ routes.cart_change_url | json }} + '.js';
+  var updateUrl = {{ routes.cart_update_url | json }} + '.js';
+  var busy = false;
+
+  function setCount(n) {
+    var el = document.getElementById('aiae-cart-count');
+    if (el) el.textContent = n;
+  }
+
+  /* The whole live region is swapped after each change, so every handler
+     stays delegated on the section root and survives the re-render. */
+  function swap(html) {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    var next = doc.querySelector('[data-aiae-cart-live]');
+    var current = root.querySelector('[data-aiae-cart-live]');
+    if (!next || !current) { window.location.reload(); return; }
+    current.innerHTML = next.innerHTML;
+    root.classList.toggle('aiae-cart--empty', !!current.querySelector('.aiae-cart__void'));
+    /* the swapped-in markup carries reveal hooks nothing is observing any
+       more — show it outright rather than leave it faded out */
+    current.querySelectorAll('[data-aiae-reveal]').forEach(function(el) {
+      el.classList.add('is-revealed');
+    });
+  }
+
+  function change(key, quantity) {
+    if (busy) return;
+    busy = true;
+    root.classList.add('is-busy');
+    fetch(changeUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        id: key,
+        quantity: quantity,
+        sections: sectionId,
+        sections_url: window.location.pathname
+      })
+    })
+      .then(function(r) { return r.json(); })
+      .then(function(state) {
+        setCount(state.item_count);
+        if (state.sections && state.sections[sectionId]) {
+          swap(state.sections[sectionId]);
+        } else {
+          window.location.reload();
+        }
+      })
+      .catch(function() { window.location.reload(); })
+      .finally(function() {
+        busy = false;
+        root.classList.remove('is-busy');
+      });
+  }
+
+  function context(el) {
+    var row = el.closest('[data-aiae-cart-row]');
+    if (!row) return null;
+    return { key: row.getAttribute('data-key'), input: row.querySelector('[data-aiae-cart-input]') };
+  }
+
+  root.addEventListener('click', function(e) {
+    var step = e.target.closest('[data-aiae-cart-step]');
+    if (step) {
+      var ctx = context(step);
+      if (!ctx || !ctx.input) return;
+      var next = parseInt(ctx.input.value, 10) + parseInt(step.getAttribute('data-aiae-cart-step'), 10);
+      if (isNaN(next) || next < 0) next = 0;
+      change(ctx.key, next);
+      return;
+    }
+    var remove = e.target.closest('[data-aiae-cart-remove]');
+    if (remove) {
+      var rctx = context(remove);
+      if (rctx) change(rctx.key, 0);
+    }
+  });
+
+  root.addEventListener('change', function(e) {
+    var input = e.target.closest('[data-aiae-cart-input]');
+    if (!input) return;
+    var ctx = context(input);
+    if (!ctx) return;
+    var value = parseInt(input.value, 10);
+    if (isNaN(value) || value < 0) value = 0;
+    change(ctx.key, value);
+  });
+
+  /* Enter inside a quantity field must not reach the checkout button */
+  root.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter') return;
+    if (!e.target.closest('[data-aiae-cart-input]')) return;
+    e.preventDefault();
+    e.target.blur();
+  });
+
+  /* The note rides along with the checkout submit, but someone who leaves
+     without checking out should still find it there when they come back. */
+  root.addEventListener('blur', function(e) {
+    if (!e.target.closest('.aiae-cart__note')) return;
+    if (e.target.tagName !== 'TEXTAREA') return;
+    fetch(updateUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ note: e.target.value })
+    });
+  }, true);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "AIAE Cart",
+  "settings": [
+    { "type": "text", "id": "section_number", "label": "Section number", "default": "00" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "COȘUL TĂU — ÎNAINTE DE PRINT" },
+    { "type": "text", "id": "title", "label": "Title (use newline for line break)", "default": "COȘ" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Fiecare piesă se printează după ce pleacă comanda. Verifică mărimile și culorile acum — după print nu se mai schimbă." },
+    { "type": "header", "content": "Intrare / ieșire" },
+    { "type": "text", "id": "ticker_text", "label": "Tape text", "info": "Separate items with |. Leave blank to hide both tapes.", "default": "PRINT ON DEMAND|SE PRINTEAZĂ DUPĂ COMANDĂ|VERIFICĂ MĂRIMEA|AIA E. ASTA E." },
+    { "type": "text", "id": "open_label", "label": "Opening stamp", "default": "COȘ DESCHIS" },
+    { "type": "text", "id": "close_label", "label": "Closing stamp", "default": "URMEAZĂ PLATA" },
+    { "type": "header", "content": "Coloane" },
+    { "type": "text", "id": "col_product", "label": "Product column", "default": "PIESĂ" },
+    { "type": "text", "id": "col_quantity", "label": "Quantity column", "default": "CANTITATE" },
+    { "type": "text", "id": "col_total", "label": "Total column", "default": "TOTAL" },
+    { "type": "text", "id": "col_plan", "label": "Selling plan label", "default": "PLAN" },
+    { "type": "text", "id": "unit_label", "label": "Unit label", "default": "BUCATĂ" },
+    { "type": "text", "id": "remove_label", "label": "Remove label", "default": "SCOATE" },
+    { "type": "text", "id": "increase_label", "label": "Increase quantity label", "default": "Mai mult" },
+    { "type": "text", "id": "decrease_label", "label": "Decrease quantity label", "default": "Mai puțin" },
+    { "type": "text", "id": "update_label", "label": "Update button (no-JS only)", "default": "ACTUALIZEAZĂ" },
+    { "type": "header", "content": "Sumar" },
+    { "type": "text", "id": "summary_label", "label": "Summary tag", "default": "NOTA DE PLATĂ" },
+    { "type": "text", "id": "subtotal_label", "label": "Subtotal label", "default": "SUBTOTAL" },
+    { "type": "text", "id": "total_label", "label": "Total label", "default": "TOTAL" },
+    { "type": "text", "id": "tax_note", "label": "Tax note", "default": "Taxele incluse. Transportul se calculează la checkout." },
+    { "type": "text", "id": "checkout_label", "label": "Checkout label", "default": "FINALIZEAZĂ COMANDA" },
+    { "type": "checkbox", "id": "show_note", "label": "Show order note", "default": true },
+    { "type": "text", "id": "note_label", "label": "Note label", "default": "MESAJ PENTRU NOI" },
+    { "type": "text", "id": "note_placeholder", "label": "Note placeholder", "default": "Opțional — ceva ce trebuie să știm." },
+    { "type": "text", "id": "assurance_1", "label": "Assurance 1", "default": "PRINTAT LA COMANDĂ — FĂRĂ STOC MORT" },
+    { "type": "text", "id": "assurance_2", "label": "Assurance 2", "default": "PLATĂ SECURIZATĂ PRIN SHOPIFY" },
+    { "type": "text", "id": "assurance_3", "label": "Assurance 3", "default": "LIVRARE ÎN TOATĂ ROMÂNIA" },
+    { "type": "header", "content": "Coș gol" },
+    { "type": "text", "id": "empty_title", "label": "Empty title", "default": "COȘUL E GOL. DEGEABA." },
+    { "type": "textarea", "id": "empty_description", "label": "Empty description", "default": "Nimic în coș încă. Alege o piesă gata făcută sau pornește de la un concept și fă-ți-o pe a ta." },
+    { "type": "text", "id": "empty_note", "label": "Empty note", "default": "NIMIC DE PRINTAT — DEOCAMDATĂ" },
+    { "type": "text", "id": "empty_link_1_label", "label": "Empty link 1 label", "default": "VEZI PIESELE GATA FĂCUTE" },
+    { "type": "url", "id": "empty_link_1", "label": "Empty link 1" },
+    { "type": "text", "id": "empty_link_2_label", "label": "Empty link 2 label", "default": "PERSONALIZEAZĂ O PIESĂ" },
+    { "type": "url", "id": "empty_link_2", "label": "Empty link 2" },
+    { "type": "text", "id": "empty_close_label", "label": "Closing stamp when empty", "default": "NIMIC DE PLĂTIT" },
+    { "type": "text", "id": "login_label", "label": "Login prompt", "default": "AI CONT? INTRĂ ÎN CONT →" }
+  ],
+  "presets": [
+    { "name": "AIAE Cart" }
+  ]
+}
+{% endschema %}

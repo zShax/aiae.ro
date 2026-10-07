@@ -1,6 +1,13 @@
-<section id="top" class="aiae-hero">
+{%- liquid
+  assign hero_image = section.settings.image_desktop | default: section.settings.image_mobile
+  assign has_media = false
+  if section.settings.image_desktop != blank or section.settings.image_mobile != blank
+    assign has_media = true
+  endif
+-%}
+<section id="top" class="aiae-hero{% if has_media %} aiae-hero--has-media{% endif %}">
 
-  {%- if section.settings.image_desktop != blank or section.settings.image_mobile != blank -%}
+  {%- if has_media -%}
     <div class="aiae-hero__media" data-aiae-reveal="fade" style="--aiae-reveal-delay: 0.05s;">
       <picture>
         {%- if section.settings.image_mobile != blank -%}
@@ -8,14 +15,14 @@
             media="(max-width: 749px)"
             srcset="{{ section.settings.image_mobile | image_url: width: 1100 }}">
         {%- endif -%}
-        {%- assign fallback_image = section.settings.image_desktop | default: section.settings.image_mobile -%}
+        {%- assign fallback_image = hero_image -%}
         <img
           src="{{ fallback_image | image_url: width: 2200 }}"
           srcset="{{ fallback_image | image_url: width: 1100 }} 1100w,
                   {{ fallback_image | image_url: width: 2200 }} 2200w,
                   {{ fallback_image | image_url: width: 3000 }} 3000w"
           sizes="100vw"
-          alt="{{ section.settings.image_alt | default: fallback_image.alt | default: shop.name | escape }}"
+          alt="{{ fallback_image.alt | escape | default: shop.name }}"
           width="{{ fallback_image.width }}"
           height="{{ fallback_image.height }}"
           loading="eager"
@@ -46,21 +53,13 @@
     <span>— {{ section.settings.sublabel }}</span>
   </div>
 
-  {%- comment -%} The homepage's only <h1>. Short headlines (the AIA.E wordmark) get the giant cover size {%- endcomment -%}
-  <h1 class="aiae-hero__headline{% if section.settings.headline.size > 12 %} aiae-hero__headline--long{% endif %}" data-aiae-reveal="rise" style="--aiae-reveal-delay: 0.2s;">
-    {{- section.settings.headline | escape | replace: '.', '<span class="aiae-dot">.</span>' | newline_to_br -}}
+  <h1 class="aiae-hero__headline" data-aiae-reveal="rise" style="--aiae-reveal-delay: 0.2s;">
+    {{- section.settings.headline | replace: '.', '<span class="aiae-dot">.</span>' -}}
   </h1>
 
   <div class="aiae-hero__bottom">
     <p class="aiae-hero__tagline" data-aiae-reveal style="--aiae-reveal-delay: 0.36s;">{{ section.settings.tagline }}</p>
-    <div class="aiae-hero__ctas" data-aiae-reveal style="--aiae-reveal-delay: 0.46s;">
-      {%- if section.settings.cta_label != blank -%}
-        <a href="{{ section.settings.cta_link }}" class="aiae-hero__cta">{{ section.settings.cta_label }} →</a>
-      {%- endif -%}
-      {%- if section.settings.cta2_label != blank -%}
-        <a href="{{ section.settings.cta2_link }}" class="aiae-hero__cta aiae-hero__cta--ghost">{{ section.settings.cta2_label }} →</a>
-      {%- endif -%}
-    </div>
+    <a href="{{ section.settings.cta_link }}" class="aiae-hero__cta" data-aiae-reveal style="--aiae-reveal-delay: 0.46s;">{{ section.settings.cta_label }} →</a>
   </div>
 
 </section>
@@ -86,12 +85,6 @@
       "info": "Shown on screens up to 749px wide. Falls back to the desktop image if empty."
     },
     {
-      "type": "text",
-      "id": "image_alt",
-      "label": "Image alt text",
-      "info": "Describes the image for search engines and screen readers. Falls back to the image's own alt text."
-    },
-    {
       "type": "header",
       "content": "Content"
     },
@@ -99,53 +92,42 @@
       "type": "text",
       "id": "ticker_text",
       "label": "Ticker items (pipe-separated)",
-      "default": "DEGEABA CLUB 2026 — LOT 200/200|PRINT ON DEMAND — TOATE CULORILE|BUCUREȘTI / TIMIȘOARA|AIA E. ASTA E."
+      "default": "TRICOURI ȘI HANORACE PERSONALIZATE|PRINT ON DEMAND — TOATE CULORILE|LIVRARE ÎN TOATĂ ROMÂNIA|BUCUREȘTI / TIMIȘOARA|AIA E. ASTA E."
     },
     {
       "type": "text",
       "id": "label",
       "label": "Eyebrow label",
-      "default": "STREETWEAR POST-IRONIC"
+      "default": "TRICOURI PERSONALIZATE"
     },
     {
       "type": "text",
       "id": "sublabel",
       "label": "Eyebrow sublabel",
-      "default": "ESTE CEEA CE ESTE"
+      "default": "STREETWEAR POST-IRONIC"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "headline",
-      "label": "Headline (the page's H1)",
-      "info": "Every . becomes an accent dot. Line breaks are kept.",
+      "label": "Headline (use . for accent dot)",
       "default": "AIA.E"
     },
     {
       "type": "textarea",
       "id": "tagline",
-      "label": "Subheading",
-      "default": "Haine pentru oameni care au încetat să se mai prefacă. Design brut, finisaj de lux. Nu schimbă nimic — dar arată bine."
+      "label": "Tagline",
+      "default": "Tricouri și hanorace personalizate, printate la comandă. Materiale grele, printuri care rezistă. Tu pui mesajul."
     },
     {
       "type": "text",
       "id": "cta_label",
-      "label": "Primary button label",
-      "default": "VEZI COLECȚIA"
+      "label": "CTA button label",
+      "default": "PERSONALIZEAZĂ ACUM"
     },
     {
       "type": "url",
       "id": "cta_link",
-      "label": "Primary button link"
-    },
-    {
-      "type": "text",
-      "id": "cta2_label",
-      "label": "Secondary button label"
-    },
-    {
-      "type": "url",
-      "id": "cta2_link",
-      "label": "Secondary button link"
+      "label": "CTA button link"
     }
   ],
   "presets": [

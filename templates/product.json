@@ -42,9 +42,11 @@
         "in_stock_label": "LIVE — DISPONIBIL",
         "sold_out_label": "Epuizat",
         "error_label": "Ceva n-a mers. Mai încearcă o dată.",
+        "consent_label": "Am înțeles că produsul personalizat nu poate fi returnat",
+        "consent_error": "Bifează confirmarea ca să poți comanda produsul.",
         "note_1": "PRINT SCHIMBABIL",
         "note_2": "CULOARE PRODUS",
-        "note_3": "PRODUS LA COMANDĂ ÎN RO"
+        "note_3": "PRINTAT LA COMANDĂ"
       }
     }
   },
