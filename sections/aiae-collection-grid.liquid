@@ -55,9 +55,9 @@
   </div>
 
   <div class="aiae-section__head aiae-lot__head">
-    <div data-aiae-reveal>
+    <div class="aiae-fitbox" data-aiae-reveal>
       <div class="aiae-eyebrow">({{ section.settings.section_number }}) {{ section.settings.eyebrow }}</div>
-      <h2 class="aiae-display aiae-section__title">{{ section.settings.title | newline_to_br }}</h2>
+      <h2 class="aiae-display aiae-fit aiae-section__title" style="{% render 'aiae-fit', text: section.settings.title %}">{{ section.settings.title | newline_to_br }}</h2>
     </div>
     <div class="aiae-section__aside" data-aiae-reveal style="--aiae-reveal-delay: 0.14s;">
       <p class="aiae-section__desc">{{ section.settings.description }}</p>

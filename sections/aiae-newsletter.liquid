@@ -2,14 +2,14 @@
 
 <section id="{{ section.settings.anchor | default: 'newsletter' }}" class="aiae-section aiae-section--{{ section.settings.tone }} aiae-nl">
 
-  <div class="aiae-nl__head" data-aiae-reveal>
+  <div class="aiae-nl__head aiae-fitbox" data-aiae-reveal>
     {%- if section.settings.eyebrow != blank -%}
       <div class="aiae-eyebrow">
         {%- if section.settings.section_number != blank -%}({{ section.settings.section_number }}) {% endif -%}
         {{ section.settings.eyebrow }}
       </div>
     {%- endif -%}
-    <h2 class="aiae-display aiae-nl__title">{{ title_html }}</h2>
+    <h2 class="aiae-display aiae-fit aiae-nl__title" style="{% render 'aiae-fit', text: section.settings.title %}">{{ title_html }}</h2>
     {%- if section.settings.body != blank -%}
       <div class="aiae-nl__body">{{ section.settings.body }}</div>
     {%- endif -%}

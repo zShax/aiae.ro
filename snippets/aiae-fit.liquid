@@ -1,0 +1,47 @@
+{%- comment -%}
+  Inline custom properties for a fitted display title (.aiae-fit), read
+  back by aiae-theme.css:
+    --fit       letter count of the longest word (never under 4, never under
+                `min`). The font-size is capped so that word always fits the
+                column, so new copy can't split a word or push the page sideways.
+    --fit-lead  only when the title has Romanian marks. Ă, Â, Î stand 0.25em
+                above Anton's caps and the Ș/Ț comma hangs 0.32em below the
+                baseline, so the tight 0.9 leading would run them into the
+                neighbouring line.
+
+  Usage: style="{% render 'aiae-fit', text: section.settings.title %}"
+         min: optional length of a phrase that must stay on one line.
+{%- endcomment -%}
+{%- liquid
+  assign aiae_fit_text = text | strip_html
+  assign aiae_fit_words = aiae_fit_text | newline_to_br | strip_newlines | replace: '<br />', ' ' | split: ' '
+  assign aiae_fit = 4
+  if min > aiae_fit
+    assign aiae_fit = min
+  endif
+  for aiae_fit_word in aiae_fit_words
+    if aiae_fit_word.size > aiae_fit
+      assign aiae_fit = aiae_fit_word.size
+    endif
+  endfor
+  echo '--fit: ' | append: aiae_fit | append: ';'
+
+  assign aiae_fit_lead = ''
+  assign aiae_fit_marks = 'Ă,Â,Î,ă,â,î' | split: ','
+  for aiae_fit_mark in aiae_fit_marks
+    if aiae_fit_text contains aiae_fit_mark
+      assign aiae_fit_lead = '1.16'
+      break
+    endif
+  endfor
+  assign aiae_fit_marks = 'Ș,Ț,ș,ț,Ş,Ţ,ş,ţ' | split: ','
+  for aiae_fit_mark in aiae_fit_marks
+    if aiae_fit_text contains aiae_fit_mark
+      assign aiae_fit_lead = '1.26'
+      break
+    endif
+  endfor
+  if aiae_fit_lead != ''
+    echo ' --fit-lead: ' | append: aiae_fit_lead | append: ';'
+  endif
+-%}
