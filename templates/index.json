@@ -19,7 +19,8 @@
       "type": "aiae-hero",
       "settings": {
         "image_desktop": "shopify://shop_images/ezgif.com-gif-to-webp-converter_1.webp",
-        "image_mobile": "shopify://shop_images/hero_mobile-ezgif.com-gif-to-webp-converter.webp",
+        "image_mobile": "shopify://shop_images/AIA.E_Mobile_Header_GIF_WebP.webp",
+        "image_alt": "",
         "ticker_text": "DEGEABA CLUB 2026 — NR. SERIE 0226-AE|HAINE PERSONALIZATE — FĂRĂ MINIM DE COMANDĂ|LIVRARE GRATUITĂ DE LA 190 LEI|AIA E.",
         "label": "TRICOURI PERSONALIZATE",
         "sublabel": "STREETWEAR POST-IRONIC",
@@ -27,9 +28,8 @@
         "tagline": "Haine grele, printuri care se uzează frumos și un singur principiu: nimic nu se schimbă. Măcar ești îmbrăcat.",
         "cta_label": "Vezi DEGEABA CLUB",
         "cta_link": "/collections/degeaba-club",
-        "image_alt": "Hanorac AIAE Fractured Starburst, streetwear românesc din bumbac greu",
-        "cta2_label": "Scrie-ți tricoul",
-        "cta2_link": "/collections/filozofia-ta"
+        "cta2_label": "",
+        "cta2_link": ""
       }
     },
     "aiae_intro": {
@@ -42,7 +42,9 @@
         "eyebrow": "DESPRE — CE ÎNSEAMNĂ NUMELE",
         "title": "Aia e.",
         "accent_dots": true,
-        "body": "<p>În română, „aia e” înseamnă că lucrurile sunt cum sunt și nu are rost să ne agităm. Am făcut din asta un brand de haine. Tricouri, hanorace și șepci din bumbac greu, cu estetică de afiș vechi, xerox și beton. Fără hype, fără numărătoare inversă, fără promisiuni.</p>"
+        "body": "<p>În română, „aia e” înseamnă că lucrurile sunt cum sunt și nu are rost să ne agităm. Am făcut din asta un brand de haine. Tricouri, hanorace și șepci din bumbac greu, cu estetică de afiș vechi, xerox și beton. Fără hype, fără numărătoare inversă, fără promisiuni.</p>",
+        "button_label": "",
+        "button_link": ""
       }
     },
     "aiae_collection_grid": {
@@ -82,6 +84,10 @@
         "title": "Filozofia ta. Pe bumbac greu.",
         "accent_word": "bumbac greu",
         "subtitle": "",
+        "intro": "",
+        "note": "",
+        "cta_label": "",
+        "cta_link": "",
         "module_label": "MODUL PERSONALIZER",
         "status_label": "LIVE",
         "tabs_label": "COLECȚII",
@@ -95,11 +101,7 @@
         "print_note": "PRINT SCHIMBABIL",
         "color_note": "CULOARE PRODUS",
         "empty_hint": "Alege o colecție cu produse personalizabile în setările secțiunii.",
-        "button_label": "PERSONALIZEAZĂ",
-        "intro": "<p>Tricouri, hanorace, bluze și șepci personalizate cu textul, numele sau designul tău. Blank-urile le alegem noi. Mesajul e treaba ta. Fără minim de comandă — o bucată e o comandă.</p>",
-        "note": "N-ai inspirație? <a href=\"/pages/concept\">Vezi capsulele concept.</a>",
-        "cta_label": "Personalizează",
-        "cta_link": "/collections/filozofia-ta"
+        "button_label": "PERSONALIZEAZĂ"
       }
     },
     "aiae_features": {
